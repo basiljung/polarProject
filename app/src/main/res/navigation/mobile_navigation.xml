@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.polarapp.ui.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_device_list"
+        android:name="com.example.polarapp.ui.DeviceListFragment"
+        android:label="@string/menu_device_list"
+        tools:layout="@layout/fragment_device_list" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.polarapp.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_tools"
+        android:name="com.example.polarapp.ui.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.example.polarapp.ui.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/nav_device_list_list"
+        android:name="com.example.polarapp.devices.ListDevicesFragment"
+        android:label="List Devices"
+        tools:layout="@layout/fragment_list_devices" />
+
+    <fragment
+        android:id="@+id/nav_device_list_scan"
+        android:name="com.example.polarapp.devices.ScanDevicesFragment"
+        android:label="Scan devices"
+        tools:layout="@layout/fragment_scan_devices" />
+</navigation>

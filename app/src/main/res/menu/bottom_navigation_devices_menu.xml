@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/device_list_list"
+        android:icon="@drawable/ic_device_list_list"
+        android:title="@string/device_list_list" />
+    <item
+        android:id="@+id/device_list_scan"
+        android:icon="@drawable/ic_device_list_scan"
+        android:title="@string/device_list_scan" />
+</menu>
