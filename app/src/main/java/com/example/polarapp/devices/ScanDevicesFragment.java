@@ -16,11 +16,11 @@ import polar.com.sdk.api.model.PolarDeviceInfo;
 
 public class ScanDevicesFragment extends Fragment implements PolarSDK.CallbackInterfaceDevices {
 
-    View root;
-    PolarSDK polarSDK;
-    ListView listView;
-    DevicesArrayAdapter devicesArrayAdapter;
-    ArrayList<PolarDeviceInfo> polarDeviceInfoArrayList = new ArrayList<>();
+    private View root;
+    private PolarSDK polarSDK;
+    private ListView listView;
+    private DevicesArrayAdapter devicesArrayAdapter;
+    private ArrayList<PolarDeviceInfo> polarDeviceInfoArrayList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

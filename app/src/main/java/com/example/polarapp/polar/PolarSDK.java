@@ -20,11 +20,11 @@ public class PolarSDK {
 
     private Context context;
     private String TAG = "Polar_HRActivity";
-    public PolarBleApi api;
+    private PolarBleApi api;
     private String DEVICE_ID;
     private Disposable scanDisposable;
 
-    CallbackInterfaceDevices callbackInterfaceDevices;
+    private CallbackInterfaceDevices callbackInterfaceDevices;
 
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
