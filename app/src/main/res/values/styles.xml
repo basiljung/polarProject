@@ -1,13 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorError">@color/colorPrimary</item>
         <item name="android:colorBackground">@color/backgroundColor</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:buttonBarButtonStyle">@color/colorAccentDark</item>
+        <item name="android:buttonBarPositiveButtonStyle">@color/colorAccentDark</item>
+        <item name="android:buttonBarNegativeButtonStyle">@color/colorAccentDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

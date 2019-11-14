@@ -1,4 +1,4 @@
-package com.example.polarapp.profile;
+package com.example.polarapp.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,15 +11,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.polarapp.R;
+import com.example.polarapp.profile.EditDialog;
 
 public class ProfileFragment extends Fragment implements EditDialog.EditListener {
 
-    View root;
-    ImageView editImageView;
-    LinearLayout sexLayout, ageLayout, heightLayout, weightLayout, emailLayout, phoneLayout, locationLayout;
-    TextView nameText, sexText, ageText, heightText, weightText, emailText, phoneText, locationText;
-    EditDialog editDialog;
-    int selectedButton;
+    private View root;
+    private ImageView editImageView;
+    private LinearLayout sexLayout, ageLayout, heightLayout, weightLayout, emailLayout, phoneLayout, locationLayout;
+    private TextView nameText, sexText, ageText, heightText, weightText, emailText, phoneText, locationText;
+    private EditDialog editDialog;
+    private int selectedButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -37,7 +38,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 10);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -52,7 +55,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                     selectedButton = R.id.sexOption2;
                 }
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(selectedButton), 1);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -61,7 +66,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 2);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -72,7 +79,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 String value = heightText.getText().toString();
                 value = value.substring(0, value.length() - 2);
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 3);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -83,7 +92,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 String value = weightText.getText().toString();
                 value = value.substring(0, value.length() - 2);
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 4);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -92,7 +103,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 5);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -101,7 +114,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 6);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
 
@@ -110,7 +125,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), locationText.getText().toString(), 7);
-                editDialog.show(getFragmentManager(), "");
+                if (getFragmentManager() != null) {
+                    editDialog.show(getFragmentManager(), "");
+                }
             }
         });
         return root;
