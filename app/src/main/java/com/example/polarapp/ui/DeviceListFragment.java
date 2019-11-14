@@ -16,9 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DeviceListFragment extends Fragment {
 
-    TextView textView;
-    BottomNavigationView bottomNavigationView;
-    View root;
+    private BottomNavigationView bottomNavigationView;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_device_list, container, false);

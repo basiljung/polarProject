@@ -15,9 +15,10 @@ import com.example.polarapp.R;
 public class HomeFragment extends Fragment {
 
     private ImageView trainingImage, sleepImage, historyImage;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
         trainingImage = root.findViewById(R.id.trainingImage);
         sleepImage = root.findViewById(R.id.sleepImage);
         historyImage = root.findViewById(R.id.historyImage);

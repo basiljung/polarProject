@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,9 +7,28 @@
         <item name="colorError">@color/colorPrimary</item>
         <item name="android:colorBackground">@color/backgroundColor</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:buttonBarButtonStyle">@color/colorAccentDark</item>
-        <item name="android:buttonBarPositiveButtonStyle">@color/colorAccentDark</item>
-        <item name="android:buttonBarNegativeButtonStyle">@color/colorAccentDark</item>
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialog</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/backgroundColor</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+
+    <style name="DatePickerDialog" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:datePickerStyle">@style/DatePickerStyle</item>
+        <item name="android:textColorPrimaryInverse">@color/backgroundColor</item>
+        <item name="android:textColorSecondaryInverse">@color/backgroundColorLight</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
+    </style>
+
+    <style name="DatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
