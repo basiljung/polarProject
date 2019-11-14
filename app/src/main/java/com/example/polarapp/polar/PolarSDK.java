@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import java.util.List;
 import java.util.UUID;
-
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -13,6 +12,7 @@ import io.reactivex.functions.Consumer;
 import polar.com.sdk.api.PolarBleApi;
 import polar.com.sdk.api.PolarBleApiCallback;
 import polar.com.sdk.api.PolarBleApiDefaultImpl;
+import polar.com.sdk.api.errors.PolarInvalidArgument;
 import polar.com.sdk.api.model.PolarDeviceInfo;
 import polar.com.sdk.api.model.PolarHrData;
 
@@ -28,6 +28,7 @@ public class PolarSDK {
 
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
+        void deviceConnected(boolean ok);
     }
 
     public PolarSDK(Context context, CallbackInterfaceDevices cb) {
@@ -134,7 +135,6 @@ public class PolarSDK {
                         @Override
                         public void accept(PolarDeviceInfo polarDeviceInfo) {
                             callbackInterfaceDevices.scanDevice(polarDeviceInfo);
-                            //Log.d("MyApp", "polar device found id: " + polarDeviceInfo.deviceId + " address: " + polarDeviceInfo.address + " rssi: " + polarDeviceInfo.rssi + " name: " + polarDeviceInfo.name + " isConnectable: " + polarDeviceInfo.isConnectable);
                         }
                     },
                     new Consumer<Throwable>() {
@@ -153,6 +153,16 @@ public class PolarSDK {
         } else{
             scanDisposable.dispose();
             scanDisposable = null;
+        }
+    }
+
+    public void connectDevice(String device_id) {
+        try {
+            api.connectToDevice(device_id);
+            callbackInterfaceDevices.deviceConnected(true);
+        } catch (PolarInvalidArgument polarInvalidArgument) {
+            polarInvalidArgument.printStackTrace();
+            callbackInterfaceDevices.deviceConnected(false);
         }
     }
 }

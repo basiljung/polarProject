@@ -1,9 +1,7 @@
 package com.example.polarapp.devices;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
-
 import java.util.ArrayList;
-
 import polar.com.sdk.api.model.PolarDeviceInfo;
 
 public class ScanDevicesFragment extends Fragment implements PolarSDK.CallbackInterfaceDevices {
@@ -46,5 +41,10 @@ public class ScanDevicesFragment extends Fragment implements PolarSDK.CallbackIn
         polarDeviceInfoArrayList.add(polarDeviceInfo);
         devicesArrayAdapter = new DevicesArrayAdapter(getContext(), polarDeviceInfoArrayList);
         listView.setAdapter(devicesArrayAdapter);
+    }
+
+    @Override
+    public void deviceConnected(boolean ok) {
+        // Do stuff to send it to the list of connected devices
     }
 }

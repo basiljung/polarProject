@@ -82,19 +82,30 @@ public class EditDialog extends DialogFragment {
         sexGroup = view.findViewById(R.id.groupSex);
         sexGroup.check(Integer.parseInt(defaultValue));
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                }).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                editListener.applySexChanges(sexGroup.getCheckedRadioButtonId());
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editListener.applySexChanges(sexGroup.getCheckedRadioButtonId());
+                        dialog.dismiss();
+                    }
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
-        AlertDialog alertDialog = builder.create();
         return alertDialog;
     }
 
@@ -111,22 +122,36 @@ public class EditDialog extends DialogFragment {
         TextView textView = view.findViewById(R.id.titlePhysicalData);
         textView.setText(title);
 
-        builder.setView(view)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(View v) {
                         if (title.toLowerCase().contains("height")) {
-                           editListener.applyHeightChanges(numberPicker.getValue());
+                            editListener.applyHeightChanges(numberPicker.getValue());
+                            dialog.dismiss();
                         } else if (title.toLowerCase().contains("weight")) {
                             editListener.applyWeightChanges(numberPicker.getValue());
+                            dialog.dismiss();
                         }
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
-        AlertDialog alertDialog = builder.create();
+
         return alertDialog;
     }
 
@@ -136,17 +161,14 @@ public class EditDialog extends DialogFragment {
         int month = newCalendar.get(Calendar.MONTH);
         int year = newCalendar.get(Calendar.YEAR);
 
-        picker = new DatePickerDialog(getContext(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        getAge(year, monthOfYear, dayOfMonth);
-                    }
-                }, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                getAge(year, monthOfYear, dayOfMonth);
+            }
+        },1998, 5, 24); // Select BirthDate on DB
 
-        picker.updateDate(1998, 5, 24); // Select BirthDate on DB
-
-        return picker;
+        return datePickerDialog;
     }
 
     public void getAge(int year, int monthOfYear, int dayOfMonth) {
@@ -179,18 +201,17 @@ public class EditDialog extends DialogFragment {
         final EditText email = view.findViewById(R.id.emailValue);
 
         final TextInputLayout layoutEmail = view.findViewById(R.id.inputLayout);
-        layoutEmail.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.endblue)));
+        layoutEmail.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save", null);
+        builder.setView(view);
 
         final AlertDialog alertDialog = builder.create();
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
-                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -203,6 +224,12 @@ public class EditDialog extends DialogFragment {
                             layoutEmail.setError("Invalid email");
                             Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
                     }
                 });
             }
@@ -224,18 +251,31 @@ public class EditDialog extends DialogFragment {
         ccp.setCountryPreference("ES,FI,CH");
         ccp.detectSIMCountry(true);
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                }).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                editListener.applyPhoneChanges(ccp.getFormattedFullNumber());
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editListener.applyPhoneChanges(ccp.getFormattedFullNumber());
+                        dialog.dismiss();
+                    }
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
-        AlertDialog alertDialog = builder.create();
+
         return alertDialog;
     }
 
@@ -251,19 +291,32 @@ public class EditDialog extends DialogFragment {
         String city = data[0];
         editText.setText(city);
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                }).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                editListener.applyLocationChanges(editText.getText().toString() + "/" +
-                        ccp.getSelectedCountryName());
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editListener.applyLocationChanges(editText.getText().toString() + "/" +
+                                ccp.getSelectedCountryName());
+                        dialog.dismiss();
+                    }
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
-        AlertDialog alertDialog = builder.create();
+
         return alertDialog;
     }
 
@@ -274,24 +327,23 @@ public class EditDialog extends DialogFragment {
         final TextInputLayout layoutOldPass = view.findViewById(R.id.inputLayoutOldPass);
         final TextInputLayout layoutNewPass1 = view.findViewById(R.id.inputLayoutNewPass1);
         final TextInputLayout layoutNewPass2 = view.findViewById(R.id.inputLayoutNewPass2);
-        layoutOldPass.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.endblue)));
-        layoutNewPass1.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.endblue)));
-        layoutNewPass2.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.endblue)));
+        layoutOldPass.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
+        layoutNewPass1.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
+        layoutNewPass2.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
         final TextView nameValue = view.findViewById(R.id.nameValue);
         final TextView oldPass = view.findViewById(R.id.oldPassValue);
         final TextView newPass1 = view.findViewById(R.id.newPassValue1);
         final TextView newPass2 = view.findViewById(R.id.newPassValue2);
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save", null);
+        builder.setView(view);
 
         final AlertDialog alertDialog = builder.create();
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
-                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button positiveButton = view.findViewById(R.id.saveButton);
+                Button negativeButton = view.findViewById(R.id.cancelButton);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -322,6 +374,13 @@ public class EditDialog extends DialogFragment {
                             editListener.applyProfileChanges(nameValue.getText().toString(), newPassValue2);
                             dialog.dismiss();
                         }
+
+                    }
+                });
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
                     }
                 });
             }

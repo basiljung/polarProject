@@ -4,17 +4,41 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.polarapp.R;
 
 public class HomeFragment extends Fragment {
 
+    ImageView trainingImage, sleepImage, historyImage;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        textView.setText("This is Home fragment");
+        trainingImage = root.findViewById(R.id.trainingImage);
+        sleepImage = root.findViewById(R.id.sleepImage);
+        historyImage = root.findViewById(R.id.historyImage);
+        trainingImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Selected Training", Toast.LENGTH_SHORT).show();
+            }
+        });
+        sleepImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Selected Sleep", Toast.LENGTH_SHORT).show();
+            }
+        });
+        historyImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
+            }
+        });
         return root;
     }
 }
