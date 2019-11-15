@@ -4,7 +4,10 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import com.example.polarapp.ui.DeviceListFragment;
@@ -23,6 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
 
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
+    private static final String PROFILE_USER_ID = "profile_user_id";
+    private static final String USER_ID = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +58,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////
-/*
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(PROFILE_USER_ID, Context.MODE_PRIVATE);
+        String id = sp.getString(USER_ID, "");
+
+        Log.d("MyApp", id);
+
+        DocumentReference docRef = db.collection("profile").document(id);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("MyApp", "DocumentSnapshot " + document.getId() + " data: " + document.getData());
+                    } else {
+                        Log.d("MyApp", "No such document");
+                    }
+                } else {
+                    Log.d("MyApp", "get failed with ", task.getException());
+                }
+            }
+        });
+
+/*
         // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
         user.put("first", "Other");
@@ -96,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-        db.collection("users")
+        db.collection("profile")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -242,7 +242,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public final static boolean isValidEmail(CharSequence target) {
+    public boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
