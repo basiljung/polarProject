@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -188,10 +189,8 @@ public class IntroActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        sp = getApplicationContext().getSharedPreferences(PROFILE_USER_ID, 0);
-                        editor = sp.edit();
-                        editor.putString(USER_ID, documentReference.getId());
-                        editor.commit();
+                        sp = getApplicationContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+                        sp.edit().putString(USER_ID, documentReference.getId()).commit();
 
                         Log.d("MyApp", "DocumentSnapshot added with ID: " + documentReference.getId());
                     }

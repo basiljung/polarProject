@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //////////////////////////////////////////////////////////////////////////////////
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences(PROFILE_USER_ID, Context.MODE_PRIVATE);
-        String id = sp.getString(USER_ID, "");
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
+        String id = sp.getString(USER_ID, "Error");
 
         Log.d("MyApp", id);
 
