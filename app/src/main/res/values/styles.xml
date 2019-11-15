@@ -10,6 +10,22 @@
         <item name="android:datePickerDialogTheme">@style/DatePickerDialog</item>
     </style>
 
+    <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item> <!-- Create the IMG for SplashView -->
+    <!-- Optional, on Android 5+ you can modify the colorPrimaryDark color to match the windowBackground color for further branding-->
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/backgroundColor</item>
         <item name="android:backgroundTint">@color/colorAccent</item>
@@ -30,14 +46,5 @@
     <style name="DatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:headerBackground">@color/colorAccent</item>
     </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
