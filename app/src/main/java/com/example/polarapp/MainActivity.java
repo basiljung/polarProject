@@ -59,28 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-        String id = sp.getString(USER_ID, "Error");
 
-        Log.d("MyApp", id);
-
-        DocumentReference docRef = db.collection("profile").document(id);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("MyApp", "DocumentSnapshot " + document.getId() + " data: " + document.getData());
-                    } else {
-                        Log.d("MyApp", "No such document");
-                    }
-                } else {
-                    Log.d("MyApp", "get failed with ", task.getException());
-                }
-            }
-        });
 
 /*
         // Create a new user with a first and last name

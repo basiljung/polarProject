@@ -47,7 +47,6 @@ public class IntroActivity extends AppCompatActivity {
     private RadioButton radioButtonError;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     SharedPreferences sp;
-    SharedPreferences.Editor editor;
 
     private static final String PROFILE_USER_ID = "profile_user_id";
     private static final String USER_ID = "id";
@@ -167,11 +166,11 @@ public class IntroActivity extends AppCompatActivity {
     private void saveUserData() {
         Map<String, Object> userData = new HashMap<>();
 
-        userData.put("Name", userName.getText().toString());
-        userData.put("Email", userEmail.getText().toString());
-        userData.put("Country", ccpCountry.getSelectedCountryName());
-        userData.put("City", userCity.getText().toString());
-        userData.put("Phone", ccpPhone.getFormattedFullNumber());
+        userData.put("Name", userName.getText().toString().trim());
+        userData.put("Email", userEmail.getText().toString().trim());
+        userData.put("Country", ccpCountry.getSelectedCountryName().trim());
+        userData.put("City", userCity.getText().toString().trim());
+        userData.put("Phone", ccpPhone.getFormattedFullNumber().trim());
         switch(sexGroup.getCheckedRadioButtonId()) {
             case R.id.userSexOption1:
                 userData.put("Sex", "Male");
@@ -182,7 +181,7 @@ public class IntroActivity extends AppCompatActivity {
         }
         userData.put("Height", pickerHeight.getValue());
         userData.put("Weight", pickerWeight.getValue());
-        userData.put("BirthDate", userBirthDate.getText().toString());
+        userData.put("BirthDate", userBirthDate.getText().toString().trim());
 
         db.collection("profile")
                 .add(userData)
@@ -190,7 +189,9 @@ public class IntroActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         sp = getApplicationContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                        sp.edit().putString(USER_ID, documentReference.getId()).commit();
+                        SharedPreferences.Editor editSP = sp.edit();
+                        editSP.putString(USER_ID, documentReference.getId());
+                        editSP.commit();
 
                         Log.d("MyApp", "DocumentSnapshot added with ID: " + documentReference.getId());
                     }

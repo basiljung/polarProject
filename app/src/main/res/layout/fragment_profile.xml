@@ -36,7 +36,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:text="Iván González Acuña"
                         android:textColor="@color/backgroundColor"
                         android:textSize="21sp"
                         android:textStyle="bold" />
@@ -109,7 +108,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="10dp"
-                                android:text="Male"
                                 android:textColor="@color/colorAccentDark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -135,7 +133,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="10dp"
-                                android:text="21"
                                 android:textColor="@color/colorAccentDark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -161,7 +158,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="10dp"
-                                android:text="175cm"
                                 android:textColor="@color/colorAccentDark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -187,7 +183,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="10dp"
-                                android:text="75kg"
                                 android:textColor="@color/colorAccentDark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -223,7 +218,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:text="1011ivan.8@gmail.com"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -246,7 +240,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:text="+34 654 462 602"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -269,7 +262,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:text="Oulu/Finland"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
