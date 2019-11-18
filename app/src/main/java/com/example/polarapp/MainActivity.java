@@ -1,42 +1,26 @@
 package com.example.polarapp;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import com.example.polarapp.ui.DeviceListFragment;
-import com.example.polarapp.ui.HomeFragment;
-import com.example.polarapp.ui.AboutFragment;
-import com.example.polarapp.ui.ProfileFragment;
-import com.example.polarapp.ui.SettingsFragment;
-import android.util.Log;
+import android.os.*;
+
+import com.example.polarapp.ui.*;
+
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.widget.Toast;
-import java.util.HashMap;
-import java.util.Map;
+
+import android.view.View;
+import android.widget.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -44,91 +28,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
+    private TextView textViewName, textViewEmail;
+    private ProfilePreferencesManager profilePreferencesManager;
 
-    SharedPreferences sp;
-    SharedPreferences.Editor editor;
-
-    private static final String PROFILE_USER_ID = "profile_user_id";
-    private static final String USER_ID = "id";
+    // Shared preferences file name
+    private static final String PROFILE_USER_NAME = "profile_user_name";
+    private static final String PROFILE_USER_EMAIL = "profile_user_email";
+    private static final String PROFILE_USER_PHONE = "profile_user_phone";
+    private static final String PROFILE_USER_CITY = "profile_user_city";
+    private static final String PROFILE_USER_COUNTRY = "profile_user_country";
+    private static final String PROFILE_USER_BIRTH = "profile_user_birth";
+    private static final String PROFILE_USER_SEX = "profile_user_sex";
+    private static final String PROFILE_USER_HEIGHT = "profile_user_height";
+    private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////
-
-
-
-/*
-        // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Other");
-        user.put("last", "Trial");
-        user.put("born", 1234);
-
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("MyApp", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("MyApp", "Error adding document", e);
-                    }
-                });
-
-        // Create a new user with a first, middle, and last name
-        user = new HashMap<>();
-        user.put("first", "Trial");
-        user.put("middle", "Middle");
-        user.put("last", "Turing");
-        user.put("born", 1982);
-
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("MyApp", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("MyApp", "Error adding document", e);
-                    }
-                });
-
-        db.collection("profile")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("MyApp Data", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w("MyApp Data", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-*/
-        //////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////
+        profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        View hView = navigationView.getHeaderView(0);
+
+        textViewName = hView.findViewById(R.id.textViewNameHeader);
+        textViewEmail = hView.findViewById(R.id.textViewEmailHeader);
+
         navigationView.setNavigationItemSelectedListener(this);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -141,14 +70,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+        String name = String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_NAME));
+        textViewName.setText(name);
+        String email = String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_EMAIL));
+        textViewEmail.setText(email);
+
         checkBT();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -183,9 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
                 break;
         }
-
         drawer.closeDrawer(GravityCompat.START);
-
         return true;
     }
 

@@ -16,7 +16,6 @@ public class ListDevicesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_list_devices, container, false);
-        Toast.makeText(getContext(), "List devices pressed", Toast.LENGTH_SHORT).show();
 
         return root;
     }

@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:layout_height="match_parent">
 
-    <ImageView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/trainingImage"
-        android:src="@drawable/home_activity_image"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/sleepImage"
-        android:src="@drawable/home_sleep_image"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="10dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:id="@+id/trainingImage"
+            android:src="@drawable/home_activity_image"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/historyImage"
-        android:src="@drawable/home_history_image"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="10dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:id="@+id/sleepImage"
+            android:src="@drawable/home_sleep_image"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"/>
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:id="@+id/historyImage"
+            android:src="@drawable/home_history_image"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+</ScrollView>

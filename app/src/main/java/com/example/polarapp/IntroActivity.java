@@ -1,43 +1,23 @@
 package com.example.polarapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Bundle;
+import android.os.*;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.*;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private PreferencesManager preferencesManager;
+    private IntroPreferencesManager introPreferencesManager;
     private Button saveButton;
     private EditText userName, userEmail, userCity, userPhone, userBirthDate;
     private CountryCodePicker ccpCountry, ccpPhone;
@@ -45,18 +25,27 @@ public class IntroActivity extends AppCompatActivity {
     private NumberPicker pickerHeight, pickerWeight;
     private TextInputLayout nameLayout, emailLayout, cityLayout, phoneLayout, birthDateLayout;
     private RadioButton radioButtonError;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    SharedPreferences sp;
+    private ProfilePreferencesManager profilePreferencesManager;
 
-    private static final String PROFILE_USER_ID = "profile_user_id";
-    private static final String USER_ID = "id";
+    // Shared preferences file name
+    private static final String PROFILE_USER_NAME = "profile_user_name";
+    private static final String PROFILE_USER_EMAIL = "profile_user_email";
+    private static final String PROFILE_USER_PHONE = "profile_user_phone";
+    private static final String PROFILE_USER_CITY = "profile_user_city";
+    private static final String PROFILE_USER_COUNTRY = "profile_user_country";
+    private static final String PROFILE_USER_BIRTH = "profile_user_birth";
+    private static final String PROFILE_USER_SEX = "profile_user_sex";
+    private static final String PROFILE_USER_HEIGHT = "profile_user_height";
+    private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        preferencesManager = new PreferencesManager(getApplicationContext());
-        if (!preferencesManager.isFirstTimeLaunch()) {
+        introPreferencesManager = new IntroPreferencesManager(getBaseContext());
+        profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+
+        if (!introPreferencesManager.isFirstTimeLaunch()) {
             launchHomeScreen();
             finish();
         }
@@ -66,8 +55,6 @@ public class IntroActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_intro);
-
-        db = FirebaseFirestore.getInstance();
 
         nameLayout = findViewById(R.id.userNameLayout);
         emailLayout = findViewById(R.id.userEmailLayout);
@@ -114,7 +101,7 @@ public class IntroActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    bridge();
+                doChecks();
             }
         });
     }
@@ -124,14 +111,14 @@ public class IntroActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String month = "";
-                        String day = "";
-                        if((monthOfYear+1) < 10) {
-                            month = "0" + (monthOfYear+1);
+                        String month;
+                        String day;
+                        if ((monthOfYear + 1) < 10) {
+                            month = "0" + (monthOfYear + 1);
                         } else {
-                            month = String.valueOf(monthOfYear+1);
+                            month = String.valueOf(monthOfYear + 1);
                         }
-                        if(dayOfMonth < 10) {
+                        if (dayOfMonth < 10) {
                             day = "0" + dayOfMonth;
                         } else {
                             day = String.valueOf(dayOfMonth);
@@ -147,13 +134,13 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        preferencesManager.setFirstTimeLaunch(false);
+        introPreferencesManager.setFirstTimeLaunch(false);
         startActivity(new Intent(IntroActivity.this, MainActivity.class));
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 
-    private void bridge() {
+    private void doChecks() {
         if (isValidName() && isValidEmail() && isValidCity() && isValidPhone() && isValidSex() && isValidBirthDate()) {
             Toast.makeText(getApplicationContext(), "Good data", Toast.LENGTH_SHORT).show();
             saveUserData();
@@ -167,41 +154,34 @@ public class IntroActivity extends AppCompatActivity {
         Map<String, Object> userData = new HashMap<>();
 
         userData.put("Name", userName.getText().toString().trim());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_NAME, userName.getText().toString().trim());
         userData.put("Email", userEmail.getText().toString().trim());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_EMAIL, userEmail.getText().toString().trim());
         userData.put("Country", ccpCountry.getSelectedCountryName().trim());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_COUNTRY, ccpCountry.getSelectedCountryName().trim());
         userData.put("City", userCity.getText().toString().trim());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_CITY, userCity.getText().toString().trim());
         userData.put("Phone", ccpPhone.getFormattedFullNumber().trim());
-        switch(sexGroup.getCheckedRadioButtonId()) {
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_PHONE, ccpPhone.getFormattedFullNumber().trim());
+
+        switch (sexGroup.getCheckedRadioButtonId()) {
             case R.id.userSexOption1:
                 userData.put("Sex", "Male");
+                profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Male");
                 break;
             case R.id.userSexOption2:
                 userData.put("Sex", "Female");
+                profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Female");
                 break;
         }
+
         userData.put("Height", pickerHeight.getValue());
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_HEIGHT, pickerHeight.getValue());
         userData.put("Weight", pickerWeight.getValue());
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_WEIGHT, pickerWeight.getValue());
         userData.put("BirthDate", userBirthDate.getText().toString().trim());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_BIRTH, userBirthDate.getText().toString().trim());
 
-        db.collection("profile")
-                .add(userData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        sp = getApplicationContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editSP = sp.edit();
-                        editSP.putString(USER_ID, documentReference.getId());
-                        editSP.commit();
-
-                        Log.d("MyApp", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("MyApp", "Error adding document", e);
-                    }
-                });
     }
 
     private boolean isValidEmailPattern(CharSequence target) {
@@ -222,7 +202,7 @@ public class IntroActivity extends AppCompatActivity {
         if (userEmail.getText().toString().isEmpty()) {
             emailLayout.setError("Empty email");
             return false;
-        } else if(!isValidEmailPattern(userEmail.getText().toString())) {
+        } else if (!isValidEmailPattern(userEmail.getText().toString())) {
             emailLayout.setError("Email not valid");
             return false;
         } else {

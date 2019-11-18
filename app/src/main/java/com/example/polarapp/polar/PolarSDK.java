@@ -2,6 +2,8 @@ package com.example.polarapp.polar;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+
 import java.util.List;
 import java.util.UUID;
 import io.reactivex.Flowable;
@@ -28,7 +30,7 @@ public class PolarSDK {
 
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
-        void deviceConnected(boolean ok);
+        void deviceConnected(boolean ok, View v);
     }
 
     public PolarSDK(Context context, CallbackInterfaceDevices cb) {
@@ -156,13 +158,13 @@ public class PolarSDK {
         }
     }
 
-    public void connectDevice(String device_id) {
+    public void connectDevice(String device_id, View v) {
         try {
             api.connectToDevice(device_id);
-            callbackInterfaceDevices.deviceConnected(true);
+            callbackInterfaceDevices.deviceConnected(true, v);
         } catch (PolarInvalidArgument polarInvalidArgument) {
             polarInvalidArgument.printStackTrace();
-            callbackInterfaceDevices.deviceConnected(false);
+            callbackInterfaceDevices.deviceConnected(false, v);
         }
     }
 }

@@ -1,37 +1,19 @@
 package com.example.polarapp.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.polarapp.IntroActivity;
+import com.example.polarapp.ProfilePreferencesManager;
 import com.example.polarapp.R;
 import com.example.polarapp.profile.EditDialog;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.time.*;
+import java.util.*;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class ProfileFragment extends Fragment implements EditDialog.EditListener {
@@ -42,10 +24,17 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     private TextView nameText, sexText, ageText, heightText, weightText, emailText, phoneText, locationText;
     private EditDialog editDialog;
     private int selectedButton;
-    private static final String USER_ID = "id";
-    private Map<String, Object> userData = new HashMap<>();
-    private SharedPreferences sp;
-    private DocumentReference docRef;
+    private ProfilePreferencesManager profilePreferencesManager;
+
+    private static final String PROFILE_USER_NAME = "profile_user_name";
+    private static final String PROFILE_USER_EMAIL = "profile_user_email";
+    private static final String PROFILE_USER_PHONE = "profile_user_phone";
+    private static final String PROFILE_USER_CITY = "profile_user_city";
+    private static final String PROFILE_USER_COUNTRY = "profile_user_country";
+    private static final String PROFILE_USER_BIRTH = "profile_user_birth";
+    private static final String PROFILE_USER_SEX = "profile_user_sex";
+    private static final String PROFILE_USER_HEIGHT = "profile_user_height";
+    private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -58,13 +47,15 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         phoneText = root.findViewById(R.id.phoneValue);
         locationText = root.findViewById(R.id.locationValue);
 
+        profilePreferencesManager = new ProfilePreferencesManager(getActivity().getBaseContext());
+
         editImageView = root.findViewById(R.id.imageViewEdit);
         editImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 10);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit profile");
                 }
             }
         });
@@ -81,7 +72,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 }
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(selectedButton), 1);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit sex");
                 }
             }
         });
@@ -92,7 +83,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 2);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit age");
                 }
             }
         });
@@ -105,7 +96,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 value = value.substring(0, value.length() - 2);
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 3);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit height");
                 }
             }
         });
@@ -118,7 +109,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 value = value.substring(0, value.length() - 2);
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 4);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit weight");
                 }
             }
         });
@@ -129,7 +120,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 5);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit email");
                 }
             }
         });
@@ -140,7 +131,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 6);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit phone");
                 }
             }
         });
@@ -151,20 +142,29 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             public void onClick(View view) {
                 editDialog = new EditDialog(ProfileFragment.this, getContext(), locationText.getText().toString(), 7);
                 if (getFragmentManager() != null) {
-                    editDialog.show(getFragmentManager(), "");
+                    editDialog.show(getFragmentManager(), "Edit location");
                 }
             }
         });
-        
-        loadProfileData();
-        
-        
+
+        //loadProfileData();
+
+        nameText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_NAME));
+        emailText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_EMAIL));
+        phoneText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_PHONE));
+        locationText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_CITY) + "/" +
+                profilePreferencesManager.getStringProfileValue(PROFILE_USER_COUNTRY));
+        sexText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_SEX));
+        heightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT));
+        weightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT));
+        String[] date = profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH).split("/");
+        ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
+
         return root;
     }
 
-    private void loadProfileData() {
+    /*private void loadProfileData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        sp = getContext().getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE);
         String id = sp.getString(USER_ID, "Error");
         Log.d("MyApp", id);
         docRef = db.collection("profile").document(id);
@@ -176,7 +176,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                     if (document.exists()) {
                         Log.d("MyApp", "DocumentSnapshot " + document.getId() + " data: " + document.getData());
                         userData = document.getData();
-                        printUserData(userData);
+                        //printUserData(userData);
                     } else {
                         Log.d("MyApp", "No such document");
                     }
@@ -185,9 +185,9 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 }
             }
         });
-    }
+    }*/
 
-    public void printUserData(Map<String, Object> userData) {
+    /*public void printUserData(Map<String, Object> userData) {
         Object userName = userData.get("Name");
         Object userEmail = userData.get("Email");
         Object userPhone = userData.get("Phone");
@@ -206,7 +206,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         heightText.setText(userHeight + "cm");
         String[] date = String.valueOf(userBirthDate).split("/");
         ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]),Integer.parseInt(date[1]),Integer.parseInt(date[0]))));
-    }
+    }*/
 
     public int getAge(int year, int monthOfYear, int dayOfMonth) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -214,7 +214,6 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             LocalDate birthDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
             Period p = Period.between(birthDate, today);
             return p.getYears();
-            //editListener.applyAgeChanges(p.getYears());
         } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
@@ -229,7 +228,6 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(TimeUnit.MILLISECONDS.toMillis(Math.abs(end - start)));
             return (c.get(Calendar.YEAR) - 1970);
-            //editListener.applyAgeChanges(c.get(Calendar.YEAR) - 1970);
         }
     }
 
@@ -237,50 +235,60 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     public void applySexChanges(int sex) {
         switch (sex) {
             case R.id.sexOption1:
-                Toast.makeText(getContext(), "Male", Toast.LENGTH_SHORT).show();
                 sexText.setText("Male");
+                profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Male");
                 break;
             case R.id.sexOption2:
-                Toast.makeText(getContext(), "Female", Toast.LENGTH_SHORT).show();
+                profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Female");
                 sexText.setText("Female");
                 break;
         }
     }
 
     @Override
-    public void applyAgeChanges(int age) {
-        ageText.setText(String.valueOf(age));
+    public void applyBirthChanges(String birthday) {
+        String[] date = birthday.split("/");
+        ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_BIRTH, birthday);
     }
 
     @Override
     public void applyHeightChanges(int height) {
         heightText.setText(height + "cm");
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_HEIGHT, height);
     }
 
     @Override
     public void applyWeightChanges(int weight) {
         weightText.setText(weight + "kg");
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_WEIGHT, weight);
     }
 
     @Override
     public void applyEmailChanges(String email) {
         emailText.setText(email);
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_EMAIL, email);
     }
 
     @Override
     public void applyPhoneChanges(String phone) {
         phoneText.setText(phone);
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_PHONE, phone);
     }
 
     @Override
     public void applyLocationChanges(String location) {
+        String[] data = location.split("/");
         locationText.setText(location);
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_CITY, data[0]);
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_COUNTRY, data[1]);
     }
 
     @Override
     public void applyProfileChanges(String name, String password) {
-        if(!name.equals("")) {
+        if (!name.equals("")) {
             nameText.setText(name);
+            profilePreferencesManager.setStringProfileValue(PROFILE_USER_NAME, name);
         }
     }
 }
