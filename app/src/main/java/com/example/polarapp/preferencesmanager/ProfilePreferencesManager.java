@@ -1,4 +1,4 @@
-package com.example.polarapp;
+package com.example.polarapp.preferencesmanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;

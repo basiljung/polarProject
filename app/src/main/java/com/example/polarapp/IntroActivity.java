@@ -10,6 +10,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 
+import com.example.polarapp.preferencesmanager.IntroPreferencesManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
 

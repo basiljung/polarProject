@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.polarapp.R;
+import com.example.polarapp.preferencesmanager.DevicePreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +23,10 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
     private Context mContext;
     private List<PolarDeviceInfo> polarDeviceInfoList;
     private ButtonConnectCallback bcc;
+    private DevicePreferenceManager devicePreferenceManager;
 
     public interface ButtonConnectCallback {
-        void onClickButtonListView(View v, String id, int position);
+        void onClickButtonListView(View v, String id, PolarDeviceInfo pdi);
     }
 
     public DevicesArrayAdapter(ButtonConnectCallback bcc, Context context, ArrayList<PolarDeviceInfo> list) {
@@ -31,14 +34,15 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
         this.bcc = bcc;
         this.mContext = context;
         this.polarDeviceInfoList = list;
+        devicePreferenceManager = new DevicePreferenceManager(context);
     }
 
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list,parent,false);
 
-        PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
+        final PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
 
         TextView polarDeviceName = listItem.findViewById(R.id.polarDeviceName);
         polarDeviceName.setText(currentInfo.name);
@@ -57,10 +61,23 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
         }
 
         Button connectButton = listItem.findViewById(R.id.connectButton);
+        LinearLayout batteryLayout = listItem.findViewById(R.id.batteryLayout);
+        TextView polarDeviceBattery = listItem.findViewById(R.id.polarDeviceBattery);
+
+        if (devicePreferenceManager.getConnectedDevices() == 1 && devicePreferenceManager.getID().equals(currentInfo.deviceId)) {
+            batteryLayout.setVisibility(View.VISIBLE);
+            connectButton.setText("Disconnect");
+            polarDeviceBattery.setText(devicePreferenceManager.getBatteryLevel() + "%");
+        } else {
+            batteryLayout.setVisibility(View.INVISIBLE);
+            connectButton.setText("Connect");
+        }
+
+        final View finalListItem = listItem;
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bcc.onClickButtonListView(view, polarDeviceID.getText().toString(), position);
+                bcc.onClickButtonListView(finalListItem, polarDeviceID.getText().toString(), currentInfo);
             }
         });
 

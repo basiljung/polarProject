@@ -7,7 +7,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.polarapp.ProfilePreferencesManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.R;
 import com.example.polarapp.profile.EditDialog;
 

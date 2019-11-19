@@ -30,7 +30,9 @@ public class PolarSDK {
 
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
-        void deviceConnected(boolean ok, View v);
+        //void deviceConnected(boolean ok);
+        void deviceDisconnected(boolean ok);
+        void batteryDataReceived(int batteryLevel);
     }
 
     public PolarSDK(Context context, CallbackInterfaceDevices cb) {
@@ -108,6 +110,7 @@ public class PolarSDK {
             @Override
             public void batteryLevelReceived(String s, int i) {
                 Log.d(TAG, "Battery level " + s + " " + i);
+                callbackInterfaceDevices.batteryDataReceived(i);
             }
 
             @Override
@@ -158,13 +161,24 @@ public class PolarSDK {
         }
     }
 
-    public void connectDevice(String device_id, View v) {
+    public void connectDevice(String device_id) {
         try {
             api.connectToDevice(device_id);
-            callbackInterfaceDevices.deviceConnected(true, v);
+            //callbackInterfaceDevices.deviceConnected(true);
         } catch (PolarInvalidArgument polarInvalidArgument) {
             polarInvalidArgument.printStackTrace();
-            callbackInterfaceDevices.deviceConnected(false, v);
+            //callbackInterfaceDevices.deviceConnected(false);
         }
+    }
+
+    public void disconnectDevice(String device_id) {
+        try {
+            api.disconnectFromDevice(device_id);
+            callbackInterfaceDevices.deviceDisconnected(true);
+        } catch (PolarInvalidArgument polarInvalidArgument) {
+            polarInvalidArgument.printStackTrace();
+            callbackInterfaceDevices.deviceDisconnected(false);
+        }
+
     }
 }

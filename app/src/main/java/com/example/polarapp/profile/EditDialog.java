@@ -11,7 +11,7 @@ import android.widget.*;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.example.polarapp.ProfilePreferencesManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
