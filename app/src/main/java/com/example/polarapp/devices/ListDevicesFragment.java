@@ -11,6 +11,7 @@ import android.widget.*;
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.DevicePreferenceManager;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -25,16 +26,12 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
     private ArrayList<PolarDeviceInfo> polarDeviceInfoArrayList = new ArrayList<>();
     private PolarDeviceInfo polarDeviceInfo;
     private TextView textBattery;
-    private Button button;
+    private MaterialButton button;
     private LinearLayout batteryLayout;
     private boolean isBatteryReceived = false;
     private boolean isDeviceDisconnected = false;
+    private boolean isDeviceConnected = false;
     private DevicePreferenceManager devicePreferenceManager;
-
-
-    // Add SP to know the connected device. In that case, device count has to change to 1, and in the
-    // ArrayAdapter I have to show the text for connected device.
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +57,11 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
     }
 
     @Override
+    public void deviceConnected(boolean ok) {
+        isDeviceConnected = ok;
+    }
+
+    @Override
     public void deviceDisconnected(boolean ok) {
         isDeviceDisconnected = ok;
     }
@@ -79,23 +81,23 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
         textBattery = v.findViewById(R.id.polarDeviceBattery);
         String textButton = button.getText().toString();
         if (textButton.toLowerCase().equals("connect")) {
-            new LoadAsync().execute(new MyTaskParams(id, true));
+            new DeviceConnectionAsync().execute(new DeviceConnectionParams(id, true));
         } else if (textButton.toLowerCase().equals("disconnect")) {
-            new LoadAsync().execute(new MyTaskParams(id, false));
+            new DeviceConnectionAsync().execute(new DeviceConnectionParams(id, false));
         }
     }
 
-    private static class MyTaskParams {
+    private static class DeviceConnectionParams {
         String id;
         boolean action;
 
-        MyTaskParams(String id, boolean action) {
+        DeviceConnectionParams(String id, boolean action) {
             this.id = id;
             this.action = action;
         }
     }
 
-    class LoadAsync extends AsyncTask<MyTaskParams, Void, Void> {
+    class DeviceConnectionAsync extends AsyncTask<DeviceConnectionParams, Void, Void> {
         private boolean action;
         private int devicesCount;
 
@@ -104,22 +106,21 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
             button.setText("Connecting...");
         }
 
-        protected Void doInBackground(MyTaskParams... args) {
+        protected Void doInBackground(DeviceConnectionParams... args) {
             action = args[0].action;
             devicesCount = devicePreferenceManager.getConnectedDevices();
             if (action == true && devicesCount < 1) {
                 polarSDK.connectDevice(args[0].id);
-                while (!isBatteryReceived);
-                devicePreferenceManager.setConnectedDevices(devicesCount+1);
+                while (!isBatteryReceived && !isDeviceConnected);
+                devicePreferenceManager.setConnectedDevices(devicesCount + 1);
                 devicePreferenceManager.setID(args[0].id);
             } else if (action == false) {
                 polarSDK.disconnectDevice(args[0].id);
                 while (!isDeviceDisconnected);
-                devicePreferenceManager.setConnectedDevices(devicesCount-1);
+                devicePreferenceManager.setConnectedDevices(devicesCount - 1);
             } else {
                 Log.d("MyApp", "You can only connect 1 device at the same time"); //Make a toast here
                 action = false;
-                return null;
             }
             return null;
         }

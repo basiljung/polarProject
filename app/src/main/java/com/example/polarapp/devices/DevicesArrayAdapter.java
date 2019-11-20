@@ -1,18 +1,12 @@
 package com.example.polarapp.devices;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferenceManager;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +34,7 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list, parent,false);
 
         final PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
 
@@ -60,7 +54,7 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
             polarDeviceImage.setImageResource(R.drawable.polarh10);
         }
 
-        Button connectButton = listItem.findViewById(R.id.connectButton);
+        MaterialButton connectButton = listItem.findViewById(R.id.connectButton);
         LinearLayout batteryLayout = listItem.findViewById(R.id.batteryLayout);
         TextView polarDeviceBattery = listItem.findViewById(R.id.polarDeviceBattery);
 

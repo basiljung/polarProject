@@ -11,7 +11,6 @@ import android.widget.*;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
@@ -37,19 +36,12 @@ public class EditDialog extends DialogFragment {
 
     public interface EditListener {
         void applySexChanges(int sex);
-
         void applyBirthChanges(String birthday);
-
         void applyHeightChanges(int height);
-
         void applyWeightChanges(int weight);
-
         void applyEmailChanges(String email);
-
         void applyPhoneChanges(String phone);
-
         void applyLocationChanges(String location);
-
         void applyProfileChanges(String name, String password);
     }
 
@@ -60,7 +52,7 @@ public class EditDialog extends DialogFragment {
                 dialog = editSex();
                 break;
             case 2:
-                picker = editAge();
+                picker = editAge(defaultValue);
                 return picker;
             case 3:
                 dialog = numberPickerDialog("Select your height", 100, 250, Integer.parseInt(defaultValue));
@@ -165,10 +157,9 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public DatePickerDialog editAge() {
-        ProfilePreferencesManager ppf = new ProfilePreferencesManager(getContext());
-        Map<String, Object> userData = ppf.getUserProfileData();
-        String[] date = String.valueOf(userData.get("BirthDate")).split("/");
+    public DatePickerDialog editAge(String defaultValue) {
+        String[] date = defaultValue.split("/");
+        Log.d("Default Value", defaultValue);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -185,6 +176,7 @@ public class EditDialog extends DialogFragment {
                         } else {
                             day = String.valueOf(dayOfMonth);
                         }
+                        Log.d("Before EditListener", day + "/" + month + "/" + year);
                         editListener.applyBirthChanges(day + "/" + month + "/" + year);
                     }
                 }, Integer.parseInt(date[2]), Integer.parseInt(date[1]) - 1, Integer.parseInt(date[0])); // Select BirthDate on DB

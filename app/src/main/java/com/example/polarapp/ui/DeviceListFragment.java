@@ -2,10 +2,7 @@ package com.example.polarapp.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,7 +24,6 @@ public class DeviceListFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.device_list_list:
-                        Log.d("MyApp", "Estamos aqui de nuevoo");
                         getFragmentManager().beginTransaction().replace(R.id.fragment_container_devices, new ListDevicesFragment()).commit();
                         break;
                 }

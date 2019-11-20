@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,18 +25,27 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected Training", Toast.LENGTH_SHORT).show();
+                // Start activity with the timer, distance and all the stuff we need.
+                // Use also on it the PolarSDK function with an interface.
+                // Add onPause, onResume, etc in the activity, and call specific functions
+                // of the PolarSDK, really important.
             }
         });
         sleepImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected Sleep", Toast.LENGTH_SHORT).show();
+                // Should be something similar to the activity, but you will need to record the sleep.
+                // Add onPause, onResume, etc in the activity, and call specific functions
+                // of the PolarSDK, really important.
             }
         });
         historyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
+                // Start activity where we'll load all the data saved about the training history.
+                // Showing the last activities, with distance, profile, HR and other things.
             }
         });
         return root;

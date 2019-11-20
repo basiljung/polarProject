@@ -13,27 +13,26 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="170dp"
             android:id="@+id/trainingImage"
             android:src="@drawable/home_activity_image"
             android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="5dp"/>
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="170dp"
             android:id="@+id/sleepImage"
             android:src="@drawable/home_sleep_image"
             android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="5dp"/>
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="170dp"
             android:id="@+id/historyImage"
             android:src="@drawable/home_history_image"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"/>
+            android:scaleType="fitXY"/>
 
     </LinearLayout>
 </ScrollView>
