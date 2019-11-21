@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.List;
 import java.util.UUID;
 import io.reactivex.Flowable;
@@ -30,7 +32,7 @@ public class PolarSDK {
 
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
-        //void deviceConnected(boolean ok);
+        void deviceConnected(boolean ok);
         void deviceDisconnected(boolean ok);
         void batteryDataReceived(int batteryLevel);
     }
@@ -164,10 +166,10 @@ public class PolarSDK {
     public void connectDevice(String device_id) {
         try {
             api.connectToDevice(device_id);
-            //callbackInterfaceDevices.deviceConnected(true);
+            callbackInterfaceDevices.deviceConnected(true);
         } catch (PolarInvalidArgument polarInvalidArgument) {
             polarInvalidArgument.printStackTrace();
-            //callbackInterfaceDevices.deviceConnected(false);
+            callbackInterfaceDevices.deviceConnected(false);
         }
     }
 

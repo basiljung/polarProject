@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         sexLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sexValue = sexText.getText().toString();
+                String sexValue = profilePreferencesManager.getStringProfileValue(PROFILE_USER_SEX);
                 if (sexValue.equals("Male")) {
                     selectedButton = R.id.sexOption1;
                 } else if (sexValue.equals("Female")) {
@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         ageLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 2);
+                editDialog = new EditDialog(ProfileFragment.this, getContext(), profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH), 2);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit age");
                 }
@@ -92,9 +92,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         heightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String value = heightText.getText().toString();
-                value = value.substring(0, value.length() - 2);
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 3);
+                editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT)), 3);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit height");
                 }
@@ -105,9 +103,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         weightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String value = weightText.getText().toString();
-                value = value.substring(0, value.length() - 2);
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), value, 4);
+                editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT)), 4);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit weight");
                 }
@@ -155,8 +151,8 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         locationText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_CITY) + "/" +
                 profilePreferencesManager.getStringProfileValue(PROFILE_USER_COUNTRY));
         sexText.setText(profilePreferencesManager.getStringProfileValue(PROFILE_USER_SEX));
-        heightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT));
-        weightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT));
+        heightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT) + "cm");
+        weightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT) + "kg");
         String[] date = profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH).split("/");
         ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
 
@@ -211,14 +207,14 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     public int getAge(int year, int monthOfYear, int dayOfMonth) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate today = LocalDate.now();
-            LocalDate birthDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
+            LocalDate birthDate = LocalDate.of(year, monthOfYear, dayOfMonth);
             Period p = Period.between(birthDate, today);
             return p.getYears();
         } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            Calendar birthDate = new GregorianCalendar(year, monthOfYear + 1, dayOfMonth);
+            Calendar birthDate = new GregorianCalendar(year, monthOfYear, dayOfMonth);
             Calendar currentDate = new GregorianCalendar(cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 

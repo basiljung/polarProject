@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.*;
 
+import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.ui.*;
 
