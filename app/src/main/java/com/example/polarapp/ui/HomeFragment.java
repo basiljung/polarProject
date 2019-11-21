@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         historyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Selected History LOL", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
                 openHistoryActivity();
                 Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
                 // Start activity where we'll load all the data saved about the training history.
