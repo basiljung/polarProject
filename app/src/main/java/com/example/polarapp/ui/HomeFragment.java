@@ -1,5 +1,6 @@
 package com.example.polarapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.polarapp.HistoryActivity;
 import com.example.polarapp.R;
 
 public class HomeFragment extends Fragment {
@@ -37,9 +40,16 @@ public class HomeFragment extends Fragment {
         historyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Selected History LOL", Toast.LENGTH_SHORT).show();
+                openHistoryActivity();
             }
         });
         return root;
+    }
+
+    public void openHistoryActivity() {
+        //Intent intent = new Intent(this, HistoryActivity.class);
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), HistoryActivity.class);
+        startActivity(myIntent);
     }
 }
