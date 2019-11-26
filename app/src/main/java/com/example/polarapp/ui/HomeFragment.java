@@ -1,5 +1,6 @@
 package com.example.polarapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.polarapp.HistoryActivity;
 import com.example.polarapp.R;
 
 public class HomeFragment extends Fragment {
@@ -44,10 +47,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
+                openHistoryActivity();
+                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
                 // Start activity where we'll load all the data saved about the training history.
                 // Showing the last activities, with distance, profile, HR and other things.
             }
         });
         return root;
+    }
+
+    public void openHistoryActivity() {
+        //Intent intent = new Intent(this, HistoryActivity.class);
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), HistoryActivity.class);
+        startActivity(myIntent);
     }
 }
