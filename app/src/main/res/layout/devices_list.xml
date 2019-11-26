@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginLeft="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
@@ -85,67 +84,3 @@
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
-
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginRight="5dp"
-    android:background="@drawable/devices_list_scan_shape"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/sensorImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center"
-        android:layout_margin="4dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="6dp">
-
-        <TextView
-            android:id="@+id/polarDeviceName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Polar H10 55ACFA2B"
-            android:textSize="16dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/polarDeviceID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="55ACFA2B"
-            android:textSize="12dp"
-            android:textStyle="italic" />
-
-        <TextView
-            android:id="@+id/polarDeviceAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="11:22:33:44:55:66"
-            android:textSize="12dp"
-            android:textStyle="italic" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end|center">
-
-            <Button
-                android:id="@+id/connectButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyleithgradient"
-                android:text="Connect"
-                android:textColor="#fff" />
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>-->

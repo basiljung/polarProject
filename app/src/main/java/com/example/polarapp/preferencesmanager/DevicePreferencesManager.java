@@ -3,7 +3,7 @@ package com.example.polarapp.preferencesmanager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class DevicePreferenceManager {
+public class DevicePreferencesManager {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -12,7 +12,7 @@ public class DevicePreferenceManager {
     private static final String ID_DEVICE_CONNECTED = "id_connected";
     private static final String BATTERY_LEVEL = "battery_level";
 
-    public DevicePreferenceManager(Context context) {
+    public DevicePreferencesManager(Context context) {
         this.context = context;
         sp = context.getSharedPreferences(CONNECTED_DEVICE, Context.MODE_PRIVATE);
         editor = sp.edit();
@@ -36,16 +36,24 @@ public class DevicePreferenceManager {
     }
 
     public void setBatteryLevel(int level) {
-        editor.putInt(BATTERY_LEVEL, level);
+        if (level == -1) {
+            editor.remove(BATTERY_LEVEL);
+        } else {
+            editor.putInt(BATTERY_LEVEL, level);
+        }
         editor.commit();
     }
 
-    public String getID() {
+    public String getDeviceID() {
         return sp.getString(ID_DEVICE_CONNECTED, "");
     }
 
-    public void setID(String id) {
-        editor.putString(ID_DEVICE_CONNECTED, id);
+    public void setDeviceID(String id) {
+        if (id.equals("")) {
+            editor.remove(ID_DEVICE_CONNECTED);
+        } else {
+            editor.putString(ID_DEVICE_CONNECTED, id);
+        }
         editor.commit();
     }
 

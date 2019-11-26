@@ -10,14 +10,14 @@ import android.widget.*;
 
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
-import com.example.polarapp.preferencesmanager.DevicePreferenceManager;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 import polar.com.sdk.api.model.PolarDeviceInfo;
 
-public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackInterfaceDevices, DevicesArrayAdapter.ButtonConnectCallback {
+public class SearchDevicesFragment extends Fragment implements PolarSDK.CallbackInterfaceDevices, DevicesArrayAdapter.ButtonConnectCallback {
 
     private View root;
     private PolarSDK polarSDK;
@@ -31,18 +31,18 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
     private boolean isBatteryReceived = false;
     private boolean isDeviceDisconnected = false;
     private boolean isDeviceConnected = false;
-    private DevicePreferenceManager devicePreferenceManager;
+    private DevicePreferencesManager devicePreferencesManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_list_devices, container, false);
-        devicePreferenceManager = new DevicePreferenceManager(getActivity().getBaseContext());
+        root = inflater.inflate(R.layout.fragment_search_devices, container, false);
+        devicePreferencesManager = new DevicePreferencesManager(getActivity().getBaseContext());
 
         polarDeviceInfoArrayList = new ArrayList<>();
         listView = root.findViewById(R.id.devices_list_view);
 
-        polarSDK = new PolarSDK(getContext(), this);
-        polarSDK.startAPI();
+        polarSDK = (PolarSDK) getActivity().getApplicationContext();
+        polarSDK.setCallbackInterfaceDevices(this);
         polarSDK.scanDevices();
 
         return root;
@@ -68,10 +68,9 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
 
     @Override
     public void batteryDataReceived(int batteryLevel) {
-        devicePreferenceManager.setBatteryLevel(batteryLevel);
+        devicePreferencesManager.setBatteryLevel(batteryLevel);
         isBatteryReceived = true;
     }
-
 
     @Override
     public void onClickButtonListView(View v, String id, PolarDeviceInfo pdi) {
@@ -108,18 +107,24 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
 
         protected Void doInBackground(DeviceConnectionParams... args) {
             action = args[0].action;
-            devicesCount = devicePreferenceManager.getConnectedDevices();
-            if (action == true && devicesCount < 1) {
+            devicesCount = devicePreferencesManager.getConnectedDevices();
+            if (action == true && devicesCount < 1) { // Connect
                 polarSDK.connectDevice(args[0].id);
-                while (!isBatteryReceived && !isDeviceConnected);
-                devicePreferenceManager.setConnectedDevices(devicesCount + 1);
-                devicePreferenceManager.setID(args[0].id);
-            } else if (action == false) {
+                while (!(isBatteryReceived && isDeviceConnected)) ;
+                isBatteryReceived = false;
+                isDeviceConnected = false;
+                devicePreferencesManager.setConnectedDevices(devicesCount + 1);
+                devicePreferencesManager.setDeviceID(args[0].id);
+            } else if (action == false) { // Disconnect
                 polarSDK.disconnectDevice(args[0].id);
-                while (!isDeviceDisconnected);
-                devicePreferenceManager.setConnectedDevices(devicesCount - 1);
+                while (!isDeviceDisconnected) ;
+                isDeviceDisconnected = false;
+                devicePreferencesManager.setBatteryLevel(-1);
+                devicePreferencesManager.setConnectedDevices(devicesCount - 1);
+                devicePreferencesManager.setDeviceID("");
             } else {
-                Log.d("MyApp", "You can only connect 1 device at the same time"); //Make a toast here
+                Log.d("MyApp", "You can only connect 1 device at the same time");
+                //Make a toast here
                 action = false;
             }
             return null;
@@ -129,9 +134,10 @@ public class ListDevicesFragment extends Fragment implements PolarSDK.CallbackIn
             super.onPostExecute(unused);
             if (action == true) {
                 batteryLayout.setVisibility(View.VISIBLE);
-                textBattery.setText(devicePreferenceManager.getBatteryLevel() + "%");
+                Log.d("MyApp", "isBatteryReceived onPost: " + isBatteryReceived);
+                textBattery.setText(devicePreferencesManager.getBatteryLevel() + "%");
                 button.setText("Disconnect");
-            } else if (action == false) {
+            } else {
                 batteryLayout.setVisibility(View.INVISIBLE);
                 button.setText("Connect");
             }

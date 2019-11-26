@@ -1,10 +1,9 @@
 package com.example.polarapp.polar;
 
-import android.content.Context;
+import android.app.Application;
 import android.util.Log;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,33 +19,44 @@ import polar.com.sdk.api.errors.PolarInvalidArgument;
 import polar.com.sdk.api.model.PolarDeviceInfo;
 import polar.com.sdk.api.model.PolarHrData;
 
-public class PolarSDK {
+public class PolarSDK extends Application {
 
-    private Context context;
-    private String TAG = "Polar_HRActivity";
+    private String TAG = "PolarSDK_API";
     private PolarBleApi api;
     private String DEVICE_ID;
     private Disposable scanDisposable;
+    private DevicePreferencesManager devicePreferencesManager;
+
+    // Base for other Interfaces like the Activity or the Sleep one.
 
     private CallbackInterfaceDevices callbackInterfaceDevices;
-
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
         void deviceConnected(boolean ok);
         void deviceDisconnected(boolean ok);
         void batteryDataReceived(int batteryLevel);
     }
-
-    public PolarSDK(Context context, CallbackInterfaceDevices cb) {
+    public void setCallbackInterfaceDevices(CallbackInterfaceDevices cb) {
         this.callbackInterfaceDevices = cb;
-        this.context = context;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        startAPI();
+        devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
+        if (devicePreferencesManager.getConnectedDevices() == 1) {
+            try {
+                api.connectToDevice(devicePreferencesManager.getDeviceID());
+            } catch (PolarInvalidArgument polarInvalidArgument) {
+                polarInvalidArgument.printStackTrace();
+            }
+        }
     }
 
     public void startAPI() {
-
         DEVICE_ID = "";
-
-        api = PolarBleApiDefaultImpl.defaultImplementation(context,
+        api = PolarBleApiDefaultImpl.defaultImplementation(getBaseContext(),
                 PolarBleApi.ALL_FEATURES);
 
         api.setApiCallback(new PolarBleApiCallback() {
@@ -182,5 +192,17 @@ public class PolarSDK {
             callbackInterfaceDevices.deviceDisconnected(false);
         }
 
+    }
+
+    public void onPauseEntered() {
+        api.backgroundEntered();
+    }
+
+    public void onResumeEntered() {
+        api.foregroundEntered();
+    }
+
+    public void onDestroyEntered() {
+        api.shutDown();
     }
 }

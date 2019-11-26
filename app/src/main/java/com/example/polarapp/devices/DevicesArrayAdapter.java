@@ -5,7 +5,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.example.polarapp.R;
-import com.example.polarapp.preferencesmanager.DevicePreferenceManager;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
     private Context mContext;
     private List<PolarDeviceInfo> polarDeviceInfoList;
     private ButtonConnectCallback bcc;
-    private DevicePreferenceManager devicePreferenceManager;
+    private DevicePreferencesManager devicePreferencesManager;
 
     public interface ButtonConnectCallback {
         void onClickButtonListView(View v, String id, PolarDeviceInfo pdi);
@@ -28,7 +28,7 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
         this.bcc = bcc;
         this.mContext = context;
         this.polarDeviceInfoList = list;
-        devicePreferenceManager = new DevicePreferenceManager(context);
+        devicePreferencesManager = new DevicePreferencesManager(context);
     }
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
@@ -58,10 +58,10 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
         LinearLayout batteryLayout = listItem.findViewById(R.id.batteryLayout);
         TextView polarDeviceBattery = listItem.findViewById(R.id.polarDeviceBattery);
 
-        if (devicePreferenceManager.getConnectedDevices() == 1 && devicePreferenceManager.getID().equals(currentInfo.deviceId)) {
+        if (devicePreferencesManager.getConnectedDevices() == 1 && devicePreferencesManager.getDeviceID().equals(currentInfo.deviceId)) {
             batteryLayout.setVisibility(View.VISIBLE);
             connectButton.setText("Disconnect");
-            polarDeviceBattery.setText(devicePreferenceManager.getBatteryLevel() + "%");
+            polarDeviceBattery.setText(devicePreferencesManager.getBatteryLevel() + "%");
         } else {
             batteryLayout.setVisibility(View.INVISIBLE);
             connectButton.setText("Connect");

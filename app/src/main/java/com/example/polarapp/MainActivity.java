@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.*;
 
 import com.example.polarapp.polar.PolarSDK;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.ui.*;
 
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     private TextView textViewName, textViewEmail;
     private ProfilePreferencesManager profilePreferencesManager;
+    private DevicePreferencesManager devicePreferencesManager;
+    private PolarSDK polarSDK;
 
     // Shared preferences file name
     private static final String PROFILE_USER_NAME = "profile_user_name";
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+        devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
+        polarSDK = (PolarSDK) getApplicationContext();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_device_list:
                 Toast.makeText(this, "Device List", Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DeviceListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DevicesFragment()).commit();
                 break;
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
@@ -135,5 +140,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= 23) {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        polarSDK.onPauseEntered();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        polarSDK.onResumeEntered();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        polarSDK.onDestroyEntered();
     }
 }
