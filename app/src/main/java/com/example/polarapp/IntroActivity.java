@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.*;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -39,6 +40,14 @@ public class IntroActivity extends AppCompatActivity {
     private static final String PROFILE_USER_SEX = "profile_user_sex";
     private static final String PROFILE_USER_HEIGHT = "profile_user_height";
     private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
+    private static final String PROFILE_USER_ID = "profile_user_id";
+
+    /*
+    String uniqueID = UUID.randomUUID().toString();
+            Log.d("1234", uniqueID);
+            sharedPreferences.edit().putString("UUID", uniqueID).apply();
+            sharedPreferences.edit().putBoolean("firstTime", false).apply();
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +164,10 @@ public class IntroActivity extends AppCompatActivity {
     private void saveUserData() {
         Map<String, Object> userData = new HashMap<>();
 
+        String uniqueID = UUID.randomUUID().toString();
+        userData.put("UserID", uniqueID);
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_ID, uniqueID);
+        //sharedPreferences.edit().putString("UUID", uniqueID).apply();
         userData.put("Name", userName.getText().toString().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_NAME, userName.getText().toString().trim());
         userData.put("Email", userEmail.getText().toString().trim());

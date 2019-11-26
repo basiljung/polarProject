@@ -10,6 +10,7 @@ import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.ui.*;
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.*;
+
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //-
+        //String uniqueID = UUID.randomUUID().toString();
+        //Log.d("1234", uniqueID);
+        //-
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
