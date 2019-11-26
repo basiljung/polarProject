@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_polaris_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".history.HistoryActivity"
+            android:theme="@style/AppTheme.Activity"></activity>
         <activity
             android:name=".IntroActivity"
             android:theme="@style/AppTheme.Intro" />

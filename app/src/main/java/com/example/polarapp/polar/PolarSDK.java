@@ -1,12 +1,18 @@
 package com.example.polarapp.polar;
 
 import android.app.Application;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
+import com.example.polarapp.devices.SearchDevicesFragment;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -25,6 +31,8 @@ public class PolarSDK extends Application {
     private PolarBleApi api;
     private String DEVICE_ID;
     private Disposable scanDisposable;
+    private boolean isConnecting = false;
+    private CountDownLatch latch;
     private DevicePreferencesManager devicePreferencesManager;
 
     // Base for other Interfaces like the Activity or the Sleep one.
@@ -44,13 +52,10 @@ public class PolarSDK extends Application {
     public void onCreate() {
         super.onCreate();
         startAPI();
+        latch = new CountDownLatch(1);
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
         if (devicePreferencesManager.getConnectedDevices() == 1) {
-            try {
-                api.connectToDevice(devicePreferencesManager.getDeviceID());
-            } catch (PolarInvalidArgument polarInvalidArgument) {
-                polarInvalidArgument.printStackTrace();
-            }
+            connectDevice(devicePreferencesManager.getDeviceID(), true);
         }
     }
 
@@ -69,16 +74,21 @@ public class PolarSDK extends Application {
             public void deviceConnected(PolarDeviceInfo s) {
                 Log.d(TAG, "Device connected " + s.deviceId);
                 DEVICE_ID = s.deviceId;
+                isConnecting = false;
             }
 
             @Override
             public void deviceConnecting(PolarDeviceInfo s) {
                 Log.d(TAG, "Device connecting " + s.deviceId);
+                isConnecting = true;
+                latch.countDown();
             }
 
             @Override
             public void deviceDisconnected(PolarDeviceInfo s) {
                 Log.d(TAG, "Device disconnected " + s);
+                devicePreferencesManager.setConnectedDevices(0);
+                devicePreferencesManager.setDeviceID("");
                 DEVICE_ID = "";
             }
 
@@ -173,13 +183,17 @@ public class PolarSDK extends Application {
         }
     }
 
-    public void connectDevice(String device_id) {
-        try {
-            api.connectToDevice(device_id);
-            callbackInterfaceDevices.deviceConnected(true);
-        } catch (PolarInvalidArgument polarInvalidArgument) {
-            polarInvalidArgument.printStackTrace();
-            callbackInterfaceDevices.deviceConnected(false);
+    public void connectDevice(String device_id, boolean isStart) {
+        if (isStart) {
+            new TryToConnect().execute(device_id);
+        } else {
+            try {
+                api.connectToDevice(device_id);
+                callbackInterfaceDevices.deviceConnected(true);
+            } catch (PolarInvalidArgument polarInvalidArgument) {
+                polarInvalidArgument.printStackTrace();
+                callbackInterfaceDevices.deviceConnected(false);
+            }
         }
     }
 
@@ -204,5 +218,37 @@ public class PolarSDK extends Application {
 
     public void onDestroyEntered() {
         api.shutDown();
+    }
+
+    class TryToConnect extends AsyncTask<String, Void, Void> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected Void doInBackground(String... args) {
+            try {
+                api.connectToDevice(args[0]);
+                Log.d("PolarSDK_API", "Waiting to connect");
+                latch.await(5, TimeUnit.SECONDS);
+                if (isConnecting == true) {
+                    Log.d("PolarSDK_API", "Successfull");
+                    Log.d("PolarSDK_API", "Device " + devicePreferencesManager.getDeviceID() + " connected");
+                } else {
+                    Log.d("PolarSDK_API", "Device " + devicePreferencesManager.getDeviceID() + " not connected :(");
+                    devicePreferencesManager.setDeviceID("");
+                    devicePreferencesManager.setConnectedDevices(0);
+                }
+            } catch (PolarInvalidArgument polarInvalidArgument) {
+                polarInvalidArgument.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+        }
     }
 }

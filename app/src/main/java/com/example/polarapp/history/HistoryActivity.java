@@ -1,28 +1,28 @@
-package com.example.polarapp;
+package com.example.polarapp.history;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.example.polarapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.type.LatLng;
 
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     ArrayList<HistoryPart> YourHistoryParts = new ArrayList<>();
     ListView listView = null;
 
@@ -30,6 +30,9 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         listView = findViewById(R.id.historyList);
         final HistoryAdapter historyAdapter = new HistoryAdapter(this, YourHistoryParts);

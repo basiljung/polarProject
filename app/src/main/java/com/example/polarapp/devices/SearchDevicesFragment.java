@@ -109,7 +109,7 @@ public class SearchDevicesFragment extends Fragment implements PolarSDK.Callback
             action = args[0].action;
             devicesCount = devicePreferencesManager.getConnectedDevices();
             if (action == true && devicesCount < 1) { // Connect
-                polarSDK.connectDevice(args[0].id);
+                polarSDK.connectDevice(args[0].id, false);
                 while (!(isBatteryReceived && isDeviceConnected)) ;
                 isBatteryReceived = false;
                 isDeviceConnected = false;
