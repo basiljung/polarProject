@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.polarapp.HistoryActivity;
+import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
 
 public class HomeFragment extends Fragment {

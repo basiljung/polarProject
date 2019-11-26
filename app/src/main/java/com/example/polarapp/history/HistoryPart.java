@@ -1,4 +1,4 @@
-package com.example.polarapp;
+package com.example.polarapp.history;
 
 import java.io.Serializable;
 
