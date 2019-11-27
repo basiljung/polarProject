@@ -1,6 +1,7 @@
 package com.example.polarapp.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -35,6 +36,8 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     private static final String PROFILE_USER_SEX = "profile_user_sex";
     private static final String PROFILE_USER_HEIGHT = "profile_user_height";
     private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
+
+    private static final String PROFILE_USER_ID = "profile_user_id";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -155,6 +158,8 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         weightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT) + "kg");
         String[] date = profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH).split("/");
         ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
+
+        Log.d("1234", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
 
         return root;
     }

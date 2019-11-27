@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.ListView;
 
 import com.example.polarapp.R;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,8 +24,11 @@ import java.util.ArrayList;
 public class HistoryActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private ProfilePreferencesManager profilePreferencesManager;
     ArrayList<HistoryPart> YourHistoryParts = new ArrayList<>();
     ListView listView = null;
+
+    private static final String PROFILE_USER_ID = "profile_user_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,10 @@ public class HistoryActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Query activity = db.collection("activities");//.whereEqualTo("UUID", sharedPreferences.getString("UUID", null));
+        profilePreferencesManager = new ProfilePreferencesManager(getApplication().getBaseContext());
 
+        Query activity = db.collection("activities").whereEqualTo("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+                                                                                //profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID)
 
         activity
                 .get()
