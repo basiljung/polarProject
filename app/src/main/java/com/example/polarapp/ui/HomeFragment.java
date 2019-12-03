@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
+import com.example.polarapp.sleep.SleepActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -28,6 +29,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected Training", Toast.LENGTH_SHORT).show();
+
                 // Start activity with the timer, distance and all the stuff we need.
                 // Use also on it the PolarSDK function with an interface.
                 // Add onPause, onResume, etc in the activity, and call specific functions
@@ -37,7 +39,7 @@ public class HomeFragment extends Fragment {
         sleepImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Selected Sleep", Toast.LENGTH_SHORT).show();
+                openSleepActivity();
                 // Should be something similar to the activity, but you will need to record the sleep.
                 // Add onPause, onResume, etc in the activity, and call specific functions
                 // of the PolarSDK, really important.
@@ -46,14 +48,17 @@ public class HomeFragment extends Fragment {
         historyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
                 openHistoryActivity();
-                Toast.makeText(getContext(), "Selected History", Toast.LENGTH_SHORT).show();
                 // Start activity where we'll load all the data saved about the training history.
                 // Showing the last activities, with distance, profile, HR and other things.
             }
         });
         return root;
+    }
+
+    public void openSleepActivity() {
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), SleepActivity.class);
+        startActivity(myIntent);
     }
 
     public void openHistoryActivity() {

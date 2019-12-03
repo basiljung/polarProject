@@ -55,11 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //-
-        //String uniqueID = UUID.randomUUID().toString();
-        //Log.d("1234", uniqueID);
-        //-
-
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
         polarSDK = (PolarSDK) getApplicationContext();
