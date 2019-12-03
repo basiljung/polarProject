@@ -42,13 +42,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Shared preferences file name
     private static final String PROFILE_USER_NAME = "profile_user_name";
     private static final String PROFILE_USER_EMAIL = "profile_user_email";
-    private static final String PROFILE_USER_PHONE = "profile_user_phone";
-    private static final String PROFILE_USER_CITY = "profile_user_city";
-    private static final String PROFILE_USER_COUNTRY = "profile_user_country";
-    private static final String PROFILE_USER_BIRTH = "profile_user_birth";
-    private static final String PROFILE_USER_SEX = "profile_user_sex";
-    private static final String PROFILE_USER_HEIGHT = "profile_user_height";
-    private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkBT();
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }*/
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -110,22 +97,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_home);
                 break;
             case R.id.nav_device_list:
                 Toast.makeText(this, "Device List", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DevicesFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_device_list);
                 break;
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_profile);
                 break;
             case R.id.nav_settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_settings);
                 break;
             case R.id.nav_about:
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_about);
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

@@ -3,49 +3,56 @@ package com.example.polarapp.polar;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
-import com.example.polarapp.devices.SearchDevicesFragment;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import polar.com.sdk.api.PolarBleApi;
-import polar.com.sdk.api.PolarBleApiCallback;
-import polar.com.sdk.api.PolarBleApiDefaultImpl;
+import io.reactivex.functions.*;
+import polar.com.sdk.api.*;
 import polar.com.sdk.api.errors.PolarInvalidArgument;
-import polar.com.sdk.api.model.PolarDeviceInfo;
-import polar.com.sdk.api.model.PolarHrData;
+import polar.com.sdk.api.model.*;
 
 public class PolarSDK extends Application {
 
     private String TAG = "PolarSDK_API";
     private PolarBleApi api;
     private String DEVICE_ID;
-    private Disposable scanDisposable;
+    private Disposable scanDisposable, accDisposable;
     private boolean isConnecting = false;
     private CountDownLatch latch;
     private DevicePreferencesManager devicePreferencesManager;
 
     // Base for other Interfaces like the Activity or the Sleep one.
 
-    private CallbackInterfaceDevices callbackInterfaceDevices;
+    private CallbackInterfaceDevices callbackInterfaceDevices = null;
+
     public interface CallbackInterfaceDevices {
         void scanDevice(PolarDeviceInfo polarDeviceInfo);
+
         void deviceConnected(boolean ok);
+
         void deviceDisconnected(boolean ok);
+
         void batteryDataReceived(int batteryLevel);
     }
+
     public void setCallbackInterfaceDevices(CallbackInterfaceDevices cb) {
         this.callbackInterfaceDevices = cb;
+    }
+
+    private CallbackInterfaceActivity callbackInterfaceActivity = null;
+
+    public interface CallbackInterfaceActivity {
+        void hrUpdateData(int hr);
+    }
+
+    public void setCallbackInterfaceActivity(CallbackInterfaceActivity cb) {
+        this.callbackInterfaceActivity = cb;
     }
 
     @Override
@@ -138,6 +145,10 @@ public class PolarSDK extends Application {
             @Override
             public void hrNotificationReceived(String s, PolarHrData polarHrData) {
                 Log.d(TAG, "HR " + polarHrData.hr);
+
+                if (callbackInterfaceActivity != null) {
+                    callbackInterfaceActivity.hrUpdateData(polarHrData.hr);
+                }
                 List<Integer> rrsMs = polarHrData.rrsMs;
                 String msg = polarHrData.hr + "\n";
                 for (int i : rrsMs) {
@@ -156,7 +167,7 @@ public class PolarSDK extends Application {
     }
 
     public void scanDevices() {
-        if(scanDisposable == null) {
+        if (scanDisposable == null) {
             scanDisposable = api.searchForDevice().observeOn(AndroidSchedulers.mainThread()).subscribe(
                     new Consumer<PolarDeviceInfo>() {
                         @Override
@@ -177,7 +188,7 @@ public class PolarSDK extends Application {
                         }
                     }
             );
-        } else{
+        } else {
             scanDisposable.dispose();
             scanDisposable = null;
         }
