@@ -1,4 +1,4 @@
-package com.example.polarapp.history;
+package com.example.polarapp.activity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,25 +7,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.polarapp.R;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-public class HistoryAdapter extends ArrayAdapter<HistoryPart> {
-
-    public HistoryAdapter(Context context, ArrayList<HistoryPart> YourHistoryParts){
-        super(context, R.layout.history_item, YourHistoryParts);
+public class ActivityDataAdapter extends ArrayAdapter<ActivityData> {
+    public ActivityDataAdapter(Context context, ArrayList<ActivityData> activityDataArrayList){
+        super(context, R.layout.activity_item, activityDataArrayList);
     }
-
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final HistoryPart base = getItem(position);
+        final ActivityData base = getItem(position);
 
         LayoutInflater historyInflater = LayoutInflater.from(getContext());
-        View customView = historyInflater.inflate(R.layout.history_item, parent, false);
+        View customView = historyInflater.inflate(R.layout.activity_item, parent, false);
 
         //type of activity
         //TextView type = convertView.findViewById(R.id.typeText);
@@ -35,22 +33,17 @@ public class HistoryAdapter extends ArrayAdapter<HistoryPart> {
         //timestamp of activity
         //TextView timestamp = convertView.findViewById(R.id.timestampText);
         TextView timestamp = (TextView) customView.findViewById(R.id.timestampText);
-        timestamp.setText(base.getTimeStamp());
+        timestamp.setText(String.valueOf(base.getTimestamp()));
 
         //length of activity
         //TextView length = convertView.findViewById(R.id.lengthText);
 
         TextView length = (TextView) customView.findViewById(R.id.lengthText);
-        length.setText(base.getLength());
+        length.setText(String.valueOf(base.getDistance()));
 
         return customView;
 
-        //convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_item, parent, false);
+        //convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_item, parent, false);
         //return convertView;
     }
-
-
-
-
 }
-

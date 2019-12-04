@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.polarapp.activity.ActivityActivity;
+import com.example.polarapp.analytics.AnalyticsActivity;
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Selected Analytics", Toast.LENGTH_SHORT).show();
-                openSleepActivity();
+                openAnalyticsActivity();
                 // Should be something similar to the activity, but you will need to record the sleep.
                 // Add onPause, onResume, etc in the activity, and call specific functions
                 // of the PolarSDK, really important.
@@ -76,13 +77,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void openHistoryActivity() {
-        //Intent intent = new Intent(this, HistoryActivity.class);
         Intent myIntent = new Intent(HomeFragment.this.getActivity(), HistoryActivity.class);
         startActivity(myIntent);
     }
 
     public void openActivityActivity() {
-        //Intent intent = new Intent(this, HistoryActivity.class);
         //if (devicePreferencesManager.getConnectedDevices() == 1) {
         Intent myIntent = new Intent(HomeFragment.this.getActivity(), ActivityActivity.class);
         startActivity(myIntent);
@@ -92,8 +91,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void openSleepActivity() {
-        //Intent intent = new Intent(this, HistoryActivity.class);
         //Intent myIntent = new Intent(HomeFragment.this.getActivity(), MapsActivity.class);
         //startActivity(myIntent);
+    }
+
+    public void openAnalyticsActivity() {
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), AnalyticsActivity.class);
+        startActivity(myIntent);
     }
 }

@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity, OnMapReadyCallback,
@@ -51,6 +52,7 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
     private Toolbar toolbar;
     private PolarSDK polarSDK;
     private double totalDistance = 0;
+    private List<LatLng> points; // Polylines, we need to save them in out database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,6 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
 
         hrData = findViewById(R.id.hrData);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
     }
 
     @Override
@@ -180,13 +181,14 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
     }
 
     private void updateTrack() {
-        List<LatLng> points = gpsTrack.getPoints();
+        points = gpsTrack.getPoints();
         points.add(lastKnownLatLng);
         gpsTrack.setPoints(points);
         if (points.size() >= 2) {
             double distance = SphericalUtil.computeDistanceBetween(points.get(points.size()-2), points.get(points.size()-1));
             totalDistance = totalDistance + distance;
             Toast.makeText(getApplicationContext(), "The total distance is " + totalDistance, Toast.LENGTH_SHORT).show();
+            Log.d("MyApp", "The total distance is " + totalDistance);
         }
     }
 

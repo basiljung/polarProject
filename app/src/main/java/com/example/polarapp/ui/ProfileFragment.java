@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         String[] date = profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH).split("/");
         ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
 
-        Log.d("1234", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        Log.d("1234", "Data : " + profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
 
         return root;
     }
