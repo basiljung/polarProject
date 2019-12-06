@@ -10,27 +10,21 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.polarapp.R;
-import com.example.polarapp.activity.ActivityData;
-import com.example.polarapp.activity.ActivityDataAdapter;
+import com.example.polarapp.activity.*;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.gms.tasks.*;
+import com.google.firebase.firestore.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class HistoryActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ProfilePreferencesManager profilePreferencesManager;
-    ArrayList<ActivityData> activityDataArrayList = new ArrayList<>();
-    ListView listView = null;
+    private ArrayList<ActivityData> activityDataArrayList = new ArrayList<>();
+    private ListView listView = null;
 
     private static final String PROFILE_USER_ID = "profile_user_id";
 
@@ -41,7 +35,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -70,7 +64,8 @@ public class HistoryActivity extends AppCompatActivity {
                                 ActivityData activityData = new ActivityData();
 
                                 String type = document.get("type").toString();
-                                long timestamp = Long.parseLong(document.get("timestamp").toString());
+                                Timestamp timestamp = new Timestamp(Long.parseLong(document.get("timestamp").toString()));
+                                Log.d("jolo", "Date: " + new Date(timestamp.getTime()));
                                 int time = Integer.parseInt(document.get("time").toString());
                                 activityData.setType(type);
                                 activityData.setTimestamp(timestamp);
