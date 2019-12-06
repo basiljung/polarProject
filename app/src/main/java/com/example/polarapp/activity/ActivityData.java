@@ -3,12 +3,16 @@ package com.example.polarapp.activity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class ActivityData implements Serializable {
-    private String type;
-    private long timestamp;
-    private int time; // in  seconds
+public class ActivityData implements Serializable, Comparable<ActivityData> {
+    private String type = "";
+    private Timestamp timestamp = null;
+    private int time = 0; // in  seconds
     private double distance = 0; // in meters
     private double avgSpeed = 0;
     private List<LatLng> locationPoints = null;
@@ -23,11 +27,11 @@ public class ActivityData implements Serializable {
         this.type = type;
     }
 
-    public long getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -77,5 +81,11 @@ public class ActivityData implements Serializable {
 
     public void setNightMoves(int nightMoves) {
         this.nightMoves = nightMoves;
+    }
+
+    @Override
+    public int compareTo(ActivityData activityData) {
+        int lastCmp = timestamp.compareTo(activityData.timestamp);
+        return (lastCmp != 0 ? lastCmp : timestamp.compareTo(activityData.timestamp));
     }
 }
