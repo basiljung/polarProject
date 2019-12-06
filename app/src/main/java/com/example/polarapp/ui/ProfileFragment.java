@@ -1,4 +1,4 @@
-package com.example.polarapp.profile;
+package com.example.polarapp.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.polarapp.R;
+import com.example.polarapp.profile.EditDialog;
 
 public class ProfileFragment extends Fragment implements EditDialog.EditListener {
 
