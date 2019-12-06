@@ -132,8 +132,8 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     }
 
     @Override
-    public void applyAgeChanges(int age) {
-        ageText.setText(String.valueOf(age));
+    public void applyBirthChanges(String birthday) {
+        ageText.setText(String.valueOf(birthday));
     }
 
     @Override

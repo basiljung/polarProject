@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -22,7 +23,7 @@ import com.example.polarapp.R;
 
 import java.util.Locale;
 
-public class HomeActivityFragment extends Fragment implements TimePickerFragment.TimerListener {
+public class HomeActivityFragment extends AppCompatActivity implements TimePickerFragment.TimerListener {
     private static  final long START_TIME_IN_MIllIS = 600000;
     private TextView textViewTimer;
     Button startpauseTimer, resetTimer;
@@ -40,12 +41,13 @@ public class HomeActivityFragment extends Fragment implements TimePickerFragment
 
     View root;
     @Override
-    public View onCreateView (@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         //*********Stopwatch implementation*********************
-        root = inflater.inflate(R.layout.fragment_activity, container, false);
-        textViewTimer = root.findViewById(R.id.timer);
-        startpauseTimer = root.findViewById(R.id.startpauseTimer);
-        resetTimer = root.findViewById(R.id.resetTimer);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_activity);
+        textViewTimer =findViewById(R.id.timer);
+        startpauseTimer = findViewById(R.id.startpauseTimer);
+        resetTimer = findViewById(R.id.resetTimer);
         startpauseTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
@@ -64,10 +66,10 @@ public class HomeActivityFragment extends Fragment implements TimePickerFragment
         });
         updateCountDownText();
         //***************Chronometer implementation**************************
-        chronometer = root.findViewById(R.id.chronometer);
-        startChronometer = root.findViewById(R.id.startChronometer);
-        pauseChronometer = root.findViewById(R.id.pauseChronometer);
-        resetChronometer = root.findViewById(R.id.resetChronometer);
+        chronometer = findViewById(R.id.chronometer);
+        startChronometer = findViewById(R.id.startChronometer);
+        pauseChronometer = findViewById(R.id.pauseChronometer);
+        resetChronometer = findViewById(R.id.resetChronometer);
 
         startChronometer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,16 +90,15 @@ public class HomeActivityFragment extends Fragment implements TimePickerFragment
             }
         });
         //***********timepicker****************
-        textViewPicker = root.findViewById(R.id.txtVTimePicker);
-        Button timePickerBtn = root.findViewById(R.id.pickerBtn);
+        textViewPicker = findViewById(R.id.txtVTimePicker);
+        Button timePickerBtn = findViewById(R.id.pickerBtn);
         timePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
                 TimePickerFragment timePickerFragment = new TimePickerFragment(HomeActivityFragment.this);
-                timePickerFragment.show(getFragmentManager(),"time picker");
+                timePickerFragment.show(getSupportFragmentManager(),"time picker");
             }
         });
-        return root;
     }
 
     private void startTimer(View root) {

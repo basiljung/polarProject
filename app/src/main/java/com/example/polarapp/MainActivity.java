@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.example.polarapp.ui.DeviceListFragment;
+import com.example.polarapp.ui.DevicesFragment;
 import com.example.polarapp.ui.HomeFragment;
 import com.example.polarapp.ui.AboutFragment;
-import com.example.polarapp.profile.ProfileFragment;
+import com.example.polarapp.ui.ProfileFragment;
 import com.example.polarapp.ui.SettingsFragment;
 
 import android.view.MenuItem;
@@ -60,12 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -83,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_device_list:
                 Toast.makeText(this, "Device List", Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DeviceListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DevicesFragment()).commit();
                 break;
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
