@@ -11,8 +11,10 @@ import com.example.polarapp.R;
 
 public class AboutFragment extends Fragment {
 
+    private View root;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_about, container, false);
+        root = inflater.inflate(R.layout.fragment_about, container, false);
         return root;
     }
 }

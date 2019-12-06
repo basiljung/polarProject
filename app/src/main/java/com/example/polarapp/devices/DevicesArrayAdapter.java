@@ -1,14 +1,12 @@
 package com.example.polarapp.devices;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import com.example.polarapp.R;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,24 +16,32 @@ import polar.com.sdk.api.model.PolarDeviceInfo;
 public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
     private Context mContext;
     private List<PolarDeviceInfo> polarDeviceInfoList;
+    private ButtonConnectCallback bcc;
+    private DevicePreferencesManager devicePreferencesManager;
 
-    public DevicesArrayAdapter(Context context, ArrayList<PolarDeviceInfo> list) {
-        super(context, 0, list);
-        this.mContext = context;
-        this.polarDeviceInfoList = list;
+    public interface ButtonConnectCallback {
+        void onClickButtonListView(View v, String id, PolarDeviceInfo pdi);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public DevicesArrayAdapter(ButtonConnectCallback bcc, Context context, ArrayList<PolarDeviceInfo> list) {
+        super(context, 0, list);
+        this.bcc = bcc;
+        this.mContext = context;
+        this.polarDeviceInfoList = list;
+        devicePreferencesManager = new DevicePreferencesManager(context);
+    }
+
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list, parent,false);
 
-        PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
+        final PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
 
         TextView polarDeviceName = listItem.findViewById(R.id.polarDeviceName);
         polarDeviceName.setText(currentInfo.name);
 
-        TextView polarDeviceID = listItem.findViewById(R.id.polarDeviceID);
+        final TextView polarDeviceID = listItem.findViewById(R.id.polarDeviceID);
         polarDeviceID.setText(currentInfo.deviceId);
 
         TextView polarDeviceAddress = listItem.findViewById(R.id.polarDeviceAddress);
@@ -47,6 +53,27 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
         } else {
             polarDeviceImage.setImageResource(R.drawable.polarh10);
         }
+
+        MaterialButton connectButton = listItem.findViewById(R.id.connectButton);
+        LinearLayout batteryLayout = listItem.findViewById(R.id.batteryLayout);
+        TextView polarDeviceBattery = listItem.findViewById(R.id.polarDeviceBattery);
+
+        if (devicePreferencesManager.getConnectedDevices() == 1 && devicePreferencesManager.getDeviceID().equals(currentInfo.deviceId)) {
+            batteryLayout.setVisibility(View.VISIBLE);
+            connectButton.setText("Disconnect");
+            polarDeviceBattery.setText(devicePreferencesManager.getBatteryLevel() + "%");
+        } else {
+            batteryLayout.setVisibility(View.INVISIBLE);
+            connectButton.setText("Connect");
+        }
+
+        final View finalListItem = listItem;
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bcc.onClickButtonListView(finalListItem, polarDeviceID.getText().toString(), currentInfo);
+            }
+        });
 
         return listItem;
     }

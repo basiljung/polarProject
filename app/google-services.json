@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "419082663995",
+    "firebase_url": "https://polaris-8ee0e.firebaseio.com",
+    "project_id": "polaris-8ee0e",
+    "storage_bucket": "polaris-8ee0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419082663995:android:a9a4e4bb26e0229e27041e",
+        "android_client_info": {
+          "package_name": "com.example.polarapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419082663995-hot6kq5t75urm3du3nr9ej9dfa687s99.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmrsP6KgEilxGuq_Xw4EsUDmpzoREbVzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419082663995-hot6kq5t75urm3du3nr9ej9dfa687s99.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,8 +13,10 @@ import com.example.polarapp.R;
 
 public class SettingsFragment extends Fragment {
 
+    private View root;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        root = inflater.inflate(R.layout.fragment_settings, container, false);
         TextView textView = root.findViewById(R.id.text_tools);
         textView.setText("Hola");
         return root;

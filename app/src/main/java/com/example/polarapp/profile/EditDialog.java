@@ -8,23 +8,24 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+
 import androidx.fragment.app.DialogFragment;
+
 import com.example.polarapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
-import java.time.*;
+
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class EditDialog extends DialogFragment {
-    RadioGroup sexGroup;
-    EditListener editListener;
-    Context context;
-    String defaultValue;
-    int action;
-    View view;
-    AlertDialog dialog;
-    DatePickerDialog picker;
+    private RadioGroup sexGroup;
+    private EditListener editListener;
+    private Context context;
+    private String defaultValue;
+    private int action;
+    private View view;
+    private AlertDialog dialog;
+    private DatePickerDialog picker;
 
     public EditDialog(EditListener cb, Context context, String defaultValue, int action) {
         this.editListener = cb;
@@ -35,7 +36,7 @@ public class EditDialog extends DialogFragment {
 
     public interface EditListener {
         void applySexChanges(int sex);
-        void applyAgeChanges(int age);
+        void applyBirthChanges(String birthday);
         void applyHeightChanges(int height);
         void applyWeightChanges(int weight);
         void applyEmailChanges(String email);
@@ -46,18 +47,19 @@ public class EditDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        switch(action) {
+        switch (action) {
             case 1:
                 dialog = editSex();
                 break;
             case 2:
-                picker = editAge();
+                picker = editAge(defaultValue);
                 return picker;
             case 3:
-                dialog =  numberPickerDialog("Select your height", 100, 250, Integer.parseInt(defaultValue));
+                dialog = numberPickerDialog("Select your height", 100, 250, Integer.parseInt(defaultValue));
                 break;
             case 4:
-                dialog =  numberPickerDialog("Select your weight", 30, 150, Integer.parseInt(defaultValue));;
+                dialog = numberPickerDialog("Select your weight", 30, 150, Integer.parseInt(defaultValue));
+                ;
                 break;
             case 5:
                 dialog = editEmail();
@@ -155,43 +157,35 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public DatePickerDialog editAge() {
-        final Calendar newCalendar = Calendar.getInstance();
-        int day = newCalendar.get(Calendar.DAY_OF_MONTH);
-        int month = newCalendar.get(Calendar.MONTH);
-        int year = newCalendar.get(Calendar.YEAR);
+    public DatePickerDialog editAge(String defaultValue) {
+        String[] date = defaultValue.split("/");
+        Log.d("Default Value", defaultValue);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String month;
+                        String day;
+                        if ((monthOfYear + 1) < 10) {
+                            month = "0" + (monthOfYear + 1);
+                        } else {
+                            month = String.valueOf(monthOfYear + 1);
+                        }
+                        if (dayOfMonth < 10) {
+                            day = "0" + dayOfMonth;
+                        } else {
+                            day = String.valueOf(dayOfMonth);
+                        }
+                        Log.d("Before EditListener", day + "/" + month + "/" + year);
+                        editListener.applyBirthChanges(day + "/" + month + "/" + year);
+                    }
+                }, Integer.parseInt(date[2]), Integer.parseInt(date[1]) - 1, Integer.parseInt(date[0])); // Select BirthDate on DB
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                getAge(year, monthOfYear, dayOfMonth);
-            }
-        },1998, 5, 24); // Select BirthDate on DB
+        datePickerDialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+        datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, "SAVE", datePickerDialog);
+        datePickerDialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, "CANCEL", datePickerDialog);
 
         return datePickerDialog;
-    }
-
-    public void getAge(int year, int monthOfYear, int dayOfMonth) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            LocalDate today = LocalDate.now();
-            LocalDate birthDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-            Period p = Period.between(birthDate, today);
-            editListener.applyAgeChanges(p.getYears());
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-
-            Calendar birthDate = new GregorianCalendar(year, monthOfYear+1, dayOfMonth);
-            Calendar currentDate =  new GregorianCalendar(cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
-
-            long end = birthDate.getTimeInMillis();
-            long start = currentDate.getTimeInMillis();
-
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(TimeUnit.MILLISECONDS.toMillis(Math.abs(end - start)));
-            editListener.applyAgeChanges(c.get(Calendar.YEAR)-1970);
-        }
     }
 
     public AlertDialog editEmail() {
@@ -237,7 +231,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public final static boolean isValidEmail(CharSequence target) {
+    public boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
@@ -354,7 +348,7 @@ public class EditDialog extends DialogFragment {
                         String newPassValue1 = newPass1.getText().toString();
                         String newPassValue2 = newPass2.getText().toString();
 
-                        if(!(oldPassValue.equals("") && newPassValue1.equals("") && newPassValue2.equals(""))) {
+                        if (!(oldPassValue.equals("") && newPassValue1.equals("") && newPassValue2.equals(""))) {
                             if (!oldPassValue.equals("oldpass")) {
                                 layoutOldPass.setError("Password doesn't match!");
                             } else if (newPassValue1.length() < 8 || newPassValue2.length() < 8) {

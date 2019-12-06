@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.example.polarapp.ui.DeviceListFragment;
 import com.example.polarapp.ui.HomeFragment;
 import com.example.polarapp.ui.AboutFragment;
-import com.example.polarapp.ui.ProfileFragment;
+import com.example.polarapp.profile.ProfileFragment;
 import com.example.polarapp.ui.SettingsFragment;
 
 import android.view.MenuItem;
