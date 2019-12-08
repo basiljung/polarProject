@@ -105,12 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Map<String, Object> activity = new HashMap<>();
 
         activity.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity.put("type", "run");
+        activity.put("type", "sleep");
         activity.put("timestamp", System.currentTimeMillis());
-        activity.put("time", 60);
-        activity.put("distance", 12.60);
-        activity.put("avgSpeed", 15.06);
-        activity.put("locationPoints", null);
+        activity.put("time", 130);
+        activity.put("deepSleepTime", 12);
+        activity.put("nightMoves", 15);
 
         db.collection("activities")
                 .add(activity)

@@ -11,8 +11,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,13 +39,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ActivityActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity, OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener {
+        com.google.android.gms.location.LocationListener,
+        TimePickerFragment.TimerListener  {
 
     private GoogleMap map;
     private Polyline gpsTrack;
@@ -54,6 +60,20 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
     private double totalDistance = 0;
     private List<LatLng> points; // Polylines, we need to save them in out database
 
+    private static  final long START_TIME_IN_MIllIS = 600000;
+    private TextView textViewTimer;
+    Button startpauseTimer, resetTimer;
+    private CountDownTimer countDownTimer;
+    private boolean runningTimer;
+    private long TimeLeftInMillis = START_TIME_IN_MIllIS;
+    //*******************
+    private Chronometer chronometer;
+    private boolean runningChronometer;
+    private long pauseOffset;
+    Button startChronometer, pauseChronometer, resetChronometer;
+    //*********
+    private TextView textViewPicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +85,61 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        textViewTimer =findViewById(R.id.timer);
+        startpauseTimer = findViewById(R.id.startpauseTimer);
+        resetTimer = findViewById(R.id.resetTimer);
+        startpauseTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                if(runningTimer){
+                    pauseTimer(root);
+                }else{
+                    startTimer(root);
+                }
+            }
+        });
+        resetTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                resetTimer(root);
+            }
+        });
+        updateCountDownText();
+        //***************Chronometer implementation**************************
+        chronometer = findViewById(R.id.chronometer);
+        startChronometer = findViewById(R.id.startChronometer);
+        pauseChronometer = findViewById(R.id.pauseChronometer);
+        resetChronometer = findViewById(R.id.resetChronometer);
+
+        startChronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                startChronometer(root);
+            }
+        });
+        pauseChronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                pauseChronometer(root);
+            }
+        });
+        resetChronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                resetChronometer(root);
+            }
+        });
+        //***********timepicker****************
+        textViewPicker = findViewById(R.id.txtVTimePicker);
+        Button timePickerBtn = findViewById(R.id.pickerBtn);
+        timePickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                TimePickerFragment timePickerFragment = new TimePickerFragment(ActivityActivity.this);
+                timePickerFragment.show(getSupportFragmentManager(),"time picker");
+            }
+        });
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -82,6 +157,68 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
 
         hrData = findViewById(R.id.hrData);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    private void startTimer(View root) {
+        countDownTimer = new CountDownTimer(TimeLeftInMillis,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                TimeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+            @Override
+            public void onFinish() {
+                runningTimer = false;
+                startpauseTimer.setText("Start");
+                startpauseTimer.setVisibility(View.INVISIBLE);
+                resetTimer.setVisibility(View.VISIBLE);
+            }
+        }.start();
+        runningTimer = true;
+        startpauseTimer.setText("Pause");
+        resetTimer.setVisibility(View.INVISIBLE);
+    }
+
+    private void pauseTimer(View root) {
+        countDownTimer.cancel();
+        runningTimer = false;
+        startpauseTimer.setText("Start");
+        resetTimer.setVisibility(View.VISIBLE);
+    }
+    private void resetTimer(View root) {
+        TimeLeftInMillis = START_TIME_IN_MIllIS;
+        updateCountDownText();
+        resetTimer.setVisibility(View.INVISIBLE);
+        startpauseTimer.setVisibility(View.VISIBLE);
+    }
+
+    private void updateCountDownText(){
+        int minutes = (int)(TimeLeftInMillis/1000)/60;
+        int seconds = (int)(TimeLeftInMillis/1000)%60;
+
+        String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
+        textViewTimer.setText(timeLeftFormatted);
+    }
+
+    public void startChronometer(View v){
+        if(!runningChronometer){
+            chronometer.setBase(SystemClock.elapsedRealtime()- pauseOffset);
+            chronometer.start();
+            runningChronometer = true;
+        }
+    }
+
+    public void resetChronometer(View v){
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        runningChronometer = false;
+        pauseOffset = 0;
+    }
+    public void pauseChronometer(View v){
+        if(runningChronometer){
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+            runningChronometer = false;
+        }
     }
 
     @Override
@@ -223,5 +360,10 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
     @Override
     public void hrUpdateData(int hr) {
         hrData.setText(String.valueOf(hr));
+    }
+
+    @Override
+    public void applyTimeChage(String pickerTime) {
+        textViewPicker.setText(pickerTime);
     }
 }

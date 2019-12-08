@@ -16,7 +16,6 @@ import com.example.polarapp.analytics.AnalyticsActivity;
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
-import com.google.android.material.navigation.NavigationView;
 
 public class HomeFragment extends Fragment {
 
