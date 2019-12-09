@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,16 +17,28 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.polarapp.R;
 import com.example.polarapp.history.HistoryActivity;
+import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.ui.HomeFragment;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+
+import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class Activity extends AppCompatActivity implements TimePickerFragment.TimerListener{
+public class Activity extends AppCompatActivity implements TimePickerFragment.TimerListener {
 
     private Toolbar toolbar;
     private Button startNormal, startInterval,pickerInterval ;
     private String intervaltimeViewPicker;
     private TimePickerFragment timePickerFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +73,9 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
                 openPickerdialog();
             }
         });
+
+
+
     }
 
     public void openNormalTrainingActivity() {
