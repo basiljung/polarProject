@@ -39,6 +39,15 @@
             android:name=".activity.ActivityActivity"
             android:theme="@style/AppTheme.Activity" />
         <activity
+            android:name=".activity.Activity"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
+            android:name=".activity.ActivityIntervaltraining"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
+            android:name=".activity.ActivityNormaltraining"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
             android:name=".history.HistoryActivity"
             android:theme="@style/AppTheme.Activity" />
         <activity
@@ -63,6 +72,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

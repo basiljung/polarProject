@@ -45,8 +45,7 @@ import java.util.Locale;
 public class ActivityActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity, OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener,
-        TimePickerFragment.TimerListener  {
+        com.google.android.gms.location.LocationListener{
 
     private GoogleMap map;
     private Polyline gpsTrack;
@@ -86,7 +85,7 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        textViewTimer =findViewById(R.id.timer);
+        textViewTimer = findViewById(R.id.timer);
         startpauseTimer = findViewById(R.id.startpauseTimer);
         resetTimer = findViewById(R.id.resetTimer);
         startpauseTimer.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +130,7 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
             }
         });
         //***********timepicker****************
-        textViewPicker = findViewById(R.id.txtVTimePicker);
+/*        textViewPicker = findViewById(R.id.txtVTimePicker);
         Button timePickerBtn = findViewById(R.id.pickerBtn);
         timePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +138,7 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
                 TimePickerFragment timePickerFragment = new TimePickerFragment(ActivityActivity.this);
                 timePickerFragment.show(getSupportFragmentManager(),"time picker");
             }
-        });
+        });*/
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -360,10 +359,5 @@ public class ActivityActivity extends AppCompatActivity implements PolarSDK.Call
     @Override
     public void hrUpdateData(int hr) {
         hrData.setText(String.valueOf(hr));
-    }
-
-    @Override
-    public void applyTimeChage(String pickerTime) {
-        textViewPicker.setText(pickerTime);
     }
 }
