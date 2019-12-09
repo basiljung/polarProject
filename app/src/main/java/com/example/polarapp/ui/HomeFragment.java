@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.polarapp.activity.Activity;
-import com.example.polarapp.activity.ActivityActivity;
 import com.example.polarapp.analytics.AnalyticsActivity;
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
