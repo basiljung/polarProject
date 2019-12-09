@@ -1,5 +1,6 @@
 package com.example.polarapp.activity;
 
+import android.animation.TimeAnimator;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -37,9 +38,8 @@ public class TimePickerFragment extends DialogFragment {
         return picker;
     }
 
-
     public interface TimerListener {
-        void applyTimeChage(String pickerTime);
+        void applyTimeChange(String pickerTime);
     }
 
     public TimePickerDialog setTime() {
@@ -51,7 +51,7 @@ public class TimePickerFragment extends DialogFragment {
 
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                timerListener.applyTimeChage(hourOfDay+":"+minute);
+                timerListener.applyTimeChange(hourOfDay+":"+minute);
             }
         }, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
 

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.polarapp.activity.ActivityActivity;
+import com.example.polarapp.activity.Activity;
 import com.example.polarapp.analytics.AnalyticsActivity;
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
 
     public void openActivityActivity() {
         //if (devicePreferencesManager.getConnectedDevices() == 1) {
-        Intent myIntent = new Intent(HomeFragment.this.getActivity(), ActivityActivity.class);
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), Activity.class);
         startActivity(myIntent);
         //} else {
         //    Toast.makeText(getContext(), "Please, connect one Polar device first", Toast.LENGTH_SHORT).show();

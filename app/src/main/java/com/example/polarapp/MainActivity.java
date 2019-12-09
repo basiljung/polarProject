@@ -1,6 +1,7 @@
 package com.example.polarapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.*;
@@ -31,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -55,13 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        //-
-        //String uniqueID = UUID.randomUUID().toString();
-        //Log.d("1234", uniqueID);
-        //-
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
@@ -102,17 +97,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void createActivities() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> activity = new HashMap<>();
+        Map<String, Object> activity1 = new HashMap<>();
 
-        activity.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity.put("type", "sleep");
-        activity.put("timestamp", System.currentTimeMillis());
-        activity.put("time", 130);
-        activity.put("deepSleepTime", 12);
-        activity.put("nightMoves", 15);
+        activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put("type", "run");
+        activity1.put("timestamp", (long)1575194400*1000);
+        activity1.put("time", 220);
+        activity1.put("distance", 17);
+        activity1.put("avgSpeed", 18);
+        activity1.put("locationPoints", null);
 
         db.collection("activities")
-                .add(activity)
+                .add(activity1)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("MyApp", "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("MyApp", "Error adding document", e);
+                    }
+                });
+
+        Map<String, Object> activity2 = new HashMap<>();
+
+        activity2.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity2.put("type", "sleep");
+        activity2.put("timestamp", (long)1575194400*1000);
+        activity2.put("time", 100);
+        activity2.put("deepSleepTime", 35);
+        activity2.put("nightMoves", 10);
+
+        db.collection("activities")
+                .add(activity2)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

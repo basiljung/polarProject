@@ -36,11 +36,21 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activity.ActivityActivity"
+            android:name=".activity.Activity"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
+            android:name=".activity.ActivityIntervaltraining"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
+            android:name=".activity.ActivityNormaltraining"
             android:theme="@style/AppTheme.Activity" />
         <activity
             android:name=".history.HistoryActivity"
@@ -67,6 +77,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
