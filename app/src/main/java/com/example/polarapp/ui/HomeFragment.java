@@ -16,6 +16,8 @@ import com.example.polarapp.analytics.AnalyticsActivity;
 import com.example.polarapp.history.HistoryActivity;
 import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
+import com.example.polarapp.sleep.SleepActivity;
+import com.google.android.material.navigation.NavigationView;
 
 public class HomeFragment extends Fragment {
 
@@ -90,8 +92,8 @@ public class HomeFragment extends Fragment {
     }
 
     public void openSleepActivity() {
-        //Intent myIntent = new Intent(HomeFragment.this.getActivity(), MapsActivity.class);
-        //startActivity(myIntent);
+        Intent myIntent = new Intent(HomeFragment.this.getActivity(), SleepActivity.class);
+        startActivity(myIntent);
     }
 
     public void openAnalyticsActivity() {
