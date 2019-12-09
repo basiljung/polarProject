@@ -77,7 +77,7 @@ public class EditDialog extends DialogFragment {
         return dialog;
     }
 
-    public AlertDialog editSex() {
+    private AlertDialog editSex() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_sex, null);
@@ -111,7 +111,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public AlertDialog numberPickerDialog(final String title, int minValue, int maxValue, int defaultValue) {
+    private AlertDialog numberPickerDialog(final String title, int minValue, int maxValue, int defaultValue) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_physical_data, null);
@@ -157,7 +157,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public DatePickerDialog editAge(String defaultValue) {
+    private DatePickerDialog editAge(String defaultValue) {
         String[] date = defaultValue.split("/");
         Log.d("Default Value", defaultValue);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
@@ -188,7 +188,7 @@ public class EditDialog extends DialogFragment {
         return datePickerDialog;
     }
 
-    public AlertDialog editEmail() {
+    private AlertDialog editEmail() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_email, null);
@@ -231,11 +231,11 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public boolean isValidEmail(CharSequence target) {
+    private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    public AlertDialog editPhone() {
+    private AlertDialog editPhone() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_phone, null);
@@ -273,7 +273,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public AlertDialog editLocation() {
+    private AlertDialog editLocation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_location, null);
@@ -314,7 +314,7 @@ public class EditDialog extends DialogFragment {
         return alertDialog;
     }
 
-    public AlertDialog editProfile() {
+    private AlertDialog editProfile() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_profile, null);

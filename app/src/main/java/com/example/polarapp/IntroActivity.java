@@ -42,13 +42,6 @@ public class IntroActivity extends AppCompatActivity {
     private static final String PROFILE_USER_WEIGHT = "profile_user_weight";
     private static final String PROFILE_USER_ID = "profile_user_id";
 
-    /*
-    String uniqueID = UUID.randomUUID().toString();
-            Log.d("1234", uniqueID);
-            sharedPreferences.edit().putString("UUID", uniqueID).apply();
-            sharedPreferences.edit().putBoolean("firstTime", false).apply();
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
