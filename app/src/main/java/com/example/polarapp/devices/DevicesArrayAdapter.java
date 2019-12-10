@@ -8,8 +8,7 @@ import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import polar.com.sdk.api.model.PolarDeviceInfo;
 

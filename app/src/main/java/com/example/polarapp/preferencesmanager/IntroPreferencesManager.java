@@ -1,16 +1,15 @@
 package com.example.polarapp.preferencesmanager;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 
 public class IntroPreferencesManager {
 
-    SharedPreferences sp;
-    SharedPreferences.Editor editor;
-    Context context;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private Context context;
 
     // shared sp mode
-    int PRIVATE_MODE = 0;
+    private int PRIVATE_MODE = 0;
 
     // Shared preferences file name
     private static final String WELCOME_SCREEN = "welcome_screen";

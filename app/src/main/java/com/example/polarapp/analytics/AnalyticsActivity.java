@@ -12,6 +12,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.example.polarapp.R;
+import com.example.polarapp.activity.Activity;
 import com.example.polarapp.activity.ActivityData;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.github.mikephil.charting.charts.BarChart;
@@ -19,8 +20,6 @@ import com.github.mikephil.charting.components.*;
 import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.*;
@@ -144,7 +143,6 @@ public class AnalyticsActivity extends AppCompatActivity {
                 tvSpeedNightMoves.setText("Total night moves: " + activityData.getNightMoves());
                 tvAvgHR.setText("Avg Heart Rate: " + activityData.getAvgHR());
             }
-            // Check how to show Picker ONLY when there is data for that day and kind of activity
             super.refreshContent(e, highlight);
         }
 
@@ -155,7 +153,6 @@ public class AnalyticsActivity extends AppCompatActivity {
             if (mOffset == null) {
                 mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
             }
-
             return mOffset;
         }
     }
@@ -195,12 +192,12 @@ public class AnalyticsActivity extends AppCompatActivity {
         description.setText("");
         barChart.setDescription(description);
 
-        userRunCurrentWeekActivitiesList = getWeekActivities(weekOfYear, 0);
-        userSleepCurrentWeekActivitiesList = getWeekActivities(weekOfYear, 1);
+        userRunCurrentWeekActivitiesList = new ArrayList<>(getWeekActivities(weekOfYear, 0));
+        userSleepCurrentWeekActivitiesList = new ArrayList<>(getWeekActivities(weekOfYear, 1));
 
         if (weekOfYear > 1) {
-            userRunCurrentWeekBeforeActivitiesList = getWeekActivities(weekOfYear - 1, 0);
-            userSleepCurrentWeekBeforeActivitiesList = getWeekActivities(weekOfYear - 1, 1);
+            userRunCurrentWeekBeforeActivitiesList = new ArrayList<>(getWeekActivities(weekOfYear - 1, 0));
+            userSleepCurrentWeekBeforeActivitiesList = new ArrayList<>(getWeekActivities(weekOfYear - 1, 1));
         }
 
         ArrayList<BarEntry> runEntries = new ArrayList<>();
@@ -256,61 +253,14 @@ public class AnalyticsActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    private void getDatabaseData(QueryDocumentSnapshot document) {
-        Log.d("MyApp", document.getId() + " => " + document.getData());
-        Calendar calendar = Calendar.getInstance();
-
-        ActivityData activityData = new ActivityData();
-
-        String type = document.get("type").toString();
-        Timestamp timestamp = new Timestamp(Long.parseLong(document.get("timestamp").toString()));
-        long timestampLong = timestamp.getTime();
-        calendar.setTimeInMillis(timestampLong);
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
-        Log.d("MyApp", "Week of year of the data is : " + week);
-        Log.d("MyApp", "Date: " + new Date(timestamp.getTime()));
-        int time = Integer.parseInt(document.get("time").toString());
-        activityData.setType(type);
-        activityData.setTimestamp(timestamp);
-        activityData.setTime(time);
-        if (type.equals("sleep")) {
-            int deepSleepTime = Integer.parseInt(document.get("deepSleepTime").toString());
-            int nightMoves = Integer.parseInt(document.get("nightMoves").toString());
-            activityData.setDeepSleepTime(deepSleepTime);
-            activityData.setNightMoves(nightMoves);
-            allUserSleepActivitiesArrayList.add(activityData);
-        } else {
-            double distance = Double.parseDouble(document.get("distance").toString());
-            double avgSpeed = Double.parseDouble(document.get("avgSpeed").toString());
-            List<LatLng> locationPoints;
-            try {
-                locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get("locationPoints")); // Try if works
-            } catch (NullPointerException e) {
-                locationPoints = null;
-            }
-
-            activityData.setDistance(distance);
-            activityData.setAvgSpeed(avgSpeed);
-            activityData.setLocationPoints(locationPoints);
-            allUserRunActivitiesArrayList.add(activityData);
-        }
-
-        Collections.sort(allUserRunActivitiesArrayList);
-        Collections.sort(allUserSleepActivitiesArrayList);
-
-        allUserActivitiesDataArrayList.add(activityData);
-
-        Log.d("jolo", document.getId() + " => " + document.getData());
-    }
-
     private ArrayList<ActivityData> getWeekActivities(int weekOfYear, int option) {
         ArrayList<ActivityData> data = new ArrayList<>();
         if (option == 0) { // Run activities
             Calendar calendar = Calendar.getInstance();
             for (int i = 0; i < allUserRunActivitiesArrayList.size(); i++) {
-                ActivityData actualActivity = allUserRunActivitiesArrayList.get(i);
+                ActivityData actualActivity = new ActivityData(allUserRunActivitiesArrayList.get(i));
                 calendar.setTimeInMillis(actualActivity.getTimestamp().getTime());
-                Log.d("MyApp", "Week of year: " + calendar.get(Calendar.WEEK_OF_YEAR));
+                Log.d("MyApp", "Week of year: " + calendar.get(Calendar.WEEK_OF_YEAR) + ", Time: " + actualActivity.getTime());
                 if (calendar.get(Calendar.WEEK_OF_YEAR) == weekOfYear) {
                     Log.d("MyApp", "Week of year accepted: " + calendar.get(Calendar.WEEK_OF_YEAR));
                     data.add(actualActivity);
@@ -319,20 +269,22 @@ public class AnalyticsActivity extends AppCompatActivity {
         } else { // Sleep activities
             Calendar calendar = Calendar.getInstance();
             for (int i = 0; i < allUserSleepActivitiesArrayList.size(); i++) {
-                ActivityData actualActivity = allUserSleepActivitiesArrayList.get(i);
+                ActivityData actualActivity = new ActivityData(allUserSleepActivitiesArrayList.get(i));
                 calendar.setTimeInMillis(actualActivity.getTimestamp().getTime());
                 if (calendar.get(Calendar.WEEK_OF_YEAR) == weekOfYear) {
                     data.add(actualActivity);
                 }
             }
         }
-        Collections.sort(data);
-        data = sortByDay(data);
+        for (int i = 0; i < data.size(); i++) {
+            Log.d("MyAppTrial", "Time of data list: " + data.get(i).getTime());
+        }
+        data = new ArrayList<>(sortByDay(data));
         return data;
     }
 
     private ArrayList<ActivityData> sortByDay(ArrayList<ActivityData> data) {
-        Log.d("MyAppTrial", "Size of activities: " + allUserActivitiesDataArrayList.size());
+        boolean[] isDayAddedList = {false, false, false, false, false, false, false};
         ArrayList<ActivityData> sortedData = new ArrayList<>();
         ActivityData aux = new ActivityData();
         for (int i = 0; i < 7; i++) {
@@ -345,7 +297,21 @@ public class AnalyticsActivity extends AppCompatActivity {
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
             if (dayOfWeek == 0)
                 dayOfWeek = 7;
-            sortedData.set(dayOfWeek - 1, data.get(i));
+            if (isDayAddedList[dayOfWeek - 1] && data.get(i).getType().equals("run")) {
+                ActivityData dayDataToUpdate = new ActivityData(sortedData.get(dayOfWeek - 1));
+                int time = data.get(i).getTime() + dayDataToUpdate.getTime();
+                dayDataToUpdate.setTime(time);
+                double distance = data.get(i).getDistance() + dayDataToUpdate.getDistance();
+                dayDataToUpdate.setDistance(distance);
+                double avgSpeed = (data.get(i).getAvgSpeed() + dayDataToUpdate.getAvgSpeed()) / 2;
+                dayDataToUpdate.setAvgSpeed(avgSpeed);
+                double avgHR = (data.get(i).getAvgHR() + dayDataToUpdate.getAvgHR()) / 2;
+                dayDataToUpdate.setAvgHR(avgHR);
+                sortedData.set(dayOfWeek - 1, dayDataToUpdate);
+            } else {
+                sortedData.set(dayOfWeek - 1, data.get(i));
+                isDayAddedList[dayOfWeek - 1] = true;
+            }
         }
         return sortedData;
     }
@@ -445,7 +411,6 @@ public class AnalyticsActivity extends AppCompatActivity {
             Log.d("MyApp", "No data available for this week or week before");
             compareWeekRunText.setText("No data available for this week or week before");
         } else {
-
             float avgRunPercentage = (((float) totalRunTime / runDays) / ((float) totalRunTimeWB / runDaysWB)) * 100;
             String compareRunTxt = "";
 
@@ -497,8 +462,11 @@ public class AnalyticsActivity extends AppCompatActivity {
         }
 
         protected Void doInBackground(Void... args) {
-            Log.d("jolo", "Data UUID : " + profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+            Log.d("MyApp", "Data UUID : " + profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
             final Query activity = db.collection("activities").whereEqualTo("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+            allUserActivitiesDataArrayList = new ArrayList<>();
+            allUserRunActivitiesArrayList = new ArrayList<>();
+            allUserSleepActivitiesArrayList = new ArrayList<>();
 
             activity
                     .get()
@@ -520,8 +488,8 @@ public class AnalyticsActivity extends AppCompatActivity {
                                     Log.d("MyApp", "Week of year of the data is : " + week);
                                     Log.d("MyApp", "Date: " + new Date(timestamp.getTime()));
                                     int time = Integer.parseInt(document.get("time").toString());
-                                    //double avgHR = Double.valueOf(document.get("avgHR").toString());
-                                    double avgHR = 0;
+                                    double avgHR = Double.valueOf(document.get("avgHR").toString());
+                                    Log.d("MyApp", "Value of HRDataAVG: " + avgHR);
                                     activityData.setType(type);
                                     activityData.setTimestamp(timestamp);
                                     activityData.setTime(time);

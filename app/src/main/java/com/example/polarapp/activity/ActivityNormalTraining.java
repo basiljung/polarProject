@@ -1,21 +1,15 @@
 package com.example.polarapp.activity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Bundle;
-import android.os.CountDownTimer;
+import android.os.*;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -24,39 +18,25 @@ import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.model.value.IntegerValue;
+import com.google.android.gms.location.*;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+import com.google.android.gms.tasks.*;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.List;
-import java.util.Locale;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
-public class ActivityIntervaltraining extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
+public class ActivityNormalTraining extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
 
     private Toolbar toolbar;
-    private String pickerTime;
-    private TextView textViewHeartRate,textViewTimer;
-    private Button pauseStartBtn, resetBtn;
-    private CountDownTimer countDownTimer;
-    private boolean runningTimer;
-    private long TimeLeftInMillis = 0;
+    private Chronometer chronometer;
+    private Button startChronometer, pauseChronometer, resetChronometer;
+    private boolean runningChronometer;
+    private long pauseOffset;
     private GoogleMap map;
     private Polyline gpsTrack;
     private SupportMapFragment mapFragment;
@@ -71,7 +51,7 @@ public class ActivityIntervaltraining extends AppCompatActivity implements Polar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intervaltraining);
+        setContentView(R.layout.activity_normaltraining);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,37 +59,29 @@ public class ActivityIntervaltraining extends AppCompatActivity implements Polar
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        Intent intent = getIntent();
-        pickerTime = intent.getStringExtra("Picker_Time");
-        String[] times = pickerTime.split(":");
-        for (int i=0; i< times.length;i++){
-            if (times[i].length()==1) {
-                times[i] = "0"+times[i];
-            }
-        }
-        pickerTime = times[0]+":"+times[1];
-        TimeLeftInMillis = Integer.valueOf(times[0])*60*1000 + Integer.valueOf(times[1])*1000;
 
-        textViewHeartRate = findViewById(R.id.hrData);
-        textViewTimer = findViewById(R.id.txtVTimePicker);
-        textViewTimer.setText(pickerTime);
-        pauseStartBtn =findViewById(R.id.pauseStartBtn);
-        resetBtn = findViewById(R.id.resetBtn);
+        //***************Chronometer implementation**************************
+        chronometer = findViewById(R.id.chronometer);
+        startChronometer = findViewById(R.id.startChronometer);
+        pauseChronometer = findViewById(R.id.pauseChronometer);
+        resetChronometer = findViewById(R.id.resetChronometer);
 
-        pauseStartBtn.setOnClickListener(new View.OnClickListener() {
+        startChronometer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
-                if(runningTimer){
-                    pauseTimer(root);
-                }else{
-                    startTimer(root);
-                }
+                startChronometer(root);
             }
         });
-        resetBtn.setOnClickListener(new View.OnClickListener() {
+        pauseChronometer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
-                resetTimer(root);
+                pauseChronometer(root);
+            }
+        });
+        resetChronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                resetChronometer(root);
             }
         });
 
@@ -132,54 +104,37 @@ public class ActivityIntervaltraining extends AppCompatActivity implements Polar
 
     }
 
+    public void startChronometer(View v) {
+        if (!runningChronometer) {
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            chronometer.start();
+            runningChronometer = true;
+            resetChronometer.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void resetChronometer(View v) {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        runningChronometer = false;
+        pauseOffset = 0;
+        resetChronometer.setVisibility(View.INVISIBLE);
+    }
+
+    public void pauseChronometer(View v) {
+        if (runningChronometer) {
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+            runningChronometer = false;
+            resetChronometer.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void updateCountDownText(){
-        int minutes = (int)(TimeLeftInMillis/1000)/60;
-        int seconds = (int)(TimeLeftInMillis/1000)%60;
-
-        String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
-        textViewTimer.setText(timeLeftFormatted);
-    }
-
-    private void startTimer(View root) {
-        countDownTimer = new CountDownTimer(TimeLeftInMillis,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                TimeLeftInMillis = millisUntilFinished;
-                updateCountDownText();
-            }
-            @Override
-            public void onFinish() {
-                runningTimer = false;
-                pauseStartBtn.setText("Start");
-                pauseStartBtn.setVisibility(View.INVISIBLE);
-                resetBtn.setVisibility(View.VISIBLE);
-            }
-        }.start();
-        runningTimer = true;
-        pauseStartBtn.setText("Pause");
-        resetBtn.setVisibility(View.INVISIBLE);
-    }
-
-    private void pauseTimer(View root) {
-        countDownTimer.cancel();
-        runningTimer = false;
-        pauseStartBtn.setText("Start");
-        resetBtn.setVisibility(View.VISIBLE);
-    }
-    private void resetTimer(View root) {
-        String[] times = pickerTime.split(":");
-        TimeLeftInMillis = Integer.valueOf(times[0])*60*1000 + Integer.valueOf(times[1])*1000;
-        updateCountDownText();
-        resetBtn.setVisibility(View.INVISIBLE);
-        pauseStartBtn.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -283,7 +238,7 @@ public class ActivityIntervaltraining extends AppCompatActivity implements Polar
         points.add(lastKnownLatLng);
         gpsTrack.setPoints(points);
         if (points.size() >= 2) {
-            double distance = SphericalUtil.computeDistanceBetween(points.get(points.size()-2), points.get(points.size()-1));
+            double distance = SphericalUtil.computeDistanceBetween(points.get(points.size() - 2), points.get(points.size() - 1));
             totalDistance = totalDistance + distance;
             Toast.makeText(getApplicationContext(), "The total distance is " + totalDistance, Toast.LENGTH_SHORT).show();
             Log.d("MyApp", "The total distance is " + totalDistance);

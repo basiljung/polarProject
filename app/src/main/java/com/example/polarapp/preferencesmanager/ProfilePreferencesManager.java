@@ -1,15 +1,10 @@
 package com.example.polarapp.preferencesmanager;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import android.content.*;
+
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 public class ProfilePreferencesManager {
 

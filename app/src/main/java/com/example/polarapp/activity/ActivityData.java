@@ -10,12 +10,28 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
     private String type = "";
     private Timestamp timestamp = null;
     private int time = 0; // in  seconds
+    private double avgHR = 0;
     private double distance = 0; // in meters
     private double avgSpeed = 0;
-    private double avgHR = 0;
+    private int interval = 0;
     private List<LatLng> locationPoints = null;
     private int deepSleepTime = 0;
     private int nightMoves = 0;
+
+    public ActivityData() {}
+
+    public ActivityData (ActivityData activityData) {
+        this.type = activityData.getType();
+        this.timestamp = activityData.getTimestamp();
+        this.time = activityData.getTime();
+        this.avgHR = activityData.getAvgHR();
+        this.distance = activityData.getDistance();
+        this.avgSpeed = activityData.getAvgSpeed();
+        this.interval = activityData.getInterval();
+        this.locationPoints = activityData.getLocationPoints();
+        this.deepSleepTime = activityData.getDeepSleepTime();
+        this.nightMoves = activityData.getNightMoves();
+    }
 
     public String getType() {
         return type;
@@ -41,6 +57,14 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
         this.time = time;
     }
 
+    public double getAvgHR() {
+        return avgHR;
+    }
+
+    public void setAvgHR(double avgHR) {
+        this.avgHR = avgHR;
+    }
+
     public double getDistance() {
         return distance;
     }
@@ -57,12 +81,12 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
         this.avgSpeed = avgSpeed;
     }
 
-    public double getAvgHR() {
-        return avgHR;
+    public int getInterval() {
+        return interval;
     }
 
-    public void setAvgHR(double avgHR) {
-        this.avgHR = avgHR;
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 
     public List<LatLng> getLocationPoints() {

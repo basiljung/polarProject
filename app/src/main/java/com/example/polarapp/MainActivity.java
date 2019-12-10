@@ -1,15 +1,12 @@
 package com.example.polarapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.*;
 
-import com.example.polarapp.activity.ActivityData;
 import com.example.polarapp.polar.PolarSDK;
-import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
-import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
+import com.example.polarapp.preferencesmanager.*;
 import com.example.polarapp.ui.*;
 
 import android.util.Log;
@@ -19,11 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.*;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.*;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,10 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -76,7 +68,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                textViewName.setText(String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_NAME)));
+                textViewEmail.setText(String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_EMAIL)));
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -87,10 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
-        String name = String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_NAME));
-        textViewName.setText(name);
-        String email = String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_EMAIL));
-        textViewEmail.setText(email);
+        textViewName.setText(String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_NAME)));
+        textViewEmail.setText(String.valueOf(profilePreferencesManager.getStringProfileValue(PROFILE_USER_EMAIL)));
 
         checkBT();
     }
@@ -101,11 +105,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity1.put("type", "run");
-        activity1.put("timestamp", (long)1575194400*1000);
-        activity1.put("time", 220);
-        activity1.put("distance", 17);
-        activity1.put("avgSpeed", 18);
+        activity1.put("timestamp", (long) 1575712800 * 1000);
+        activity1.put("time", 290);
+        activity1.put("distance", 22);
+        activity1.put("avgSpeed", 12);
         activity1.put("locationPoints", null);
+        activity1.put("avgHR", 149.50);
+        activity1.put("interval", 1);
 
         db.collection("activities")
                 .add(activity1)
@@ -126,10 +132,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         activity2.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity2.put("type", "sleep");
-        activity2.put("timestamp", (long)1575194400*1000);
-        activity2.put("time", 100);
-        activity2.put("deepSleepTime", 35);
-        activity2.put("nightMoves", 10);
+        activity2.put("timestamp", (long) 1575712800 * 1000);
+        activity2.put("time", 1500);
+        activity2.put("deepSleepTime", 320);
+        activity2.put("nightMoves", 56);
+        activity2.put("avgHR", 58.50);
 
         db.collection("activities")
                 .add(activity2)

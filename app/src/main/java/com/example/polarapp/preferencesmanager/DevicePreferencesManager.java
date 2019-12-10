@@ -1,7 +1,6 @@
 package com.example.polarapp.preferencesmanager;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 
 public class DevicePreferencesManager {
     private SharedPreferences sp;

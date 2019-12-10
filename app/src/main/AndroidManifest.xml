@@ -43,10 +43,10 @@
             android:name=".activity.Activity"
             android:theme="@style/AppTheme.Activity" />
         <activity
-            android:name=".activity.ActivityIntervaltraining"
+            android:name=".activity.ActivityIntervalTraining"
             android:theme="@style/AppTheme.Activity" />
         <activity
-            android:name=".activity.ActivityNormaltraining"
+            android:name=".activity.ActivityNormalTraining"
             android:theme="@style/AppTheme.Activity" />
         <activity
             android:name=".history.HistoryActivity"
