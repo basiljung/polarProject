@@ -150,9 +150,9 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         @Override
         public MPPointF getOffset() {
-            if (mOffset == null) {
-                mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
-            }
+            //if (mOffset == null) {
+                mOffset = new MPPointF(-(getWidth() / 2), -(getHeight()));
+            //}
             return mOffset;
         }
     }
@@ -184,6 +184,7 @@ public class AnalyticsActivity extends AppCompatActivity {
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(true);
         barChart.setScaleXEnabled(false);
+        barChart.setScaleYEnabled(false);
         CustomMarkerView mv = new CustomMarkerView(getApplicationContext(), R.layout.marker_layout);
         mv.setChartView(barChart);
         barChart.setMarkerView(mv);
