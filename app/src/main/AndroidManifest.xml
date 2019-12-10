@@ -80,6 +80,7 @@
         </activity>
         <receiver
             android:name="com.example.polarapp.sleep.MyReceiver"
+            android:enabled="true"
             android:exported="false" />
 
     </application>
