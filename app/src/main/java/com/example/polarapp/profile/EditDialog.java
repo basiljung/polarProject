@@ -36,12 +36,19 @@ public class EditDialog extends DialogFragment {
 
     public interface EditListener {
         void applySexChanges(int sex);
+
         void applyBirthChanges(String birthday);
+
         void applyHeightChanges(int height);
+
         void applyWeightChanges(int weight);
+
         void applyEmailChanges(String email);
+
         void applyPhoneChanges(String phone);
+
         void applyLocationChanges(String location);
+
         void applyProfileChanges(String name, String password);
     }
 

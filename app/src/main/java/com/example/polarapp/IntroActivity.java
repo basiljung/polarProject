@@ -7,12 +7,11 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.*;
 import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.*;
 
-import com.example.polarapp.preferencesmanager.IntroPreferencesManager;
-import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
+import com.example.polarapp.preferencesmanager.*;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
 

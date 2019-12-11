@@ -1,23 +1,20 @@
 package com.example.polarapp.activity;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.*;
 
 import com.example.polarapp.R;
 
 import java.util.ArrayList;
 
 public class ActivityDataAdapter extends ArrayAdapter<ActivityData> {
-    public ActivityDataAdapter(Context context, ArrayList<ActivityData> activityDataArrayList){
+    public ActivityDataAdapter(Context context, ArrayList<ActivityData> activityDataArrayList) {
         super(context, R.layout.activity_item, activityDataArrayList);
     }
+
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ActivityData base = getItem(position);

@@ -5,6 +5,7 @@ import android.view.*;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import com.example.polarapp.R;
 import com.example.polarapp.devices.SearchDevicesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
