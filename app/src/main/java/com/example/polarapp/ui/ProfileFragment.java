@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         editImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 10);
+                editDialog = new EditDialog(ProfileFragment.this, "", 10);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit profile");
                 }
@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
                 } else if (sexValue.equals("Female")) {
                     selectedButton = R.id.sexOption2;
                 }
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(selectedButton), 1);
+                editDialog = new EditDialog(ProfileFragment.this, String.valueOf(selectedButton), 1);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit sex");
                 }
@@ -84,7 +84,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         ageLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH), 2);
+                editDialog = new EditDialog(ProfileFragment.this, profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH), 2);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit age");
                 }
@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         heightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT)), 3);
+                editDialog = new EditDialog(ProfileFragment.this, String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_HEIGHT)), 3);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit height");
                 }
@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         weightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT)), 4);
+                editDialog = new EditDialog(ProfileFragment.this, String.valueOf(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT)), 4);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit weight");
                 }
@@ -117,7 +117,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         emailLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 5);
+                editDialog = new EditDialog(ProfileFragment.this, "", 5);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit email");
                 }
@@ -128,7 +128,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         phoneLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), "", 6);
+                editDialog = new EditDialog(ProfileFragment.this, "", 6);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit phone");
                 }
@@ -139,7 +139,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         locationLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editDialog = new EditDialog(ProfileFragment.this, getContext(), locationText.getText().toString(), 7);
+                editDialog = new EditDialog(ProfileFragment.this, locationText.getText().toString(), 7);
                 if (getFragmentManager() != null) {
                     editDialog.show(getFragmentManager(), "Edit location");
                 }
@@ -286,7 +286,7 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     }
 
     @Override
-    public void applyProfileChanges(String name, String password) {
+    public void applyProfileChanges(String name) {
         if (!name.equals("")) {
             nameText.setText(name);
             profilePreferencesManager.setStringProfileValue(PROFILE_USER_NAME, name);

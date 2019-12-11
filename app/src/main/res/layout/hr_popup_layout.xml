@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="@color/popUpColor"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/level1InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@color/HRLevel1Color"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Zone 1. 50-60% of Max Heart Rate"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/popUpTextColor"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VERY LIGHT"
+                android:layout_centerInParent="true"
+                android:textStyle="bold|italic"
+                android:textColor="@color/popUpTextColor"
+                android:textSize="15dp" />
+
+            <ImageButton
+                android:id="@+id/level1ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_check_hr_level"
+                android:background="@drawable/circle_shape"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/level1InfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:text="The very low intensity zone. Training at this intensity will boost your recovery and get you ready to train in higher heart rate zones.
+            \n\nTo train at this intensity, pick sports during which you can easily control your heart rate, such as walking or cycling."
+            android:textSize="13dp"
+            android:textAlignment="textStart"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/level2InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@color/HRLevel2Color"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/popUpTextColor"
+            android:text="Zone 2. 60-70% of Max Heart Rate"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LIGHT"
+                android:layout_centerInParent="true"
+                android:textStyle="bold|italic"
+                android:textColor="@color/popUpTextColor"
+                android:textSize="15dp" />
+
+            <ImageButton
+                android:id="@+id/level2ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_check_hr_level"
+                android:background="@drawable/circle_shape"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/level2InfoText"
+            android:layout_width="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:layout_height="wrap_content"
+            android:text="Exercising in zone 2 feels light and you should be able to go on for a long time at this intensity. In this zone you'll improve your general endurance.
+            \n\nTraining in heart rate zone 2 is an essential part of every runner’s program. Keep at it and you’ll reap the benefits later."
+            android:textSize="13dp"
+            android:textAlignment="textStart"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/level3InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@color/HRLevel3Color"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/popUpTextColor"
+            android:text="Zone 3. 70-80% of Max Heart Rate"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MODERATE"
+                android:layout_centerInParent="true"
+                android:textStyle="bold|italic"
+                android:textColor="@color/popUpTextColor"
+                android:textSize="15dp" />
+
+            <ImageButton
+                android:id="@+id/level3ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_check_hr_level"
+                android:background="@drawable/circle_shape"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/level3InfoText"
+            android:layout_width="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:layout_height="wrap_content"
+            android:text="Running in heart rate zone 3 is especially effective for improving the efficiency of blood circulation. This is the zone in which that pesky lactic acid starts building up in your bloodstream.
+            \n\nTraining in this HR zone will make moderate efforts easier and improve your efficiency."
+            android:textSize="13dp"
+            android:textAlignment="textStart"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/level4InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@color/HRLevel4Color"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/popUpTextColor"
+            android:text="Zone 4. 80-90% of Max Heart Rate"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HARD"
+                android:layout_centerInParent="true"
+                android:textStyle="bold|italic"
+                android:textColor="@color/popUpTextColor"
+                android:textSize="15dp" />
+
+            <ImageButton
+                android:id="@+id/level4ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_check_hr_level"
+                android:background="@drawable/circle_shape"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/level4InfoText"
+            android:layout_width="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:layout_height="wrap_content"
+            android:text="Heart rate zone 4 is where the going gets tough. You’ll be breathing hard and running aerobically.
+            \n\nIf you train at this intensity, you’ll improve your speed endurance. Your body will get better at using carbohydrates for energy and you’ll be able to withstand higher levels of lactic acid in your blood for longer."
+            android:textSize="13dp"
+            android:textAlignment="textStart"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/level5InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@color/HRLevel5Color"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Zone 5. 90-100% of Max Heart Rate"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAXIMUM"
+                android:layout_centerInParent="true"
+                android:textStyle="bold|italic"
+                android:textColor="@color/popUpTextColor"
+                android:textSize="15dp" />
+
+            <ImageButton
+                android:id="@+id/level5ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_check_hr_level"
+                android:background="@drawable/circle_shape"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/level5InfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/popUpTextColor"
+            android:text="Heart rate zone 5 is your maximal effort. Your heart, blood and respiratory system will be working at their maximal capacity. After a few minutes you won’t be able to continue at this intensity.
+            \n\nIf you’re just starting out or have only been training for some time, you probably won’t have to train at this intensity, as this level is better for a professional athlete."
+            android:textSize="13dp"
+            android:elegantTextHeight="true"
+            android:textAlignment="textStart"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>
