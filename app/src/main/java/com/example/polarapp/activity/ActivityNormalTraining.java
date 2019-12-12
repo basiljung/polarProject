@@ -4,18 +4,12 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.*;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -25,20 +19,10 @@ import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.location.*;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+import com.google.android.gms.tasks.*;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.SphericalUtil;
@@ -73,7 +57,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     private GoogleApiClient googleApiClient;
     private LatLng lastKnownLatLng;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private TextView hrData;
+    private TextView hrData, txtAverageSpeed, txtDistance;
     private PolarSDK polarSDK;
     private double totalDistance = 0.0; // m
     private double actualSpeed = 0.0; //km/h
@@ -85,17 +69,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     private Timestamp startTimestamp = null; // timestamp
     private List<LatLng> points; // Polylines, we need to save them in out database
     private ArrayList<Integer> hrList;
-
-    // Names in Database
-    private static final String ACTIVITY_UUID = "UUID";
-    private static final String ACTIVITY_TYPE = "type";
-    private static final String ACTIVITY_TIMESTAMP = "timestamp";
-    private static final String ACTIVITY_TIME = "time";
-    private static final String ACTIVITY_DISTANCE = "distance";
-    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
-    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
-    private static final String ACTIVITY_AVG_HR = "avgHR";
-    private static final String ACTIVITY_INTERVAL = "interval";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +95,9 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         stopChronometer = findViewById(R.id.stopChronometer);
         resetChronometer = findViewById(R.id.resetChronometer);
         saveTrainingBtn = findViewById(R.id.saveTrainingBtn);
+        hrData = findViewById(R.id.txtHRData);
+        txtAverageSpeed = findViewById(R.id.txtAverageSpeed);
+        txtDistance = findViewById(R.id.txtDistance);
         hrList = new ArrayList<>();
 
         startChronometer.setOnClickListener(new View.OnClickListener() {
@@ -163,24 +139,27 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         polarSDK = (PolarSDK) getApplicationContext();
         polarSDK.setCallbackInterfaceActivity(this);
 
-        hrData = findViewById(R.id.hrData);
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
-    public void saveInDB() {
+    public void saveInDB(){
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
+
         Log.d("MyApp", "Time: " + startTimestamp.getTime());
 
-        activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity1.put(ACTIVITY_TYPE, "run");
-        activity1.put(ACTIVITY_TIMESTAMP, startTimestamp.getTime());
-        activity1.put(ACTIVITY_TIME, Math.round(totalTimeInMin));
-        activity1.put(ACTIVITY_DISTANCE, (int) totalDistance);
-        activity1.put(ACTIVITY_AVG_SPEED, df.format(averageSpeed));
-        activity1.put(ACTIVITY_LOCATION_POINTS, points);
-        activity1.put(ACTIVITY_AVG_HR, df.format(heartRateAverage));
-        activity1.put(ACTIVITY_INTERVAL, 1);
+       activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put("type", "run");
+        activity1.put("timestamp", startTimestamp.getTime());
+        activity1.put("time", (int) totalTimeInSec);
+        activity1.put("distance",(int) totalDistance);
+        activity1.put("avgSpeed", df.format(averageSpeed));
+        activity1.put("locationPoints", points);
+        activity1.put("avgHR", heartRateAverage);
+        activity1.put("interval", 1);
 
         db.collection("activities")
                 .add(activity1)
@@ -204,7 +183,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         if (!runningChronometer) {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
-            startLocationUpdates();
             runningChronometer = true;
             resetChronometer.setVisibility(View.INVISIBLE);
         }
@@ -215,11 +193,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         runningChronometer = false;
         pauseOffset = 0;
         resetChronometer.setVisibility(View.INVISIBLE);
-        points.clear();
-        gpsTrack.setPoints(points);
-        totalDistance = 0;
-        averageSpeed = 0;
-        startLocationUpdates();
     }
 
     public void stopChronometer(View v) {
@@ -228,35 +201,36 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
             chronometer.stop();
             pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
             tT = SystemClock.elapsedRealtime() - chronometer.getBase();
-            totalTimeInSec = (tT / 1000.0);
-            totalTimeInMin = totalTimeInSec / 60.0;
-            totalTimeInHour = totalTimeInSec / 60.0 / 60.0;
+            totalTimeInSec= (tT/1000.0);
+            totalTimeInMin= totalTimeInSec/60.0;
+            totalTimeInHour= totalTimeInSec/60.0/60.0;
             runningChronometer = false;
             resetChronometer.setVisibility(View.VISIBLE);
         }
         saveTrainingBtn.setVisibility(View.VISIBLE);
     }
-
-    private void saveTraining(View root) {
+    private void saveTraining(View root){
         Integer sum = 0;
         for (int i = 0; i < hrList.size(); i++) {
             sum += hrList.get(i);
         }
-        if (hrList.size() > 0) {
-            heartRateAverage = sum / hrList.size();
+        if(hrList.size()>0){
+            heartRateAverage = sum/hrList.size();
         }
 
-        double totalDistanceInKm = totalDistance / 1000.0;
-        averageSpeed = totalDistanceInKm / totalTimeInHour;
-        Log.i("MyApp", "average speed: " + averageSpeed + "");
-        Log.i("MyApp", "average hr " + heartRateAverage);
-        Log.i("MyApp", "total time in min " + totalTimeInMin);
-        Log.i("MyApp", "total time in sec " + totalTimeInSec);
-        Log.i("MyApp", "total distance in m " + totalDistance);
-        Log.i("MyApp", "location points... in progress ");
+
+        double totalDistanceInKm = totalDistance/1000.0;
+        averageSpeed = totalDistanceInKm/totalTimeInHour;
+        Log.i("MyApp","average speed: "+averageSpeed+"");
+        Log.i("MyApp","average hr " + heartRateAverage);
+        Log.i("MyApp","total time in min " + totalTimeInMin);
+        Log.i("MyApp","total time in sec " + totalTimeInSec);
+        Log.i("MyApp","total distance in m " + totalDistance);
+        Log.i("MyApp","location points... in progress ");
         saveInDB();
         finish();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -271,10 +245,12 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         map = googleMap;
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
+
         getDeviceLocation();
 
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.RED).width(4);
+        polylineOptions.color(Color.CYAN);
+        polylineOptions.width(4);
         gpsTrack = map.addPolyline(polylineOptions);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -290,21 +266,49 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     }
 
     @Override
+    protected void onStart() {
+        googleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (googleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
     public void onConnected(@Nullable Bundle bundle) {
         startLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if (runningChronometer) {
+        if(runningChronometer){
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             updateTrack();
         }
@@ -341,8 +345,9 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         if (points.size() >= 2) {
             double distance = SphericalUtil.computeDistanceBetween(points.get(points.size() - 2), points.get(points.size() - 1));
             totalDistance = totalDistance + distance;
-            actualSpeed = totalDistance / totalTimeInHour;
+            actualSpeed = totalDistance/totalTimeInHour;
             Toast.makeText(getApplicationContext(), "The total distance is " + totalDistance, Toast.LENGTH_SHORT).show();
+            //Log.d("MyApp", "The total distance is " + totalDistance);
         }
     }
 
@@ -369,34 +374,13 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     @Override
     public void hrUpdateData(int hr) {
         hrData.setText(String.valueOf(hr));
-        if (runningChronometer) {
+        if(runningChronometer){
             hrList.add(hr);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        googleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        //googleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (googleApiClient.isConnected()) {
-            startLocationUpdates();
+            DecimalFormat f = new DecimalFormat("#0.00");
+            String averageSpeedString = f.format(averageSpeed);
+            String totalDistanceString = f.format(totalDistance);
+            txtDistance.setText(totalDistanceString);
+            txtAverageSpeed.setText(averageSpeedString);
         }
     }
 }
