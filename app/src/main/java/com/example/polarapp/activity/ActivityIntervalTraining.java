@@ -17,14 +17,21 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.tasks.*;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.SphericalUtil;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public class ActivityIntervalTraining extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
@@ -33,10 +40,14 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
 
+    private ProfilePreferencesManager profilePreferencesManager;
+    private static final String PROFILE_USER_ID = "profile_user_id";
+    private DecimalFormat df = new DecimalFormat();
+
     private Toolbar toolbar;
     private String pickerTime;
     private TextView textViewHeartRate, textViewTimer;
-    private Button pauseStartBtn, resetBtn;
+    private Button pauseStartBtn, resetBtn,resetLapsBtn, savetrainingBtn;
     private CountDownTimer countDownTimer;
     private boolean runningTimer;
     private long TimeLeftInMillis = 0;
@@ -46,10 +57,22 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     private GoogleApiClient googleApiClient;
     private LatLng lastKnownLatLng;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private TextView hrData;
+    private TextView hrData, lapcounter;
     private PolarSDK polarSDK;
-    private double totalDistance = 0;
+    private double totalDistance = 0.0; // m
+    private double averageSpeed = 0.0; //km/h
+    private Integer heartRateAverage = 0; //per trainigssession
+    private double totalTimeInSec; // sec
+    private double totalTimeInMin; // min
+    private double totalTimeInHour; // hour
+    private double timeSetInSec; // sec
+    private double timeSetInMin; // min
+    private double timeSetInHour; // hour
+    private Timestamp startTimestamp = null; // timestamp
     private List<LatLng> points; // Polylines, we need to save them in out database
+    private int lapcount = 0;
+    private ArrayList<Integer> hrList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +85,14 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+        otherSymbols.setDecimalSeparator('.');
+        df.setMaximumFractionDigits(2);
+        df.setDecimalFormatSymbols(otherSymbols);
+
+        profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+
         Intent intent = getIntent();
         pickerTime = intent.getStringExtra("Picker_Time");
         String[] times = pickerTime.split(":");
@@ -72,12 +103,24 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         }
         pickerTime = times[0] + ":" + times[1];
         TimeLeftInMillis = Integer.valueOf(times[0]) * 60 * 1000 + Integer.valueOf(times[1]) * 1000;
+        timeSetInSec = TimeLeftInMillis/1000.0;
+        timeSetInMin = TimeLeftInMillis/1000.0/60.0;
+        timeSetInHour = TimeLeftInMillis/1000.0/60.0/60.0;
 
         textViewHeartRate = findViewById(R.id.hrData);
         textViewTimer = findViewById(R.id.txtVTimePicker);
+        lapcounter = findViewById(R.id.lapcounter);
+        resetLapsBtn = findViewById(R.id.resetLapsBtn);
         textViewTimer.setText(pickerTime);
         pauseStartBtn = findViewById(R.id.pauseStartBtn);
         resetBtn = findViewById(R.id.resetBtn);
+        polarSDK = (PolarSDK) getApplicationContext();
+        polarSDK.setCallbackInterfaceActivity(this);
+
+        hrData = findViewById(R.id.hrData);
+        savetrainingBtn = findViewById(R.id.saveTrainingBtn);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        hrList = new ArrayList<>();
 
         pauseStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +138,13 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
                 resetTimer(root);
             }
         });
+        resetLapsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                lapcount = 0;
+                lapcounter.setText("done laps: "+lapcount+"");
+            }
+        });
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -106,13 +156,44 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
                     .addApi(LocationServices.API)
                     .build();
         }
+        
+        savetrainingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View root) {
+                saveTraining();
+            }
+        });
+    }
 
-        polarSDK = (PolarSDK) getApplicationContext();
-        polarSDK.setCallbackInterfaceActivity(this);
+    public void saveInDB(){
 
-        hrData = findViewById(R.id.hrData);
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> activity1 = new HashMap<>();
 
+        activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put("type", "run");
+        activity1.put("timestamp", startTimestamp.getTime());
+        activity1.put("time", (int) totalTimeInSec);
+        activity1.put("distance",(int) totalDistance);
+        activity1.put("avgSpeed", df.format(averageSpeed));
+        activity1.put("locationPoints", points);
+        activity1.put("avgHR", heartRateAverage);
+        activity1.put("laps", lapcount);
+
+        db.collection("activities")
+                .add(activity1)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("MyApp", "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("MyApp", "Error adding document", e);
+                    }
+                });
     }
 
     @Override
@@ -132,19 +213,28 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     }
 
     private void startTimer(View root) {
+        Calendar cal = Calendar.getInstance();
+        startTimestamp = new Timestamp(cal.getTimeInMillis());
         countDownTimer = new CountDownTimer(TimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 TimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
-            }
+        }
 
             @Override
             public void onFinish() {
                 runningTimer = false;
                 pauseStartBtn.setText("Start");
                 pauseStartBtn.setVisibility(View.INVISIBLE);
+                lapcount++;
+                lapcounter.setText("done laps: "+lapcount+"");
+                totalTimeInSec = timeSetInSec*lapcount;
+                totalTimeInMin = timeSetInMin*lapcount;
+                totalTimeInHour = timeSetInHour*lapcount;
                 resetBtn.setVisibility(View.VISIBLE);
+                resetLapsBtn.setVisibility(View.VISIBLE);
+                savetrainingBtn.setVisibility(View.VISIBLE);
             }
         }.start();
         runningTimer = true;
@@ -157,6 +247,7 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         runningTimer = false;
         pauseStartBtn.setText("Start");
         resetBtn.setVisibility(View.VISIBLE);
+        resetLapsBtn.setVisibility(View.VISIBLE);
     }
 
     private void resetTimer(View root) {
@@ -164,7 +255,28 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         TimeLeftInMillis = Integer.valueOf(times[0]) * 60 * 1000 + Integer.valueOf(times[1]) * 1000;
         updateCountDownText();
         resetBtn.setVisibility(View.INVISIBLE);
+        resetLapsBtn.setVisibility(View.INVISIBLE);
         pauseStartBtn.setVisibility(View.VISIBLE);
+    }
+    private void saveTraining(){
+        Integer sum = 0;
+        for (int i = 0; i < hrList.size(); i++) {
+            sum += hrList.get(i);
+        }
+        if(hrList.size()>0){
+            heartRateAverage = sum/hrList.size();
+        }
+        double totalDistanceInKm = totalDistance/1000.0;
+        averageSpeed = totalDistanceInKm/totalTimeInHour;
+        Log.i("MyApp","average speed: "+averageSpeed+"");
+        Log.i("MyApp","average hr " + heartRateAverage);
+        Log.i("MyApp","total time in min " + totalTimeInMin);
+        Log.i("MyApp","total time in sec " + totalTimeInSec);
+        Log.i("MyApp","total distance in m " + totalDistance);
+        Log.i("MyApp","laps " + lapcount);
+        Log.i("MyApp","location points... in progress ");
+        saveInDB();
+        finish();
     }
 
     @Override
@@ -271,7 +383,7 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
             double distance = SphericalUtil.computeDistanceBetween(points.get(points.size() - 2), points.get(points.size() - 1));
             totalDistance = totalDistance + distance;
             Toast.makeText(getApplicationContext(), "The total distance is " + totalDistance, Toast.LENGTH_SHORT).show();
-            Log.d("MyApp", "The total distance is " + totalDistance);
+            //Log.d("MyApp", "The total distance is " + totalDistance);
         }
     }
 
@@ -298,5 +410,8 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     @Override
     public void hrUpdateData(int hr) {
         hrData.setText(String.valueOf(hr));
+        if(runningTimer){
+            hrList.add(hr);
+        }
     }
 }

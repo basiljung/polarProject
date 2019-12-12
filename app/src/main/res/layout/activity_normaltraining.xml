@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scaleType = "fitXY"
+    android:background="@drawable/backg">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -72,7 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Start"
+            android:text="start"
             android:id="@+id/startChronometer"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="7dp"></Button>
@@ -80,8 +82,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Pause"
-            android:id="@+id/pauseChronometer"
+            android:text="stop"
+            android:id="@+id/stopChronometer"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"></Button>
@@ -89,12 +91,31 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Reset"
+            android:text="reset"
             android:id="@+id/resetChronometer"
             android:visibility="invisible"
             tools:visibility ="visible"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="15dp"></Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="save training"
+            android:textSize="10dp"
+            android:id="@+id/saveTrainingBtn"
+            android:visibility="invisible"
+            tools:visibility ="visible"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            ></Button>
+
     </LinearLayout>
 
     <fragment
@@ -104,7 +125,5 @@
         android:layout_gravity="center"
         android:layout_height="match_parent"
         />
-
-
 
 </LinearLayout>

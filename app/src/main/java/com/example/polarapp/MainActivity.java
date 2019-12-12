@@ -27,6 +27,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
 
-        //createActivities();
+        createActivities();
 
         polarSDK = (PolarSDK) getApplicationContext();
 
@@ -103,7 +105,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        DocumentReference docRef = db.collection("activities").document("2NFOpyRl6opEpzS2fZzt");
+
+// Remove the 'capital' field from the document
+        Map<String,Object> updates = new HashMap<>();
+        Calendar cal = Calendar.getInstance();
+        Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
+        updates.put("avgSpeed", 0.5);
+
+        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("MyApp", "File updated");
+            }
+        });
+
+        /*activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity1.put("type", "run");
         activity1.put("timestamp", (long) 1575712800 * 1000);
         activity1.put("time", 290);
@@ -151,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onFailure(@NonNull Exception e) {
                         Log.w("MyApp", "Error adding document", e);
                     }
-                });
-
+                });*/
     }
 
     @Override

@@ -11,7 +11,7 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
     private Timestamp timestamp = null;
     private int time = 0; // in  seconds
     private double avgHR = 0;
-    private double distance = 0; // in meters
+    private int distance = 0; // in meters
     private double avgSpeed = 0;
     private int interval = 0;
     private List<LatLng> locationPoints = null;
@@ -65,11 +65,11 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
         this.avgHR = avgHR;
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
