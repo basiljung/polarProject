@@ -24,6 +24,7 @@ import com.google.android.gms.location.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.tasks.*;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.SphericalUtil;
@@ -73,6 +74,16 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     private int lapcount = 0;
     private ArrayList<Integer> hrList;
 
+    // Names in Database
+    private static final String ACTIVITY_UUID = "UUID";
+    private static final String ACTIVITY_TYPE = "type";
+    private static final String ACTIVITY_TIMESTAMP = "timestamp";
+    private static final String ACTIVITY_TIME = "time";
+    private static final String ACTIVITY_DISTANCE = "distance";
+    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
+    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
+    private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_INTERVAL = "interval";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,15 +181,15 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity1.put("type", "run");
-        activity1.put("timestamp", startTimestamp.getTime());
-        activity1.put("time", (int) totalTimeInSec);
-        activity1.put("distance",(int) totalDistance);
-        activity1.put("avgSpeed", df.format(averageSpeed));
-        activity1.put("locationPoints", points);
-        activity1.put("avgHR", heartRateAverage);
-        activity1.put("laps", lapcount);
+        activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put(ACTIVITY_TYPE, "run");
+        activity1.put(ACTIVITY_TIMESTAMP, startTimestamp.getTime());
+        activity1.put(ACTIVITY_TIME, Math.round(totalTimeInMin));
+        activity1.put(ACTIVITY_DISTANCE,(int) totalDistance);
+        activity1.put(ACTIVITY_AVG_SPEED, df.format(averageSpeed));
+        activity1.put(ACTIVITY_LOCATION_POINTS, points);
+        activity1.put(ACTIVITY_AVG_HR, df.format(heartRateAverage));
+        activity1.put(ACTIVITY_INTERVAL, lapcount);
 
         db.collection("activities")
                 .add(activity1)
