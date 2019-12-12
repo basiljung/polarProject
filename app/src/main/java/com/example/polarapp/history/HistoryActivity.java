@@ -3,6 +3,7 @@ package com.example.polarapp.history;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -20,7 +22,17 @@ import com.example.polarapp.R;
 import com.example.polarapp.activity.ActivityData;
 import com.example.polarapp.activity.ActivityDataAdapter;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -37,8 +49,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private Toolbar toolbar;
     private ProfilePreferencesManager profilePreferencesManager;
@@ -55,7 +68,26 @@ public class HistoryActivity extends AppCompatActivity {
     private static final String PROFILE_USER_ID = "profile_user_id";
     private boolean isRunDialogFirstTime = true;
     private boolean isSleepDialogFirstTime = true;
-    private SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd/MM/yyyy", Locale.ENGLISH);
+    private SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd/MM/yyyy HH:mm:ss", Locale.ENGLISH);
+
+    // Names in Database
+    private static final String ACTIVITY_UUID = "UUID";
+    private static final String ACTIVITY_TYPE = "type";
+    private static final String ACTIVITY_TIMESTAMP = "timestamp";
+    private static final String ACTIVITY_TIME = "time";
+    private static final String ACTIVITY_DISTANCE = "distance";
+    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
+    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
+    private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_INTERVAL = "interval";
+    private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
+    private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
+
+    // Google Maps
+    private GoogleMap map;
+    private SupportMapFragment mapFragment;
+    private GoogleApiClient googleApiClient;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,21 +146,18 @@ public class HistoryActivity extends AppCompatActivity {
                     case 0:
                         selectedActivity = new ActivityData(allActivityDataArrayList.get(pos));
                         if (selectedActivity.getType().toLowerCase().equals("sleep")) {
-                            showSleepPopup(view, selectedActivity);
+                            showSleepPopup(selectedActivity);
                         } else {
-                            showRunPopup(view, selectedActivity);
+                            showRunPopup(selectedActivity);
                         }
-                        Toast.makeText(getApplicationContext(), "Selected item time: " + selectedActivity.getTime(), Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         selectedActivity = new ActivityData(runActivityDataArrayList.get(pos));
-                        showRunPopup(view, selectedActivity);
-                        Toast.makeText(getApplicationContext(), "Selected item time: " + selectedActivity.getTime(), Toast.LENGTH_SHORT).show();
+                        showRunPopup(selectedActivity);
                         break;
                     case 2:
                         selectedActivity = new ActivityData(sleepActivityDataArrayList.get(pos));
-                        showSleepPopup(view, selectedActivity);
-                        Toast.makeText(getApplicationContext(), "Selected item time: " + selectedActivity.getTime(), Toast.LENGTH_SHORT).show();
+                        showSleepPopup(selectedActivity);
                         break;
                 }
             }
@@ -153,34 +182,36 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 ActivityData activityData = new ActivityData();
 
-                                String type = document.get("type").toString();
-                                Timestamp timestamp = new Timestamp(Long.parseLong(document.get("timestamp").toString()));
+                                String type = document.get(ACTIVITY_TYPE).toString();
+                                Timestamp timestamp = new Timestamp(Long.parseLong(document.get(ACTIVITY_TIMESTAMP).toString()));
                                 Log.d("MyApp", "Date: " + new Date(timestamp.getTime()));
-                                int time = Integer.parseInt(document.get("time").toString());
-                                double avgHR = Double.valueOf(document.get("avgHR").toString());
+                                int time = Integer.parseInt(document.get(ACTIVITY_TIME).toString());
+                                double avgHR = Double.valueOf(document.get(ACTIVITY_AVG_HR).toString());
                                 activityData.setType(type);
                                 activityData.setTimestamp(timestamp);
                                 activityData.setTime(time);
                                 activityData.setAvgHR(avgHR);
                                 if (type.equals("sleep")) {
-                                    int deepSleepTime = Integer.parseInt(document.get("deepSleepTime").toString());
-                                    int nightMoves = Integer.parseInt(document.get("nightMoves").toString());
+                                    int deepSleepTime = Integer.parseInt(document.get(ACTIVITY_DEEP_SLEEP_TIME).toString());
+                                    int nightMoves = Integer.parseInt(document.get(ACTIVITY_NIGHT_MOVES).toString());
                                     activityData.setDeepSleepTime(deepSleepTime);
                                     activityData.setNightMoves(nightMoves);
                                     sleepActivityDataArrayList.add(activityData);
                                 } else {
-                                    int distance = Integer.parseInt(document.get("distance").toString());
-                                    double avgSpeed = Double.parseDouble(document.get("avgSpeed").toString());
+                                    int distance = Integer.parseInt(document.get(ACTIVITY_DISTANCE).toString());
+                                    double avgSpeed = Double.parseDouble(document.get(ACTIVITY_AVG_SPEED).toString());
                                     List<LatLng> locationPoints;
                                     try {
-                                        locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get("locationPoints")); // Try if works
+                                        locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get(ACTIVITY_LOCATION_POINTS)); // Try if works
                                     } catch (NullPointerException e) {
                                         locationPoints = null;
                                     }
+                                    int interval = Integer.parseInt(document.get(ACTIVITY_INTERVAL).toString());
 
                                     activityData.setDistance(distance);
                                     activityData.setAvgSpeed(avgSpeed);
                                     activityData.setLocationPoints(locationPoints);
+                                    activityData.setInterval(interval);
                                     runActivityDataArrayList.add(activityData);
                                 }
                                 Collections.sort(allActivityDataArrayList, Collections.reverseOrder());
@@ -196,9 +227,9 @@ public class HistoryActivity extends AppCompatActivity {
                 });
     }
 
-    private void showRunPopup(View v, ActivityData activity) {
+    private void showRunPopup(ActivityData activity) {
         if (isRunDialogFirstTime) {
-            runDialog.setContentView(R.layout.run_history_popup_layout);
+            runDialog.setContentView(R.layout.popup_run_history);
             isRunDialogFirstTime = false;
         }
         TextView typeText = runDialog.findViewById(R.id.typeText);
@@ -208,24 +239,81 @@ public class HistoryActivity extends AppCompatActivity {
         TextView distanceText = runDialog.findViewById(R.id.distanceText);
         TextView avgSpeedText = runDialog.findViewById(R.id.avgSpeedText);
         TextView avgHRText = runDialog.findViewById(R.id.avgHRText);
+        List<LatLng> locationData = activity.getLocationPoints();
+        final List<LatLng> locationPoints = new ArrayList<>();
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (locationData != null) {
+            for (Object locationObj : locationData) {
+                Map<String, Object> location = (Map<String, Object>) locationObj;
+                LatLng latLng = new LatLng((Double) location.get("latitude"), (Double) location.get("longitude"));
+                Log.d("MyApp", "Lat: " + latLng.latitude + ", Lon: " + latLng.longitude);
+                locationPoints.add(latLng);
+            }
+        } else {
+            try {
+                Task locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location initialLocation = (Location) task.getResult();
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(initialLocation.getLatitude(),
+                                            initialLocation.getLongitude()), 15));
+                            Toast.makeText(getApplicationContext(), "No GPS data to show", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } catch (SecurityException e) {
+                Log.e("Exception: %s", e.getMessage());
+            }
+        }
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                map = googleMap;
+
+                PolylineOptions polylineOptions = new PolylineOptions();
+                for (int i = 0; i < locationPoints.size(); i++) {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(locationPoints.get(0).latitude,
+                                    locationPoints.get(0).longitude), 15));
+                    polylineOptions.add(new LatLng(locationPoints.get(i).latitude, locationPoints.get(i).longitude));
+                }
+                polylineOptions.color(Color.RED).width(4);
+                map.addPolyline(polylineOptions);
+            }
+        });
 
         Date date = new Date(activity.getTimestamp().getTime());
 
-        typeText.setText(activity.getType());
+        typeText.setText(activity.getType().toUpperCase());
         timestampText.setText(sdf.format(date));
         timeText.setText(activity.getTime() + " min");
-        //intervalsText.setText(activity.getInterval());
+        intervalsText.setText(String.valueOf(activity.getInterval()));
         distanceText.setText(activity.getDistance() + " m");
         avgSpeedText.setText(activity.getAvgSpeed() + " km/h");
         avgHRText.setText(activity.getAvgHR() + " bpm");
+
 
         runDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         runDialog.show();
     }
 
-    private void showSleepPopup(View v, ActivityData activity) {
+    private void showSleepPopup(ActivityData activity) {
         if (isSleepDialogFirstTime) {
-            sleepDialog.setContentView(R.layout.sleep_history_popup_layout);
+            sleepDialog.setContentView(R.layout.popup_sleep_history);
             isSleepDialogFirstTime = false;
         }
         TextView typeText = sleepDialog.findViewById(R.id.typeText);
@@ -237,7 +325,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         Date date = new Date(activity.getTimestamp().getTime());
 
-        typeText.setText(activity.getType());
+        typeText.setText(activity.getType().toUpperCase());
         timestampText.setText(sdf.format(date));
         timeText.setText(activity.getTime() + " min");
         deepSleepText.setText(activity.getDeepSleepTime() + " min");
@@ -271,6 +359,18 @@ public class HistoryActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 }
 

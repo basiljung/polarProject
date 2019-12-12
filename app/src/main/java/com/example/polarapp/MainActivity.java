@@ -3,33 +3,41 @@ package com.example.polarapp;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.os.*;
-
-import com.example.polarapp.polar.PolarSDK;
-import com.example.polarapp.preferencesmanager.*;
-import com.example.polarapp.ui.*;
-
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.view.GravityCompat;
-
-import com.google.android.gms.tasks.*;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.*;
-
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.view.View;
-import android.widget.*;
+import com.example.polarapp.polar.PolarSDK;
+import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
+import com.example.polarapp.ui.AboutFragment;
+import com.example.polarapp.ui.DevicesFragment;
+import com.example.polarapp.ui.HomeFragment;
+import com.example.polarapp.ui.ProfileFragment;
+import com.example.polarapp.ui.SettingsFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,6 +55,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String PROFILE_USER_NAME = "profile_user_name";
     private static final String PROFILE_USER_EMAIL = "profile_user_email";
 
+    // Names in Database
+    private static final String ACTIVITY_UUID = "UUID";
+    private static final String ACTIVITY_TYPE = "type";
+    private static final String ACTIVITY_TIMESTAMP = "timestamp";
+    private static final String ACTIVITY_TIME = "time";
+    private static final String ACTIVITY_DISTANCE = "distance";
+    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
+    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
+    private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_INTERVAL = "interval";
+    private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
+    private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
         devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
 
-        createActivities();
+        // createActivities();
 
         polarSDK = (PolarSDK) getApplicationContext();
 
@@ -105,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        DocumentReference docRef = db.collection("activities").document("2NFOpyRl6opEpzS2fZzt");
+        DocumentReference docRef = db.collection("activities").document("DOj90JDaqFxC4DmaLNKx");
 
 // Remove the 'capital' field from the document
         Map<String,Object> updates = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
-        updates.put("avgSpeed", 0.5);
+        updates.put("time", 5);
 
         docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -120,15 +141,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        /*activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity1.put("type", "run");
-        activity1.put("timestamp", (long) 1575712800 * 1000);
-        activity1.put("time", 290);
-        activity1.put("distance", 22);
-        activity1.put("avgSpeed", 12);
-        activity1.put("locationPoints", null);
-        activity1.put("avgHR", 149.50);
-        activity1.put("interval", 1);
+        /*activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put(ACTIVITY_TYPE, "run");
+        activity1.put(ACTIVITY_TIMESTAMP, (long) 1575712800 * 1000);
+        activity1.put(ACTIVITY_TIME, 290);
+        activity1.put(ACTIVITY_DISTANCE, 22000);
+        activity1.put(ACTIVITY_AVG_SPEED, 12.34);
+        activity1.put(ACTIVITY_LOCATION_POINTS, null);
+        activity1.put(ACTIVITY_AVG_HR, 149.50);
+        activity1.put(ACTIVITY_INTERVAL, 1);
 
         db.collection("activities")
                 .add(activity1)
@@ -147,13 +168,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Map<String, Object> activity2 = new HashMap<>();
 
-        activity2.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
-        activity2.put("type", "sleep");
-        activity2.put("timestamp", (long) 1575712800 * 1000);
-        activity2.put("time", 1500);
-        activity2.put("deepSleepTime", 320);
-        activity2.put("nightMoves", 56);
-        activity2.put("avgHR", 58.50);
+        activity2.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity2.put(ACTIVITY_TYPE, "sleep");
+        activity2.put(ACTIVITY_TIMESTAMP, (long) 1575712800 * 1000);
+        activity2.put(ACTIVITY_TIME, 1500);
+        activity2.put(ACTIVITY_DEEP_SLEEP_TIME, 320);
+        activity2.put(ACTIVITY_NIGHT_MOVES, 56);
+        activity2.put(ACTIVITY_AVG_HR, 58.50);
 
         db.collection("activities")
                 .add(activity2)

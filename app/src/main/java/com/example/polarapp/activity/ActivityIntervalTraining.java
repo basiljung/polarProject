@@ -46,7 +46,7 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
 
     private Toolbar toolbar;
     private String pickerTime;
-    private TextView textViewHeartRate, textViewTimer;
+    private TextView hrData, textViewTimer,lapcounter, txtAverageSpeed, txtDistance;
     private Button pauseStartBtn, resetBtn,resetLapsBtn, savetrainingBtn;
     private CountDownTimer countDownTimer;
     private boolean runningTimer;
@@ -57,7 +57,6 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     private GoogleApiClient googleApiClient;
     private LatLng lastKnownLatLng;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private TextView hrData, lapcounter;
     private PolarSDK polarSDK;
     private double totalDistance = 0.0; // m
     private double averageSpeed = 0.0; //km/h
@@ -107,7 +106,9 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         timeSetInMin = TimeLeftInMillis/1000.0/60.0;
         timeSetInHour = TimeLeftInMillis/1000.0/60.0/60.0;
 
-        textViewHeartRate = findViewById(R.id.hrData);
+        hrData = findViewById(R.id.txtHRData);
+        txtAverageSpeed = findViewById(R.id.txtAverageSpeed);
+        txtDistance = findViewById(R.id.txtDistance);
         textViewTimer = findViewById(R.id.txtVTimePicker);
         lapcounter = findViewById(R.id.lapcounter);
         resetLapsBtn = findViewById(R.id.resetLapsBtn);
@@ -117,7 +118,6 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         polarSDK = (PolarSDK) getApplicationContext();
         polarSDK.setCallbackInterfaceActivity(this);
 
-        hrData = findViewById(R.id.hrData);
         savetrainingBtn = findViewById(R.id.saveTrainingBtn);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         hrList = new ArrayList<>();
@@ -412,6 +412,11 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         hrData.setText(String.valueOf(hr));
         if(runningTimer){
             hrList.add(hr);
+            DecimalFormat f = new DecimalFormat("#0.00");
+            String averageSpeedString = f.format(averageSpeed);
+            String totalDistanceString = f.format(totalDistance);
+            txtDistance.setText(totalDistanceString);
+            txtAverageSpeed.setText(averageSpeedString);
         }
     }
 }

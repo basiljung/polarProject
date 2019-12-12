@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/trainingImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="105dp"
             android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
             android:src="@drawable/home_activity_image" />
@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/sleepImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="105dp"
             android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
             android:src="@drawable/home_sleep_image" />
@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/historyImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="105dp"
             android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
             android:src="@drawable/home_history_image" />
@@ -36,7 +36,7 @@
         <ImageView
             android:id="@+id/analyticsImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="105dp"
             android:scaleType="fitXY"
             android:src="@drawable/home_analytics_image" />
     </LinearLayout>

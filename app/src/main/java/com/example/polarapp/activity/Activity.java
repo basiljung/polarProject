@@ -88,5 +88,4 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

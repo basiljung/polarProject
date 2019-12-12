@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Total Time + Intervals: "
+            android:text="Total Time: "
             android:textColor="@color/popUpTextColor"
             android:textSize="15dp"
             android:textStyle="bold" />
@@ -89,15 +89,32 @@
             android:textColor="@color/popUpTextColor"
             android:textSize="13dp" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Intervals: "
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/intervalsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="2dp"
+            android:layout_gravity="center"
             android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="11dp" />
+            android:textSize="13dp" />
 
     </LinearLayout>
 

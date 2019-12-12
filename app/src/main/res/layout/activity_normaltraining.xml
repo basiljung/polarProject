@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType = "fitXY"
-    android:background="@drawable/backg">
+    android:background="@drawable/background_activity">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -36,20 +36,66 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hearth Rate"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:layout_margin="5dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/hrData"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="average speed in km/h"
+            android:textSize="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="hearth rate"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="distance in m"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="35dp"
-        android:gravity="center"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtAverageSpeed"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="35dp"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/txtHRData"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="35dp"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/txtDistance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="35dp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
 
     <Chronometer
         android:layout_width="wrap_content"

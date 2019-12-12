@@ -34,7 +34,6 @@ import java.time.Period;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("ALL")
 public class AnalyticsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -52,8 +51,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private LinearLayout linearLayoutThisWeek, linearLayoutLastWeek, linearLayoutMonth;
 
-    private ProfilePreferencesManager profilePreferencesManager;
-    private static final String PROFILE_USER_ID = "profile_user_id";
+
     private SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd/MM/yyyy", Locale.ENGLISH);
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<String> xLabelDates = new ArrayList<>();
@@ -71,6 +69,9 @@ public class AnalyticsActivity extends AppCompatActivity {
     private final List<String> daysOfWeekList = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thurday", "Friday", "Saturday", "Sunday");
     private Runnable runnable;
 
+    private ProfilePreferencesManager profilePreferencesManager;
+    private static final String PROFILE_USER_ID = "profile_user_id";
+
     // HR Zones calculus values
     private static final String PROFILE_USER_BIRTH = "profile_user_birth";
     private final int maxHeartRateBeats = 220;
@@ -79,9 +80,22 @@ public class AnalyticsActivity extends AppCompatActivity {
     private int actualHRLevel = -1;
     private Dialog hrInfoDialog;
     private ImageButton infoImageButton;
-    private LinearLayout level1InfoLayout, level2InfoLayout, level3InfoLayout, level4InfoLayout, level5InfoLayout;
-    private TextView level1InfoText, level2InfoText, level3InfoText, level4InfoText, level5InfoText;
-    private ImageButton level1ImageButton, level2ImageButton, level3ImageButton, level4ImageButton, level5ImageButton;
+    private LinearLayout level0InfoLayout, level1InfoLayout, level2InfoLayout, level3InfoLayout, level4InfoLayout, level5InfoLayout, level6InfoLayout;
+    private TextView level0InfoText, level1InfoText, level2InfoText, level3InfoText, level4InfoText, level5InfoText, level6InfoText;
+    private ImageButton level0ImageButton, level1ImageButton, level2ImageButton, level3ImageButton, level4ImageButton, level5ImageButton, level6ImageButton;
+
+    // Names in Database
+    private static final String ACTIVITY_UUID = "UUID";
+    private static final String ACTIVITY_TYPE = "type";
+    private static final String ACTIVITY_TIMESTAMP = "timestamp";
+    private static final String ACTIVITY_TIME = "time";
+    private static final String ACTIVITY_DISTANCE = "distance";
+    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
+    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
+    private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_INTERVAL = "interval";
+    private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
+    private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +129,7 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         barChart = findViewById(R.id.barchart);
 
-        final ScrollView scrollView = ((ScrollView) findViewById(R.id.scrollView));
+        final ScrollView scrollView = findViewById(R.id.scrollView);
 
         runnable = new Runnable() {
             @Override
@@ -218,30 +232,38 @@ public class AnalyticsActivity extends AppCompatActivity {
     }
 
     public void showPopup(View v) {
-        hrInfoDialog.setContentView(R.layout.hr_popup_layout);
+        hrInfoDialog.setContentView(R.layout.popup_hr_info);
 
+        level0InfoLayout = hrInfoDialog.findViewById(R.id.level0InfoLayout);
         level1InfoLayout = hrInfoDialog.findViewById(R.id.level1InfoLayout);
         level2InfoLayout = hrInfoDialog.findViewById(R.id.level2InfoLayout);
         level3InfoLayout = hrInfoDialog.findViewById(R.id.level3InfoLayout);
         level4InfoLayout = hrInfoDialog.findViewById(R.id.level4InfoLayout);
         level5InfoLayout = hrInfoDialog.findViewById(R.id.level5InfoLayout);
+        level6InfoLayout = hrInfoDialog.findViewById(R.id.level6InfoLayout);
 
+        level0InfoText = hrInfoDialog.findViewById(R.id.level0InfoText);
         level1InfoText = hrInfoDialog.findViewById(R.id.level1InfoText);
         level2InfoText = hrInfoDialog.findViewById(R.id.level2InfoText);
         level3InfoText = hrInfoDialog.findViewById(R.id.level3InfoText);
         level4InfoText = hrInfoDialog.findViewById(R.id.level4InfoText);
         level5InfoText = hrInfoDialog.findViewById(R.id.level5InfoText);
+        level6InfoText = hrInfoDialog.findViewById(R.id.level6InfoText);
 
+        level0ImageButton = hrInfoDialog.findViewById(R.id.level0ImageButton);
         level1ImageButton = hrInfoDialog.findViewById(R.id.level1ImageButton);
         level2ImageButton = hrInfoDialog.findViewById(R.id.level2ImageButton);
         level3ImageButton = hrInfoDialog.findViewById(R.id.level3ImageButton);
         level4ImageButton = hrInfoDialog.findViewById(R.id.level4ImageButton);
         level5ImageButton = hrInfoDialog.findViewById(R.id.level5ImageButton);
+        level6ImageButton = hrInfoDialog.findViewById(R.id.level6ImageButton);
+        level0ImageButton.setVisibility(View.GONE);
         level1ImageButton.setVisibility(View.GONE);
         level2ImageButton.setVisibility(View.GONE);
         level3ImageButton.setVisibility(View.GONE);
         level4ImageButton.setVisibility(View.GONE);
         level5ImageButton.setVisibility(View.GONE);
+        level6ImageButton.setVisibility(View.GONE);
 
         if (actualHRLevel == 1) {
             level1ImageButton.setVisibility(View.VISIBLE);
@@ -253,11 +275,32 @@ public class AnalyticsActivity extends AppCompatActivity {
             level4ImageButton.setVisibility(View.VISIBLE);
         } else if (actualHRLevel == 5) {
             level5ImageButton.setVisibility(View.VISIBLE);
+        } else if (actualHRLevel == 5) {
+            level6ImageButton.setVisibility(View.VISIBLE);
+        } else {
+            level0ImageButton.setVisibility(View.VISIBLE);
         }
 
+        level0InfoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (level0InfoText.getVisibility() == View.GONE) {
+                    level0InfoText.setVisibility(View.VISIBLE);
+                } else {
+                    level0InfoText.setVisibility(View.GONE);
+                }
+                level1InfoText.setVisibility(View.GONE);
+                level2InfoText.setVisibility(View.GONE);
+                level3InfoText.setVisibility(View.GONE);
+                level4InfoText.setVisibility(View.GONE);
+                level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
+            }
+        });
         level1InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 if (level1InfoText.getVisibility() == View.GONE) {
                     level1InfoText.setVisibility(View.VISIBLE);
                 } else {
@@ -267,11 +310,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 level3InfoText.setVisibility(View.GONE);
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level2InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 if (level2InfoText.getVisibility() == View.GONE) {
                     level2InfoText.setVisibility(View.VISIBLE);
@@ -281,11 +326,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 level3InfoText.setVisibility(View.GONE);
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level3InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 if (level3InfoText.getVisibility() == View.GONE) {
@@ -295,11 +342,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 }
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level4InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 level3InfoText.setVisibility(View.GONE);
@@ -309,11 +358,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                     level4InfoText.setVisibility(View.GONE);
                 }
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level5InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 level3InfoText.setVisibility(View.GONE);
@@ -322,6 +373,23 @@ public class AnalyticsActivity extends AppCompatActivity {
                     level5InfoText.setVisibility(View.VISIBLE);
                 } else {
                     level5InfoText.setVisibility(View.GONE);
+                }
+                level6InfoText.setVisibility(View.GONE);
+            }
+        });
+        level6InfoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
+                level1InfoText.setVisibility(View.GONE);
+                level2InfoText.setVisibility(View.GONE);
+                level3InfoText.setVisibility(View.GONE);
+                level4InfoText.setVisibility(View.GONE);
+                level5InfoText.setVisibility(View.GONE);
+                if (level6InfoText.getVisibility() == View.GONE) {
+                    level6InfoText.setVisibility(View.VISIBLE);
+                } else {
+                    level6InfoText.setVisibility(View.GONE);
                 }
             }
         });
@@ -371,25 +439,25 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         public CustomMarkerView(Context context, int layoutResource) {
             super(context, layoutResource);
-            tvTime = (TextView) findViewById(R.id.tvTime);
-            tvDistDeepSleep = (TextView) findViewById(R.id.tvDistDeepSleep);
-            tvSpeedNightMoves = (TextView) findViewById(R.id.tvSpeedNightMoves);
-            tvAvgHR = (TextView) findViewById(R.id.tvAvgHR);
+            tvTime = findViewById(R.id.tvTime);
+            tvDistDeepSleep = findViewById(R.id.tvDistDeepSleep);
+            tvSpeedNightMoves = findViewById(R.id.tvSpeedNightMoves);
+            tvAvgHR = findViewById(R.id.tvAvgHR);
         }
 
         @Override
         public void refreshContent(Entry e, Highlight highlight) {
             e.getData();
-            ActivityData activityData = new ActivityData();
+            ActivityData activityData;
             if (highlight.getDataSetIndex() == 0) {
-                activityData = userRunCurrentWeekActivitiesList.get((int) e.getX());
+                activityData = new ActivityData(userRunCurrentWeekActivitiesList.get((int) e.getX()));
                 tvTime.setText("Time: " + activityData.getTime() + " min");
                 tvDistDeepSleep.setText("Distance: " + activityData.getDistance() + " m");
                 tvSpeedNightMoves.setText("Avg Speed: " + df.format(activityData.getAvgSpeed()) + " km/h");
                 tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
             } else if (highlight.getDataSetIndex() == 1) {
-                activityData = userSleepCurrentWeekActivitiesList.get((int) e.getX());
-                tvTime.setText("Time: " + activityData.getTime());
+                activityData = new ActivityData(userSleepCurrentWeekActivitiesList.get((int) e.getX()));
+                tvTime.setText("Time: " + activityData.getTime() + " min");
                 tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
                 tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
                 tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
@@ -605,7 +673,7 @@ public class AnalyticsActivity extends AppCompatActivity {
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
             if (dayOfWeek == 0)
                 dayOfWeek = 7;
-            if (isDayAddedList[dayOfWeek - 1] && data.get(i).getType().equals("run")) {
+            if (isDayAddedList[dayOfWeek - 1] && !data.get(i).getType().toLowerCase().equals("sleep")) {
                 ActivityData dayDataToUpdate = new ActivityData(sortedData.get(dayOfWeek - 1));
                 int time = data.get(i).getTime() + dayDataToUpdate.getTime();
                 dayDataToUpdate.setTime(time);
@@ -835,10 +903,10 @@ public class AnalyticsActivity extends AppCompatActivity {
             infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel5Color));
         } else if (hrData > hrLevelMinValues[5]) { // Over Level 5
             actualHRLevel = 6;
-            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel5Color));
+            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel6Color));
         } else { // Below Level 1
             actualHRLevel = 0;
-            infoImageButton.setColorFilter(getResources().getColor(R.color.colorBlack));
+            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel0Color));
         }
     }
 
@@ -905,39 +973,40 @@ public class AnalyticsActivity extends AppCompatActivity {
 
                                     ActivityData activityData = new ActivityData();
 
-                                    String type = document.get("type").toString();
-                                    Timestamp timestamp = new Timestamp(Long.parseLong(document.get("timestamp").toString()));
-                                    long timestampLong = timestamp.getTime();
-                                    calendar.setTimeInMillis(timestampLong);
+                                    String type = document.get(ACTIVITY_TYPE).toString();
+                                    Timestamp timestamp = new Timestamp(Long.parseLong(document.get(ACTIVITY_TIMESTAMP).toString()));
+                                    calendar.setTimeInMillis(timestamp.getTime());
                                     int week = calendar.get(Calendar.WEEK_OF_YEAR);
                                     Log.d("MyApp", "Week of year of the data is : " + week);
                                     Log.d("MyApp", "Date: " + new Date(timestamp.getTime()));
-                                    int time = Integer.parseInt(document.get("time").toString());
-                                    double avgHR = Double.valueOf(document.get("avgHR").toString());
+                                    int time = Integer.parseInt(document.get(ACTIVITY_TIME).toString());
+                                    double avgHR = Double.valueOf(document.get(ACTIVITY_AVG_HR).toString());
                                     Log.d("MyApp", "Value of HRDataAVG: " + avgHR);
                                     activityData.setType(type);
                                     activityData.setTimestamp(timestamp);
                                     activityData.setTime(time);
                                     activityData.setAvgHR(avgHR);
                                     if (type.equals("sleep")) {
-                                        int deepSleepTime = Integer.parseInt(document.get("deepSleepTime").toString());
-                                        int nightMoves = Integer.parseInt(document.get("nightMoves").toString());
+                                        int deepSleepTime = Integer.parseInt(document.get(ACTIVITY_DEEP_SLEEP_TIME).toString());
+                                        int nightMoves = Integer.parseInt(document.get(ACTIVITY_NIGHT_MOVES).toString());
                                         activityData.setDeepSleepTime(deepSleepTime);
                                         activityData.setNightMoves(nightMoves);
                                         allUserSleepActivitiesArrayList.add(activityData);
                                     } else {
-                                        int distance = Integer.parseInt(document.get("distance").toString());
-                                        double avgSpeed = Double.parseDouble(document.get("avgSpeed").toString());
+                                        int distance = Integer.parseInt(document.get(ACTIVITY_DISTANCE).toString());
+                                        double avgSpeed = Double.parseDouble(document.get(ACTIVITY_AVG_SPEED).toString());
                                         List<LatLng> locationPoints;
                                         try {
-                                            locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get("locationPoints")); // Try if works
+                                            locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get(ACTIVITY_LOCATION_POINTS)); // Try if works
                                         } catch (NullPointerException e) {
                                             locationPoints = null;
                                         }
+                                        int interval = Integer.parseInt(document.get(ACTIVITY_INTERVAL).toString());
 
                                         activityData.setDistance(distance);
                                         activityData.setAvgSpeed(avgSpeed);
                                         activityData.setLocationPoints(locationPoints);
+                                        activityData.setInterval(interval);
                                         allUserRunActivitiesArrayList.add(activityData);
                                     }
 

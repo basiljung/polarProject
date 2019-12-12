@@ -57,11 +57,11 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     private GoogleApiClient googleApiClient;
     private LatLng lastKnownLatLng;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private TextView hrData;
+    private TextView hrData, txtAverageSpeed, txtDistance;
     private PolarSDK polarSDK;
     private double totalDistance = 0.0; // m
-    private double actualSpeed=0.0; //km/h
-    private double averageSpeed=0.0; //km/h
+    private double actualSpeed = 0.0; //km/h
+    private double averageSpeed = 0.0; //km/h
     private Integer heartRateAverage = 0; //per trainigssession
     private double totalTimeInSec; // sec
     private double totalTimeInMin; // min
@@ -95,6 +95,9 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         stopChronometer = findViewById(R.id.stopChronometer);
         resetChronometer = findViewById(R.id.resetChronometer);
         saveTrainingBtn = findViewById(R.id.saveTrainingBtn);
+        hrData = findViewById(R.id.txtHRData);
+        txtAverageSpeed = findViewById(R.id.txtAverageSpeed);
+        txtDistance = findViewById(R.id.txtDistance);
         hrList = new ArrayList<>();
 
         startChronometer.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +139,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         polarSDK = (PolarSDK) getApplicationContext();
         polarSDK.setCallbackInterfaceActivity(this);
 
-        hrData = findViewById(R.id.hrData);
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
     }
@@ -373,6 +376,11 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         hrData.setText(String.valueOf(hr));
         if(runningChronometer){
             hrList.add(hr);
+            DecimalFormat f = new DecimalFormat("#0.00");
+            String averageSpeedString = f.format(averageSpeed);
+            String totalDistanceString = f.format(totalDistance);
+            txtDistance.setText(totalDistanceString);
+            txtAverageSpeed.setText(averageSpeedString);
         }
     }
 }
