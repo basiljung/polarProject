@@ -79,8 +79,9 @@ public class SleepActivity extends AppCompatActivity {
 
                 int differenceMillis = differenceHours*60*60*1000 + differenceMinutes * 60 * 1000;
 
-                SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
-                sleepThread.start();
+
+
+                startThread(differenceMillis);
 
                 scheduleNotification(getNotification("Wake Up!"), differenceMillis);
             }
