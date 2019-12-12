@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.polarapp.R;
@@ -34,11 +35,15 @@ public class SleepActivity extends AppCompatActivity {
 
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
+    public int differenceMillis;
+    boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep);
+
+        final TextView timer = findViewById(R.id.timer);
 
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
@@ -50,6 +55,7 @@ public class SleepActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String time = ("Alarm Set for " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
+                timer.setText(time);
                 Toast.makeText(SleepActivity.this, time, Toast.LENGTH_LONG).show();
                 Date currentTime = Calendar.getInstance().getTime();
 
@@ -71,7 +77,12 @@ public class SleepActivity extends AppCompatActivity {
                     differenceHours -= 1;
                 }
 
-                scheduleNotification(getNotification("Wake Up!"), differenceHours*60*60*1000 + differenceMinutes * 60 * 1000);
+                int differenceMillis = differenceHours*60*60*1000 + differenceMinutes * 60 * 1000;
+
+                SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
+                sleepThread.start();
+
+                scheduleNotification(getNotification("Wake Up!"), differenceMillis);
             }
         });
 
@@ -79,11 +90,21 @@ public class SleepActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String alarmAfter = ("Alarm after " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
+                timer.setText(alarmAfter);
                 Toast.makeText(SleepActivity.this, alarmAfter, Toast.LENGTH_LONG).show();
                 int myNum = 0;
                 final int finalMyNum = myNum;
 
-                scheduleNotification(getNotification("Wake Up!"), timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000);
+                int differenceMillis = timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000;
+
+                Log.d("yolo", "value: " + differenceMillis);
+
+                scheduleNotification(getNotification("Wake Up!"), differenceMillis);
+
+                //SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
+                //sleepThread.start();
+
+                startThread(differenceMillis);
 
                 new CountDownTimer(timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000, 1000 * 60 * 10) {
                     public void onTick(long millisUntilFinished) {
@@ -126,9 +147,38 @@ public class SleepActivity extends AppCompatActivity {
         builder.setChannelId("1001");
         builder.setContentTitle("Polaris");
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_menu_settings);
+        builder.setSmallIcon(R.drawable.trial_logo);
         return builder.build();
     }
+
+
+    public void startThread(final int differenceMillis) {
+        /*
+        Log.d("yolo", "thread started: " + differenceMillis);
+        SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
+        sleepThread.start();
+        */
+        //final int seconds = differenceMillis * 1000;
+
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+            // Run whatever background code you want here.
+            //Thread.sleep(1000);
+                try {
+                    for(int i = 0; i < differenceMillis / 1000; i++) {
+                        Thread.sleep(1000);
+                        Log.d("yolo", "swägä " + i);
+                        //update database
+
+                    }
+                    Log.d("yolo", "REDI");
+                    //Thread.interrupted();
+                } catch (InterruptedException e) {}
+        }}).start();
+    }
+
+
 
     @Override
     protected void onStart() {
@@ -153,3 +203,4 @@ public class SleepActivity extends AppCompatActivity {
         super.onResume();
     }
 }
+
