@@ -208,7 +208,6 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                                     }
                                     int interval = Integer.parseInt(document.get(ACTIVITY_INTERVAL).toString());
 
-
                                     activityData.setDistance(distance);
                                     activityData.setAvgSpeed(avgSpeed);
                                     activityData.setLocationPoints(locationPoints);
@@ -292,7 +291,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                                     locationPoints.get(0).longitude), 15));
                     polylineOptions.add(new LatLng(locationPoints.get(i).latitude, locationPoints.get(i).longitude));
                 }
-                polylineOptions.color(Color.CYAN).width(4);
+                polylineOptions.color(Color.RED).width(4);
                 map.addPolyline(polylineOptions);
             }
         });
