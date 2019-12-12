@@ -26,12 +26,16 @@ import com.example.polarapp.ui.DevicesFragment;
 import com.example.polarapp.ui.HomeFragment;
 import com.example.polarapp.ui.ProfileFragment;
 import com.example.polarapp.ui.SettingsFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,22 +126,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
- /*       DocumentReference docRef = db.collection("activities").document("2NFOpyRl6opEpzS2fZzt");
+        DocumentReference docRef = db.collection("activities").document("DOj90JDaqFxC4DmaLNKx");
 
 // Remove the 'capital' field from the document
         Map<String,Object> updates = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
-        updates.put("avgSpeed", 0.5);
+        updates.put("time", 5);
 
         docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d("MyApp", "File updated");
             }
-        });*/
+        });
 
-        activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        /*activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity1.put(ACTIVITY_TYPE, "run");
         activity1.put(ACTIVITY_TIMESTAMP, (long) 1575712800 * 1000);
         activity1.put(ACTIVITY_TIME, 290);
@@ -185,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onFailure(@NonNull Exception e) {
                         Log.w("MyApp", "Error adding document", e);
                     }
-                });
+                });*/
     }
 
     @Override
