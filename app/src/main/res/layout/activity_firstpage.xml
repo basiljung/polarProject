@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType = "fitXY"
-    android:background="@drawable/runningbackground"
-    >
+    android:background="@drawable/backg">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -40,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start normal training "
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorOrange"
         android:textSize="28dp"
         android:gravity="center"
         android:layout_margin="10dp"
@@ -58,7 +57,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorOrange"
         android:text="Start interval training"
         android:textSize="28dp"
         android:gravity="center"
