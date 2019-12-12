@@ -52,7 +52,6 @@ public class SleepActivity extends AppCompatActivity {
     private ProfilePreferencesManager profilePreferencesManager;
     private static final String PROFILE_USER_ID = "profile_user_id";
     public String documentID;
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -95,9 +94,9 @@ public class SleepActivity extends AppCompatActivity {
 
                 int differenceMillis = differenceHours*60*60*1000 + differenceMinutes * 60 * 1000;
 
-                //create sleep activity
-                startThread(differenceMillis);
                 scheduleNotification(getNotification("Wake Up!"), differenceMillis);
+                createDatabase();
+                startThread(differenceMillis);
             }
         });
 
@@ -111,14 +110,7 @@ public class SleepActivity extends AppCompatActivity {
                 final int finalMyNum = myNum;
                 int differenceMillis = timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000;
 
-                Log.d("yolo", "value: " + differenceMillis);
                 scheduleNotification(getNotification("Wake Up!"), differenceMillis);
-
-                //SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
-                //sleepThread.start();
-
-                //Create sleep database
-
                 createDatabase();
                 startThread(differenceMillis);
 
@@ -167,7 +159,7 @@ public class SleepActivity extends AppCompatActivity {
     }
 
     public void createDatabase() {
-        Log.d("yolo", "Database Created");
+        Log.d("sleepActivity", "Database Created");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> sleep = new HashMap<>();
         sleep.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
@@ -180,52 +172,39 @@ public class SleepActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         documentID = documentReference.getId();
-                        Log.d("yolo", "DocumentSnapshot written with ID: " + documentID);
+                        Log.d("sleepActivity", "DocumentSnapshot written with ID: " + documentID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("yolo", "Error adding document", e);
+                        Log.w("sleepActivity", "Error adding document", e);
                     }
                 });
     }
 
     public void startThread(final int differenceMillis) {
-        /*
-        Log.d("yolo", "thread started: " + differenceMillis);
-        SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
-        sleepThread.start();
-        */
-        //final int seconds = differenceMillis * 1000;
+
         new Thread( new Runnable() {
 
             @Override
             public void run() {
 
-                //FirebaseFirestore db = FirebaseFirestore.getInstance();
-                //DocumentReference sleepRef = db.collection("activities").document(documentID);
                 try {
-                    //FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                    //DocumentReference sleepRef = db.collection("activities").document(documentID);
-
                     for(int i = 0; i < differenceMillis / 1000; i++) {
                         Thread.sleep(1000);
-                        Log.d("yolo", "swägä " + i);
-                        Log.d("yolo", "Sleep ID: " + documentID);
+                        Log.d("sleepActivity", "differenceMillis: "+ differenceMillis);
+                        Log.d("sleepActivity", "counter: " + i);
+                        Log.d("sleepActivity", "Sleep ID: " + documentID);
                         if(i % 10 == 1)
                         {
                             DocumentReference sleepRef = db.collection("activities").document(documentID);
                             sleepRef.update("HRArray", FieldValue.arrayUnion(i));
-                            // Atomically add a new region to the "regions" array field.
-                            //sleepRef.update("HRArray", FieldValue.arrayUnion(1));
-                            Log.d("yolo", "10 sek");
+                            Log.d("sleepActivity", "10 sec");
                         }
                         //update database
                     }
-                    Log.d("yolo", "REDI");
-                    //Thread.interrupted();
+                    Log.d("sleepActivity", "READY");
                 } catch (InterruptedException e) {}
         }}).start();
     }
@@ -253,4 +232,3 @@ public class SleepActivity extends AppCompatActivity {
         super.onResume();
     }
 }
-
