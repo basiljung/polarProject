@@ -165,14 +165,11 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
 
         hrData = findViewById(R.id.hrData);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
     }
 
     public void saveInDB() {
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
-
         Log.d("MyApp", "Time: " + startTimestamp.getTime());
 
         activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
@@ -207,6 +204,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         if (!runningChronometer) {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
+            startLocationUpdates();
             runningChronometer = true;
             resetChronometer.setVisibility(View.INVISIBLE);
         }
@@ -217,6 +215,11 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         runningChronometer = false;
         pauseOffset = 0;
         resetChronometer.setVisibility(View.INVISIBLE);
+        points.clear();
+        gpsTrack.setPoints(points);
+        totalDistance = 0;
+        averageSpeed = 0;
+        startLocationUpdates();
     }
 
     public void stopChronometer(View v) {
@@ -243,7 +246,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
             heartRateAverage = sum / hrList.size();
         }
 
-
         double totalDistanceInKm = totalDistance / 1000.0;
         averageSpeed = totalDistanceInKm / totalTimeInHour;
         Log.i("MyApp", "average speed: " + averageSpeed + "");
@@ -255,7 +257,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         saveInDB();
         finish();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -270,12 +271,10 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         map = googleMap;
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
-
         getDeviceLocation();
 
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.CYAN);
-        polylineOptions.width(4);
+        polylineOptions.color(Color.RED).width(4);
         gpsTrack = map.addPolyline(polylineOptions);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -291,44 +290,16 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     }
 
     @Override
-    protected void onStart() {
-        googleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (googleApiClient.isConnected()) {
-            startLocationUpdates();
-        }
-    }
-
-    @Override
     public void onConnected(@Nullable Bundle bundle) {
         startLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     @Override
@@ -372,7 +343,6 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
             totalDistance = totalDistance + distance;
             actualSpeed = totalDistance / totalTimeInHour;
             Toast.makeText(getApplicationContext(), "The total distance is " + totalDistance, Toast.LENGTH_SHORT).show();
-            //Log.d("MyApp", "The total distance is " + totalDistance);
         }
     }
 
@@ -401,6 +371,32 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         hrData.setText(String.valueOf(hr));
         if (runningChronometer) {
             hrList.add(hr);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        googleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        //googleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (googleApiClient.isConnected()) {
+            startLocationUpdates();
         }
     }
 }

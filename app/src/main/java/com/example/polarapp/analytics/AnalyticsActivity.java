@@ -80,9 +80,9 @@ public class AnalyticsActivity extends AppCompatActivity {
     private int actualHRLevel = -1;
     private Dialog hrInfoDialog;
     private ImageButton infoImageButton;
-    private LinearLayout level1InfoLayout, level2InfoLayout, level3InfoLayout, level4InfoLayout, level5InfoLayout;
-    private TextView level1InfoText, level2InfoText, level3InfoText, level4InfoText, level5InfoText;
-    private ImageButton level1ImageButton, level2ImageButton, level3ImageButton, level4ImageButton, level5ImageButton;
+    private LinearLayout level0InfoLayout, level1InfoLayout, level2InfoLayout, level3InfoLayout, level4InfoLayout, level5InfoLayout, level6InfoLayout;
+    private TextView level0InfoText, level1InfoText, level2InfoText, level3InfoText, level4InfoText, level5InfoText, level6InfoText;
+    private ImageButton level0ImageButton, level1ImageButton, level2ImageButton, level3ImageButton, level4ImageButton, level5ImageButton, level6ImageButton;
 
     // Names in Database
     private static final String ACTIVITY_UUID = "UUID";
@@ -232,30 +232,38 @@ public class AnalyticsActivity extends AppCompatActivity {
     }
 
     public void showPopup(View v) {
-        hrInfoDialog.setContentView(R.layout.hr_popup_layout);
+        hrInfoDialog.setContentView(R.layout.popup_hr_info);
 
+        level0InfoLayout = hrInfoDialog.findViewById(R.id.level0InfoLayout);
         level1InfoLayout = hrInfoDialog.findViewById(R.id.level1InfoLayout);
         level2InfoLayout = hrInfoDialog.findViewById(R.id.level2InfoLayout);
         level3InfoLayout = hrInfoDialog.findViewById(R.id.level3InfoLayout);
         level4InfoLayout = hrInfoDialog.findViewById(R.id.level4InfoLayout);
         level5InfoLayout = hrInfoDialog.findViewById(R.id.level5InfoLayout);
+        level6InfoLayout = hrInfoDialog.findViewById(R.id.level6InfoLayout);
 
+        level0InfoText = hrInfoDialog.findViewById(R.id.level0InfoText);
         level1InfoText = hrInfoDialog.findViewById(R.id.level1InfoText);
         level2InfoText = hrInfoDialog.findViewById(R.id.level2InfoText);
         level3InfoText = hrInfoDialog.findViewById(R.id.level3InfoText);
         level4InfoText = hrInfoDialog.findViewById(R.id.level4InfoText);
         level5InfoText = hrInfoDialog.findViewById(R.id.level5InfoText);
+        level6InfoText = hrInfoDialog.findViewById(R.id.level6InfoText);
 
+        level0ImageButton = hrInfoDialog.findViewById(R.id.level0ImageButton);
         level1ImageButton = hrInfoDialog.findViewById(R.id.level1ImageButton);
         level2ImageButton = hrInfoDialog.findViewById(R.id.level2ImageButton);
         level3ImageButton = hrInfoDialog.findViewById(R.id.level3ImageButton);
         level4ImageButton = hrInfoDialog.findViewById(R.id.level4ImageButton);
         level5ImageButton = hrInfoDialog.findViewById(R.id.level5ImageButton);
+        level6ImageButton = hrInfoDialog.findViewById(R.id.level6ImageButton);
+        level0ImageButton.setVisibility(View.GONE);
         level1ImageButton.setVisibility(View.GONE);
         level2ImageButton.setVisibility(View.GONE);
         level3ImageButton.setVisibility(View.GONE);
         level4ImageButton.setVisibility(View.GONE);
         level5ImageButton.setVisibility(View.GONE);
+        level6ImageButton.setVisibility(View.GONE);
 
         if (actualHRLevel == 1) {
             level1ImageButton.setVisibility(View.VISIBLE);
@@ -267,11 +275,32 @@ public class AnalyticsActivity extends AppCompatActivity {
             level4ImageButton.setVisibility(View.VISIBLE);
         } else if (actualHRLevel == 5) {
             level5ImageButton.setVisibility(View.VISIBLE);
+        } else if (actualHRLevel == 5) {
+            level6ImageButton.setVisibility(View.VISIBLE);
+        } else {
+            level0ImageButton.setVisibility(View.VISIBLE);
         }
 
+        level0InfoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (level0InfoText.getVisibility() == View.GONE) {
+                    level0InfoText.setVisibility(View.VISIBLE);
+                } else {
+                    level0InfoText.setVisibility(View.GONE);
+                }
+                level1InfoText.setVisibility(View.GONE);
+                level2InfoText.setVisibility(View.GONE);
+                level3InfoText.setVisibility(View.GONE);
+                level4InfoText.setVisibility(View.GONE);
+                level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
+            }
+        });
         level1InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 if (level1InfoText.getVisibility() == View.GONE) {
                     level1InfoText.setVisibility(View.VISIBLE);
                 } else {
@@ -281,11 +310,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 level3InfoText.setVisibility(View.GONE);
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level2InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 if (level2InfoText.getVisibility() == View.GONE) {
                     level2InfoText.setVisibility(View.VISIBLE);
@@ -295,11 +326,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 level3InfoText.setVisibility(View.GONE);
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level3InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 if (level3InfoText.getVisibility() == View.GONE) {
@@ -309,11 +342,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                 }
                 level4InfoText.setVisibility(View.GONE);
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level4InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 level3InfoText.setVisibility(View.GONE);
@@ -323,11 +358,13 @@ public class AnalyticsActivity extends AppCompatActivity {
                     level4InfoText.setVisibility(View.GONE);
                 }
                 level5InfoText.setVisibility(View.GONE);
+                level6InfoText.setVisibility(View.GONE);
             }
         });
         level5InfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
                 level1InfoText.setVisibility(View.GONE);
                 level2InfoText.setVisibility(View.GONE);
                 level3InfoText.setVisibility(View.GONE);
@@ -336,6 +373,23 @@ public class AnalyticsActivity extends AppCompatActivity {
                     level5InfoText.setVisibility(View.VISIBLE);
                 } else {
                     level5InfoText.setVisibility(View.GONE);
+                }
+                level6InfoText.setVisibility(View.GONE);
+            }
+        });
+        level6InfoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                level0InfoText.setVisibility(View.GONE);
+                level1InfoText.setVisibility(View.GONE);
+                level2InfoText.setVisibility(View.GONE);
+                level3InfoText.setVisibility(View.GONE);
+                level4InfoText.setVisibility(View.GONE);
+                level5InfoText.setVisibility(View.GONE);
+                if (level6InfoText.getVisibility() == View.GONE) {
+                    level6InfoText.setVisibility(View.VISIBLE);
+                } else {
+                    level6InfoText.setVisibility(View.GONE);
                 }
             }
         });
@@ -849,10 +903,10 @@ public class AnalyticsActivity extends AppCompatActivity {
             infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel5Color));
         } else if (hrData > hrLevelMinValues[5]) { // Over Level 5
             actualHRLevel = 6;
-            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel5Color));
+            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel6Color));
         } else { // Below Level 1
             actualHRLevel = 0;
-            infoImageButton.setColorFilter(getResources().getColor(R.color.colorBlack));
+            infoImageButton.setColorFilter(getResources().getColor(R.color.HRLevel0Color));
         }
     }
 

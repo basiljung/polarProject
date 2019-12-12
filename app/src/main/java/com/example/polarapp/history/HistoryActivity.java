@@ -85,7 +85,6 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
 
     // Google Maps
     private GoogleMap map;
-    private Polyline gpsTrack;
     private SupportMapFragment mapFragment;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -231,7 +230,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
 
     private void showRunPopup(ActivityData activity) {
         if (isRunDialogFirstTime) {
-            runDialog.setContentView(R.layout.run_history_popup_layout);
+            runDialog.setContentView(R.layout.popup_run_history);
             isRunDialogFirstTime = false;
         }
         TextView typeText = runDialog.findViewById(R.id.typeText);
@@ -315,7 +314,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
 
     private void showSleepPopup(ActivityData activity) {
         if (isSleepDialogFirstTime) {
-            sleepDialog.setContentView(R.layout.sleep_history_popup_layout);
+            sleepDialog.setContentView(R.layout.popup_sleep_history);
             isSleepDialogFirstTime = false;
         }
         TextView typeText = sleepDialog.findViewById(R.id.typeText);
@@ -365,17 +364,14 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }
 
