@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -271,6 +272,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(initialLocation.getLatitude(),
                                             initialLocation.getLongitude()), 15));
+                            Toast.makeText(getApplicationContext(), "No GPS data to show", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
