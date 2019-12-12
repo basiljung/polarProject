@@ -53,8 +53,6 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
                 openPickerdialog();
             }
         });
-
-
     }
 
     public void openNormalTrainingActivity() {
