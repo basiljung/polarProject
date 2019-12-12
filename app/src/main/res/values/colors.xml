@@ -26,6 +26,7 @@
     <color name="HRLevel3Color">#C8C924</color>
     <color name="HRLevel4Color">#DA7101</color>
     <color name="HRLevel5Color">#D10027</color>
-    <color name="popUpColor">#4D000000</color>
+    <color name="popUpColorHR">#4D000000</color>
+    <color name="popUpColorHistory">#D9FFFFFF</color>
     <color name="popUpTextColor">#000000</color>
 </resources>

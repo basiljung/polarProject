@@ -47,7 +47,7 @@ public class AnalyticsActivity extends AppCompatActivity {
             totalRunTimeDifferenceLastWeekText, totalSleepTimeDifferenceLastWeekText, avgHRDifferenceLastWeekText;
     private TextView avgRunTimeDifferenceMonthText, avgSleepTimeDifferenceMonthText,
             totalRunTimeDifferenceMonthText, totalSleepTimeDifferenceMonthText, avgHRDifferenceMonthText;
-    private DecimalFormat df = new DecimalFormat("#.##");
+    private DecimalFormat df = new DecimalFormat();
 
     private TabLayout tabLayout;
     private LinearLayout linearLayoutThisWeek, linearLayoutLastWeek, linearLayoutMonth;
@@ -94,6 +94,11 @@ public class AnalyticsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+        otherSymbols.setDecimalSeparator('.');
+        df.setMaximumFractionDigits(2);
+        df.setDecimalFormatSymbols(otherSymbols);
 
         profilePreferencesManager = new ProfilePreferencesManager(getApplication().getBaseContext());
 
@@ -378,16 +383,16 @@ public class AnalyticsActivity extends AppCompatActivity {
             ActivityData activityData = new ActivityData();
             if (highlight.getDataSetIndex() == 0) {
                 activityData = userRunCurrentWeekActivitiesList.get((int) e.getX());
-                tvTime.setText("Time: " + activityData.getTime());
-                tvDistDeepSleep.setText("Distance: " + activityData.getDistance());
-                tvSpeedNightMoves.setText("Avg Speed: " + activityData.getAvgSpeed());
-                tvAvgHR.setText("Avg Heart Rate: " + activityData.getAvgHR());
+                tvTime.setText("Time: " + activityData.getTime() + " min");
+                tvDistDeepSleep.setText("Distance: " + activityData.getDistance() + " m");
+                tvSpeedNightMoves.setText("Avg Speed: " + df.format(activityData.getAvgSpeed()) + " km/h");
+                tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
             } else if (highlight.getDataSetIndex() == 1) {
                 activityData = userSleepCurrentWeekActivitiesList.get((int) e.getX());
                 tvTime.setText("Time: " + activityData.getTime());
-                tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime());
-                tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves());
-                tvAvgHR.setText("Avg Heart Rate: " + activityData.getAvgHR());
+                tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
+                tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
+                tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
             }
             super.refreshContent(e, highlight);
         }
@@ -529,18 +534,45 @@ public class AnalyticsActivity extends AppCompatActivity {
         return data;
     }
 
+    private int positionIfDayOfMonthAdded(List<Integer> list, int dayNumber) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == dayNumber) {
+                return i;
+            }
+        }
+        return -1; // Not addded
+    }
+
     private ArrayList<ActivityData> getMonthActivities(int month, int weekOfYear, int option) {
         ArrayList<ActivityData> data = new ArrayList<>();
         if (option == 0) { // Run activities
             Calendar calendar = Calendar.getInstance();
+            List<Integer> dayOfMonthAdded = new ArrayList<Integer>();
             for (int i = 0; i < allUserRunActivitiesArrayList.size(); i++) {
                 ActivityData actualActivity = new ActivityData(allUserRunActivitiesArrayList.get(i));
                 calendar.setTimeInMillis(actualActivity.getTimestamp().getTime());
                 Log.d("MyAppMonthTry", "Selected Week of year: " + weekOfYear + ", selected month of year: " + month);
                 Log.d("MyAppMonthTry", "Week of year: " + calendar.get(Calendar.WEEK_OF_YEAR) + ", Month of year: " + calendar.get(Calendar.MONTH));
+
                 if (calendar.get(Calendar.WEEK_OF_YEAR) < weekOfYear && calendar.get(Calendar.MONTH) == month) {
+                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                     Log.d("MyAppMonthTry", "Week of year accepted: " + calendar.get(Calendar.WEEK_OF_YEAR) + ", Month of year: " + calendar.get(Calendar.MONTH));
-                    data.add(actualActivity);
+                    int position = positionIfDayOfMonthAdded(dayOfMonthAdded, dayOfMonth);
+                    if (position != -1) {
+                        int time = data.get(position).getTime() + actualActivity.getTime();
+                        actualActivity.setTime(time);
+                        int distance = data.get(position).getDistance() + actualActivity.getDistance();
+                        actualActivity.setDistance(distance);
+                        double avgSpeed = (data.get(position).getAvgSpeed() + actualActivity.getAvgSpeed()) / 2;
+                        actualActivity.setAvgSpeed(avgSpeed);
+                        double avgHR = (data.get(position).getAvgHR() + actualActivity.getAvgHR()) / 2;
+                        actualActivity.setAvgHR(avgHR);
+                        data.set(position, actualActivity);
+                    } else {
+                        dayOfMonthAdded.add(dayOfMonth);
+                        data.add(actualActivity);
+                        Log.d("MyAppMonthTry", "Days added: " + dayOfMonthAdded.size() + ", Data size: " + data.size());
+                    }
                 }
             }
         } else { // Sleep activities
@@ -577,7 +609,7 @@ public class AnalyticsActivity extends AppCompatActivity {
                 ActivityData dayDataToUpdate = new ActivityData(sortedData.get(dayOfWeek - 1));
                 int time = data.get(i).getTime() + dayDataToUpdate.getTime();
                 dayDataToUpdate.setTime(time);
-                double distance = data.get(i).getDistance() + dayDataToUpdate.getDistance();
+                int distance = data.get(i).getDistance() + dayDataToUpdate.getDistance();
                 dayDataToUpdate.setDistance(distance);
                 double avgSpeed = (data.get(i).getAvgSpeed() + dayDataToUpdate.getAvgSpeed()) / 2;
                 dayDataToUpdate.setAvgSpeed(avgSpeed);
@@ -894,7 +926,7 @@ public class AnalyticsActivity extends AppCompatActivity {
                                         activityData.setNightMoves(nightMoves);
                                         allUserSleepActivitiesArrayList.add(activityData);
                                     } else {
-                                        double distance = Double.parseDouble(document.get("distance").toString());
+                                        int distance = Integer.parseInt(document.get("distance").toString());
                                         double avgSpeed = Double.parseDouble(document.get("avgSpeed").toString());
                                         List<LatLng> locationPoints;
                                         try {

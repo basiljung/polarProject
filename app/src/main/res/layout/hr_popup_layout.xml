@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    android:background="@color/popUpColor"
+    android:background="@color/popUpColorHR"
     android:orientation="vertical"
     android:padding="5dp">
 

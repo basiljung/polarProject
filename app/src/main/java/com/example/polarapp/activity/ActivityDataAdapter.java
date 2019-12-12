@@ -8,39 +8,43 @@ import androidx.annotation.*;
 
 import com.example.polarapp.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ActivityDataAdapter extends ArrayAdapter<ActivityData> {
     public ActivityDataAdapter(Context context, ArrayList<ActivityData> activityDataArrayList) {
-        super(context, R.layout.activity_item, activityDataArrayList);
+        super(context, R.layout.history_item, activityDataArrayList);
     }
 
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ActivityData base = getItem(position);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd/MM/yyyy", Locale.ENGLISH);
+
         LayoutInflater historyInflater = LayoutInflater.from(getContext());
-        View customView = historyInflater.inflate(R.layout.activity_item, parent, false);
+        View customView = historyInflater.inflate(R.layout.history_item, parent, false);
 
-        //type of activity
-        //TextView type = convertView.findViewById(R.id.typeText);
-        TextView type = (TextView) customView.findViewById(R.id.typeText);
-        type.setText(base.getType());
+        ImageView imageView = customView.findViewById(R.id.activityImageView);
+        if (base.getType().toLowerCase().equals("sleep")) {
+            imageView.setImageResource(R.drawable.sleep_history_image);
+        } else {
+            imageView.setImageResource(R.drawable.run_history_image);
+        }
 
-        //timestamp of activity
-        //TextView timestamp = convertView.findViewById(R.id.timestampText);
-        TextView timestamp = (TextView) customView.findViewById(R.id.timestampText);
-        timestamp.setText(String.valueOf(base.getTimestamp()));
+        TextView type = customView.findViewById(R.id.typeText);
+        type.setText(base.getType().toUpperCase());
 
-        //length of activity
-        //TextView length = convertView.findViewById(R.id.lengthText);
+        TextView timestamp = customView.findViewById(R.id.timestampText);
+        Date date = new Date(base.getTimestamp().getTime());
+        timestamp.setText(sdf.format(date));
 
-        TextView length = (TextView) customView.findViewById(R.id.lengthText);
-        length.setText(String.valueOf(base.getDistance()));
+        TextView time = customView.findViewById(R.id.timeText);
+        time.setText(String.valueOf(base.getTime()) + " minutes");
 
         return customView;
-
-        //convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_item, parent, false);
-        //return convertView;
     }
 }

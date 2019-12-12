@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.*;
@@ -28,6 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.SphericalUtil;
 
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public class ActivityIntervalTraining extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
@@ -35,6 +39,10 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
+
+    private ProfilePreferencesManager profilePreferencesManager;
+    private static final String PROFILE_USER_ID = "profile_user_id";
+    private DecimalFormat df = new DecimalFormat();
 
     private Toolbar toolbar;
     private String pickerTime;
@@ -60,6 +68,7 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     private double timeSetInSec; // sec
     private double timeSetInMin; // min
     private double timeSetInHour; // hour
+    private Timestamp startTimestamp = null; // timestamp
     private List<LatLng> points; // Polylines, we need to save them in out database
     private int lapcount = 0;
     private ArrayList<Integer> hrList;
@@ -76,6 +85,14 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+        otherSymbols.setDecimalSeparator('.');
+        df.setMaximumFractionDigits(2);
+        df.setDecimalFormatSymbols(otherSymbols);
+
+        profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+
         Intent intent = getIntent();
         pickerTime = intent.getStringExtra("Picker_Time");
         String[] times = pickerTime.split(":");
@@ -153,12 +170,12 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        //activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity1.put("type", "run");
-        activity1.put("timestamp", (long) 1575712800 * 1000);
-        activity1.put("time", totalTimeInMin);
-        activity1.put("distance", totalDistance);
-        activity1.put("avgSpeed", averageSpeed);
+        activity1.put("timestamp", startTimestamp.getTime());
+        activity1.put("time", (int) totalTimeInSec);
+        activity1.put("distance",(int) totalDistance);
+        activity1.put("avgSpeed", df.format(averageSpeed));
         activity1.put("locationPoints", points);
         activity1.put("avgHR", heartRateAverage);
         activity1.put("laps", lapcount);
@@ -196,6 +213,8 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
     }
 
     private void startTimer(View root) {
+        Calendar cal = Calendar.getInstance();
+        startTimestamp = new Timestamp(cal.getTimeInMillis());
         countDownTimer = new CountDownTimer(TimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -252,10 +271,12 @@ public class ActivityIntervalTraining extends AppCompatActivity implements Polar
         Log.i("MyApp","average speed: "+averageSpeed+"");
         Log.i("MyApp","average hr " + heartRateAverage);
         Log.i("MyApp","total time in min " + totalTimeInMin);
-        Log.i("MyApp","total time in min " + totalTimeInSec);
+        Log.i("MyApp","total time in sec " + totalTimeInSec);
         Log.i("MyApp","total distance in m " + totalDistance);
         Log.i("MyApp","laps " + lapcount);
         Log.i("MyApp","location points... in progress ");
+        saveInDB();
+        finish();
     }
 
     @Override
