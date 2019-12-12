@@ -20,16 +20,14 @@ import java.util.*;
 public class EditDialog extends DialogFragment {
     private RadioGroup sexGroup;
     private EditListener editListener;
-    private Context context;
     private String defaultValue;
     private int action;
     private View view;
     private AlertDialog dialog;
     private DatePickerDialog picker;
 
-    public EditDialog(EditListener cb, Context context, String defaultValue, int action) {
+    public EditDialog(EditListener cb, String defaultValue, int action) {
         this.editListener = cb;
-        this.context = context;
         this.defaultValue = defaultValue;
         this.action = action;
     }
@@ -49,7 +47,7 @@ public class EditDialog extends DialogFragment {
 
         void applyLocationChanges(String location);
 
-        void applyProfileChanges(String name, String password);
+        void applyProfileChanges(String name);
     }
 
     @Override
@@ -325,16 +323,7 @@ public class EditDialog extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.layout_dialog_edit_profile, null);
-        final TextInputLayout layoutOldPass = view.findViewById(R.id.inputLayoutOldPass);
-        final TextInputLayout layoutNewPass1 = view.findViewById(R.id.inputLayoutNewPass1);
-        final TextInputLayout layoutNewPass2 = view.findViewById(R.id.inputLayoutNewPass2);
-        layoutOldPass.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
-        layoutNewPass1.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
-        layoutNewPass2.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
         final TextView nameValue = view.findViewById(R.id.nameValue);
-        final TextView oldPass = view.findViewById(R.id.oldPassValue);
-        final TextView newPass1 = view.findViewById(R.id.newPassValue1);
-        final TextView newPass2 = view.findViewById(R.id.newPassValue2);
 
         builder.setView(view);
 
@@ -348,33 +337,8 @@ public class EditDialog extends DialogFragment {
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        layoutOldPass.setError(null);
-                        layoutNewPass1.setError(null);
-                        layoutNewPass2.setError(null);
-                        String oldPassValue = oldPass.getText().toString();
-                        String newPassValue1 = newPass1.getText().toString();
-                        String newPassValue2 = newPass2.getText().toString();
-
-                        if (!(oldPassValue.equals("") && newPassValue1.equals("") && newPassValue2.equals(""))) {
-                            if (!oldPassValue.equals("oldpass")) {
-                                layoutOldPass.setError("Password doesn't match!");
-                            } else if (newPassValue1.length() < 8 || newPassValue2.length() < 8) {
-                                Log.d("MyApp", "Password pequeña");
-                                layoutNewPass1.setError("Password must have 8 characters or more");
-                                layoutNewPass2.setError("Password must have 8 characters or more");
-                            } else if (!newPassValue1.equals(newPassValue2)) {
-                                Log.d("MyApp", "Password no coincide");
-                                layoutNewPass1.setError("Passwords don't match!");
-                                layoutNewPass2.setError("Passwords don't match!");
-                            } else {
-                                Log.d("MyApp", "1: " + newPassValue1 + ", 2: " + newPassValue2 + ", equals: " + newPassValue1.equals(newPassValue2));
-                                editListener.applyProfileChanges(nameValue.getText().toString(), newPassValue2);
-                                dialog.dismiss();
-                            }
-                        } else {
-                            editListener.applyProfileChanges(nameValue.getText().toString(), newPassValue2);
-                            dialog.dismiss();
-                        }
+                        editListener.applyProfileChanges(nameValue.getText().toString());
+                        dialog.dismiss();
 
                     }
                 });

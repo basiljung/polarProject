@@ -18,4 +18,12 @@
     <color name="backgroundColor">#DAE8F0</color>
     <color name="backgroundColorDark">#B9C7CE</color>
     <color name="backgroundColorLight">#E8F5FD</color>
+
+    <color name="HRLevel1Color">#00A8B0</color>
+    <color name="HRLevel2Color">#45B443</color>
+    <color name="HRLevel3Color">#C8C924</color>
+    <color name="HRLevel4Color">#DA7101</color>
+    <color name="HRLevel5Color">#D10027</color>
+    <color name="popUpColor">#4D000000</color>
+    <color name="popUpTextColor">#000000</color>
 </resources>
