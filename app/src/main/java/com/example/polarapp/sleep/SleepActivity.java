@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import com.example.polarapp.polar.PolarSDK;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -34,7 +35,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SleepActivity extends AppCompatActivity {
+public class SleepActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity {
 
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
@@ -53,7 +53,9 @@ public class SleepActivity extends AppCompatActivity {
     private ProfilePreferencesManager profilePreferencesManager;
     private static final String PROFILE_USER_ID = "profile_user_id";
     public String documentID;
+    public int heartRate;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private PolarSDK polarSDK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,9 @@ public class SleepActivity extends AppCompatActivity {
         timePicker.setIs24HourView(true);
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+
+        polarSDK = (PolarSDK) getApplicationContext();
+        polarSDK.setCallbackInterfaceActivity(this);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,12 +165,17 @@ public class SleepActivity extends AppCompatActivity {
     }
 
     public void createDatabase() {
-        Log.d("sleepActivity", "Database Created");
+        Log.d("sleepActivity", "DifferenceMillis: " + differenceMillis);
+        Calendar cal = Calendar.getInstance();
+        startTimestamp = new Timestamp(cal.getTimeInMillis());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> sleep = new HashMap<>();
+        sleep.put("time", differenceMillis);
+        sleep.put("avgHR", 0);
+        sleep.put("timestamp", startTimestamp.getTime());
         sleep.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         sleep.put("type", "sleep");
-        sleep.put("HRArray", Arrays.asList(45,55));
+        sleep.put("HRArray", Arrays.asList());
 
         db.collection("activities")
                 .add(sleep)
@@ -197,13 +207,15 @@ public class SleepActivity extends AppCompatActivity {
                         Log.d("sleepActivity", "differenceMillis: "+ differenceMillis);
                         Log.d("sleepActivity", "counter: " + i);
                         Log.d("sleepActivity", "Sleep ID: " + documentID);
-                        if(i % 10 == 1)
+                        if(i % 10 == 5)
                         {
                             DocumentReference sleepRef = db.collection("activities").document(documentID);
-                            sleepRef.update("HRArray", FieldValue.arrayUnion(i));
+                            sleepRef.update("HRArray", FieldValue.arrayUnion(heartRate));
+                            sleepRef.update("time", differenceMillis/1000/60);
+                            //calculate new avgHR
                             Log.d("sleepActivity", "10 sec");
+
                         }
-                        //update database
                     }
                     Log.d("sleepActivity", "READY");
                 } catch (InterruptedException e) {}
@@ -239,5 +251,10 @@ public class SleepActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void hrUpdateData(int hr) {
+        heartRate = hr;
     }
 }
