@@ -31,4 +31,7 @@
     <color name="popUpColorHR">#4D000000</color>
     <color name="popUpColorHistory">#D9FFFFFF</color>
     <color name="popUpTextColor">#000000</color>
+
+    <color name="runActivityLayoutBackground">#80000000</color>
+    <color name="runActivityTextColor">#FFFFFF</color>
 </resources>

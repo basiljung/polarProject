@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scaleType = "centerCrop"
-    android:background="@drawable/background_activity">
+    android:background="@drawable/background_activity"
+    android:orientation="vertical"
+    android:scaleType="centerCrop">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -28,148 +28,206 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/app_name"
+                android:textColor="@color/backgroundColor"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                android:textColor="@color/backgroundColor"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="average speed in km/h"
-            android:textSize="20dp"
-            android:layout_marginLeft="50dp"
-            android:layout_margin="5dp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="hearth rate"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:layout_margin="5dp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="distance in m"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:layout_margin="5dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/runActivityLayoutBackground"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtAverageSpeed"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="35dp"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/txtHRData"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Avg Speed"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtAverageSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="35dp"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/txtDistance"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Heart Rate"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtHRData"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="35dp"
-            android:gravity="center"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Distance"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDistance"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/runActivityTextColor"
+                android:textSize="20dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="8dp">
 
         <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="start"
             android:id="@+id/pauseStartBtn"
-            android:layout_marginLeft="8dp"></Button>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="start" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/runActivityLayoutBackground"
             android:id="@+id/txtVTimePicker"
-            android:layout_weight="1"
-            android:text="00:00"
-            android:textSize="30sp"
-            android:textColor="@color/colorBlack"
-            android:gravity="center_horizontal"></TextView>
-
-        <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="reset"
-            android:id="@+id/resetBtn"
-            android:layout_marginRight="8dp"
-            android:visibility="invisible"
-            tools:visibility ="visible"
-            android:layout_gravity="center_horizontal"></Button>
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="00:00"
+            android:textColor="@color/runActivityTextColor"
+            android:textSize="30sp" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/resetBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="reset"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/nextLapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Next Lap"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="8dp">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:id="@+id/saveTrainingBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:text="save training"
             android:textSize="10dp"
-            android:id="@+id/saveTrainingBtn"
-            android:visibility="invisible"
-            tools:visibility ="visible"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center_vertical"
-            ></Button>
+            android:visibility="invisible"/>
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             android:id="@+id/lapcounter"
-            android:text="done laps: 0"
-            android:textSize="15sp"
-            android:textColor="@color/colorBlack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:gravity="center_horizontal"
-            ></TextView>
+            android:gravity="center"
+            android:background="@color/runActivityLayoutBackground"
+            android:text="Done laps: 0"
+            android:textStyle="bold"
+            android:textColor="@color/runActivityTextColor"
+            android:textSize="15sp" />
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:id="@+id/resetLapsBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:text="reset laps"
             android:textSize="10dp"
-            android:id="@+id/resetLapsBtn"
-            android:visibility="invisible"
-            tools:visibility ="visible"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center_vertical"
-            ></Button>
+            android:visibility="invisible"/>
 
     </LinearLayout>
 
@@ -177,8 +235,8 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_gravity="center"
         android:layout_height="match_parent"
-        />
+        android:layout_gravity="center"
+        android:layout_margin="8dp" />
 
 </LinearLayout>
