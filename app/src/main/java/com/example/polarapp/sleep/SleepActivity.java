@@ -3,6 +3,7 @@ package com.example.polarapp.sleep;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -48,6 +49,7 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
 
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
+    private Toolbar toolbar;
     public int differenceMillis;
     private Timestamp startTimestamp = null; // timestamp
     private ProfilePreferencesManager profilePreferencesManager;
@@ -61,6 +63,13 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         final TextView timer = findViewById(R.id.timer);
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
@@ -176,6 +185,9 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
         sleep.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         sleep.put("type", "sleep");
         sleep.put("HRArray", Arrays.asList());
+        sleep.put("avgHR", 0);
+        sleep.put("deepSleepTime", 0);
+        sleep.put("nightMoves", 0);
 
         db.collection("activities")
                 .add(sleep)
