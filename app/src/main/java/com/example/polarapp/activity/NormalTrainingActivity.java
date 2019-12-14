@@ -31,9 +31,7 @@ import com.example.polarapp.BuildConfig;
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,7 +65,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 
-public class ActivityNormalTraining extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
+public class NormalTrainingActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity,
         OnMapReadyCallback {
 
     private ProfilePreferencesManager profilePreferencesManager;
@@ -96,7 +94,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     private List<LatLng> points = new ArrayList<>(); // Polylines, we need to save them in out database
     private ArrayList<Integer> hrList;
 
-    public BackgroundService gpsService;
+    public BackgroundLocationService gpsService;
     public boolean mTracking = false;
 
     private LocationUpdateData serviceReceiver;
@@ -104,19 +102,20 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             String name = className.getClassName();
-            if (name.endsWith("BackgroundService")) {
-                gpsService = ((BackgroundService.LocationServiceBinder) service).getService();
+            if (name.endsWith("BackgroundLocationService")) {
+                gpsService = ((BackgroundLocationService.LocationServiceBinder) service).getService();
             }
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (className.getClassName().equals("BackgroundService")) {
+            if (className.getClassName().equals("BackgroundLocationService")) {
                 gpsService = null;
             }
         }
     };
 
     public class LocationUpdateData extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
@@ -132,7 +131,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
                     totalDistance = totalDistance + distance;
                     actualSpeed = totalDistance / totalTimeInHour;
                     Toast.makeText(getApplicationContext(), "Total distance: " + totalDistance, Toast.LENGTH_SHORT).show();
-                    Log.d("BackgroundService", "Total distance: " + totalDistance);
+                    Log.d("BroadcastReceiver", "Total distance: " + totalDistance);
                 }
                 long tT = SystemClock.elapsedRealtime() - chronometer.getBase();
                 totalTimeInHour = (tT / 1000.0) / 60.0 / 60.0;
@@ -146,7 +145,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_normaltraining);
+        setContentView(R.layout.activity_normal_training);
 
         serviceReceiver = new LocationUpdateData();
         IntentFilter intentSFilter = new IntentFilter("ServiceToActivityAction");
@@ -156,7 +155,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
-        final Intent intent = new Intent(this.getApplicationContext(), BackgroundService.class);
+        final Intent intent = new Intent(this.getApplicationContext(), BackgroundLocationService.class);
         this.getApplication().startService(intent);
         this.getApplication().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
@@ -281,7 +280,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             runningChronometer = true;
-            startChronometer.setVisibility(View.GONE);
+            startChronometer.setVisibility(View.INVISIBLE);
             stopChronometer.setVisibility(View.VISIBLE);
             resetChronometer.setVisibility(View.INVISIBLE);
             saveTrainingBtn.setVisibility(View.INVISIBLE);
@@ -299,21 +298,26 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
             totalTimeInHour = totalTimeInSec / 60.0 / 60.0;
             runningChronometer = false;
             startChronometer.setVisibility(View.VISIBLE);
-            stopChronometer.setVisibility(View.GONE);
+            stopChronometer.setVisibility(View.INVISIBLE);
             resetChronometer.setVisibility(View.VISIBLE);
             saveTrainingBtn.setVisibility(View.VISIBLE);
         }
-
     }
 
     public void resetChronometer() {
         chronometer.setBase(SystemClock.elapsedRealtime());
         runningChronometer = false;
         pauseOffset = 0;
+        startChronometer.setVisibility(View.VISIBLE);
+        stopChronometer.setVisibility(View.INVISIBLE);
         resetChronometer.setVisibility(View.INVISIBLE);
         saveTrainingBtn.setVisibility(View.INVISIBLE);
         points.clear();
+        hrList.clear();
         gpsTrack.setPoints(points);
+        txtAverageSpeed.setText("0 km/h");
+        totalDistance = 0;
+        txtDistance.setText((int)totalDistance + " m");
     }
 
     private void saveTraining() {
@@ -327,7 +331,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
 
         double totalDistanceInKm = totalDistance / 1000.0;
         averageSpeed = totalDistanceInKm / totalTimeInHour;
-        Log.i("MyApp", "average speed: " + averageSpeed + "");
+        Log.i("MyApp", "average speed: " + averageSpeed);
         Log.i("MyApp", "average hr " + heartRateAverage);
         Log.i("MyApp", "total time in min " + totalTimeInMin);
         Log.i("MyApp", "total time in sec " + totalTimeInSec);
@@ -385,7 +389,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
     @Override
     public void onDestroy() {
         super.onDestroy();
-        final Intent intent = new Intent(this.getApplication(), BackgroundService.class);
+        final Intent intent = new Intent(this.getApplication(), BackgroundLocationService.class);
         this.getApplication().stopService(intent);
         this.getApplication().unbindService(serviceConnection);
         unregisterReceiver(serviceReceiver);

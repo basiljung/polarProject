@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_activity"
+    android:background="@drawable/background_run_activity"
     android:orientation="vertical"
     android:scaleType="centerCrop">
 
@@ -40,14 +40,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@color/runActivityLayoutBackground"
+        android:background="@drawable/shape_activity_data_background"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -64,7 +66,6 @@
                 android:id="@+id/txtAverageSpeed"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
@@ -77,7 +78,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -94,7 +97,6 @@
                 android:id="@+id/txtHRData"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
@@ -106,7 +108,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -123,7 +127,6 @@
                 android:id="@+id/txtDistance"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
@@ -148,12 +151,12 @@
 
         <TextView
             android:layout_margin="5dp"
-            android:background="@color/runActivityLayoutBackground"
+            android:background="@drawable/shape_activity_data_background"
             android:id="@+id/txtVTimePicker"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:textAlignment="center"
             android:textStyle="bold"
             android:text="00:00"
             android:textColor="@color/runActivityTextColor"
@@ -207,13 +210,13 @@
         <TextView
             android:layout_margin="5dp"
             android:padding="5dp"
-            android:id="@+id/lapcounter"
+            android:id="@+id/lapCounter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:background="@color/runActivityLayoutBackground"
+            android:textAlignment="center"
+            android:background="@drawable/shape_activity_data_background"
             android:text="Done laps: 0"
             android:textStyle="bold"
             android:textColor="@color/runActivityTextColor"

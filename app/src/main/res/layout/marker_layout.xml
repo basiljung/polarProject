@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#80D10027"
+    android:background="@color/markerBackground"
     android:orientation="vertical">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_margin="2dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
+        android:textColor="@color/runActivityTextColor"
         android:textSize="12dp" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_margin="2dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
+        android:textColor="@color/runActivityTextColor"
         android:textSize="12dp" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_margin="2dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
+        android:textColor="@color/runActivityTextColor"
         android:textSize="12dp" />
 
     <TextView
@@ -42,6 +42,6 @@
         android:layout_margin="2dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
+        android:textColor="@color/runActivityTextColor"
         android:textSize="12dp" />
 </LinearLayout>

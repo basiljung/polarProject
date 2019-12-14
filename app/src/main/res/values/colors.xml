@@ -34,4 +34,6 @@
 
     <color name="runActivityLayoutBackground">#80000000</color>
     <color name="runActivityTextColor">#FFFFFF</color>
+
+    <color name="markerBackground">#80D10027</color>
 </resources>

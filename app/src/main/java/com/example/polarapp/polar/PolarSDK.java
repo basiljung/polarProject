@@ -27,7 +27,7 @@ public class PolarSDK extends Application {
     private CountDownLatch latch;
     private DevicePreferencesManager devicePreferencesManager;
 
-    // Base for other Interfaces like the Activity or the Sleep one.
+    // Base for other Interfaces like the RunTypeSelectorActivity or the Sleep one.
 
     private CallbackInterfaceDevices callbackInterfaceDevices = null;
 

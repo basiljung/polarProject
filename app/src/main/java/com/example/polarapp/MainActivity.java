@@ -126,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        DocumentReference docRef = db.collection("activities").document("DOj90JDaqFxC4DmaLNKx");
+        DocumentReference docRef = db.collection("activities").document("UWJ6p8BenZwXsGQAptjm");
 
 // Remove the 'capital' field from the document
         Map<String,Object> updates = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
-        updates.put("time", 5);
+        updates.put("interval", 3);
 
         docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

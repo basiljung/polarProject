@@ -24,13 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-        <activity
-            android:name=".analytics.AnalyticsActivity"
-            android:theme="@style/AppTheme.Activity" />
-        <activity
-            android:name=".sleep.SleepActivity"
-            android:theme="@style/AppTheme.Activity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -47,13 +40,20 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activity.Activity"
+            android:name=".analytics.AnalyticsActivity"
             android:theme="@style/AppTheme.Activity" />
         <activity
-            android:name=".activity.ActivityIntervalTraining"
+            android:name=".sleep.SleepActivity"
+            android:theme="@style/AppTheme.Activity" />
+
+        <activity
+            android:name=".activity.RunTypeSelectorActivity"
             android:theme="@style/AppTheme.Activity" />
         <activity
-            android:name=".activity.ActivityNormalTraining"
+            android:name=".activity.IntervalTrainingActivity"
+            android:theme="@style/AppTheme.Activity" />
+        <activity
+            android:name=".activity.NormalTrainingActivity"
             android:theme="@style/AppTheme.Activity" />
         <activity
             android:name=".history.HistoryActivity"
@@ -86,7 +86,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <service android:name=".activity.BackgroundService"/>
+        <service android:name=".activity.BackgroundLocationService"/>
 
     </application>
 

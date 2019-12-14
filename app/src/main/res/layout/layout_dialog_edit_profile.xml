@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/buttondialog"
+            android:background="@drawable/shape_button_dialog"
             android:text="Cancel"
             android:textColor="@color/backgroundColor" />
 
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/buttondialog"
+            android:background="@drawable/shape_button_dialog"
             android:text="Save"
             android:textColor="@color/backgroundColor" />
     </LinearLayout>

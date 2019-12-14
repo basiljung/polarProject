@@ -8,7 +8,6 @@ import androidx.annotation.*;
 
 import com.example.polarapp.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,9 +29,9 @@ public class ActivityDataAdapter extends ArrayAdapter<ActivityData> {
 
         ImageView imageView = customView.findViewById(R.id.activityImageView);
         if (base.getType().toLowerCase().equals("sleep")) {
-            imageView.setImageResource(R.drawable.sleep_history_image);
+            imageView.setImageResource(R.drawable.history_image_sleep);
         } else {
-            imageView.setImageResource(R.drawable.run_history_image);
+            imageView.setImageResource(R.drawable.history_image_run);
         }
 
         TextView type = customView.findViewById(R.id.typeText);

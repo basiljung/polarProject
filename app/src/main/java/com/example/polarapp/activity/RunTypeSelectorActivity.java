@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.polarapp.R;
 
-public class Activity extends AppCompatActivity implements TimePickerFragment.TimerListener {
+public class RunTypeSelectorActivity extends AppCompatActivity implements TimePickerFragment.TimerListener {
 
     private Toolbar toolbar;
     private Button startNormal, startInterval, pickerInterval;
@@ -23,7 +23,7 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firstpage);
+        setContentView(R.layout.activity_run_type_selector);
 
         startNormal = findViewById(R.id.startNormal);
         startInterval = findViewById(R.id.startInterval);
@@ -50,18 +50,18 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
         pickerInterval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
-                openPickerdialog();
+                openPickerDialog();
             }
         });
     }
 
     public void openNormalTrainingActivity() {
-        Intent intent = new Intent(this, ActivityNormalTraining.class);
+        Intent intent = new Intent(this, NormalTrainingActivity.class);
         startActivity(intent);
     }
 
     public void openIntervalTrainingActivity() {
-        Intent intent = new Intent(this, ActivityIntervalTraining.class);
+        Intent intent = new Intent(this, IntervalTrainingActivity.class);
         String message = intervalTimeViewPicker;
         Log.i("MyApp", message);
         intent.putExtra("Picker_Time", message);
@@ -69,16 +69,17 @@ public class Activity extends AppCompatActivity implements TimePickerFragment.Ti
         Log.i("MyApp", "test");
     }
 
-    public void openPickerdialog() {
-        DialogFragment timePicker = new TimePickerFragment(Activity.this);
+    public void openPickerDialog() {
+        DialogFragment timePicker = new TimePickerFragment(RunTypeSelectorActivity.this);
         timePicker.show(getSupportFragmentManager(), "time picker");
         startInterval.setEnabled(true);
-        startInterval.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void applyTimeChange(String pickerTime) {
         intervalTimeViewPicker = pickerTime;
+        startInterval.setVisibility(View.VISIBLE);
     }
 
     @Override

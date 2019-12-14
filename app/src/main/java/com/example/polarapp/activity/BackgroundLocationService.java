@@ -13,7 +13,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,23 +24,18 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.maps.android.SphericalUtil;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 
-public class BackgroundService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class BackgroundLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private final LocationServiceBinder binder = new LocationServiceBinder();
-    private final String TAG = "BackgroundService";
+    private final String TAG = "BackgroundLocationService";
     private LocationListener mLocationListener;
     private LocationManager mLocationManager;
     private NotificationManager notificationManager;
@@ -209,13 +203,13 @@ public class BackgroundService extends Service implements GoogleApiClient.Connec
             //totalDistance = totalDistance + distance;
             //actualSpeed = totalDistance / totalTimeInHour;
             //Toast.makeText(getApplicationContext(), "Latitude: " + location.getLatitude() + " - Longitude: "+ location.getLongitude(), Toast.LENGTH_SHORT).show();
-            //Log.d("BackgroundService", "Latitude: " + lastKnownLatLng.latitude + " - Longitude: "+ lastKnownLatLng.longitude);
+            //Log.d("BackgroundLocationService", "Latitude: " + lastKnownLatLng.latitude + " - Longitude: "+ lastKnownLatLng.longitude);
        // }
     }
 
     public class LocationServiceBinder extends Binder {
-        public BackgroundService getService() {
-            return BackgroundService.this;
+        public BackgroundLocationService getService() {
+            return BackgroundLocationService.this;
         }
     }
 
