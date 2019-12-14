@@ -138,7 +138,7 @@ public class ActivityNormalTraining extends AppCompatActivity implements PolarSD
                 totalTimeInHour = (tT / 1000.0) / 60.0 / 60.0;
                 averageSpeed = (totalDistance/1000.0) / totalTimeInHour;
                 txtDistance.setText((int) totalDistance + " m");
-                txtAverageSpeed.setText(df.format(averageSpeed) + " km/h");
+                txtAverageSpeed.setText(df.format(averageSpeed) + " km/h" + "");
             }
         }
     }
