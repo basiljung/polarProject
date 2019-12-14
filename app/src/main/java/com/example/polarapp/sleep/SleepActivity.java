@@ -1,5 +1,6 @@
 package com.example.polarapp.sleep;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,34 +25,52 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import com.example.polarapp.polar.PolarSDK;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.polarapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SleepActivity extends AppCompatActivity {
+public class SleepActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity {
 
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
     public int differenceMillis;
-    boolean done = false;
+    private Timestamp startTimestamp = null; // timestamp
+    private ProfilePreferencesManager profilePreferencesManager;
+    private static final String PROFILE_USER_ID = "profile_user_id";
+    public String documentID;
+    public int heartRate;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private PolarSDK polarSDK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep);
-
         final TextView timer = findViewById(R.id.timer);
-
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         final TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
+        profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
+
+        polarSDK = (PolarSDK) getApplicationContext();
+        polarSDK.setCallbackInterfaceActivity(this);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +100,9 @@ public class SleepActivity extends AppCompatActivity {
 
                 int differenceMillis = differenceHours*60*60*1000 + differenceMinutes * 60 * 1000;
 
-
-
-                startThread(differenceMillis);
-
                 scheduleNotification(getNotification("Wake Up!"), differenceMillis);
+                createDatabase();
+                startThread(differenceMillis);
             }
         });
 
@@ -96,16 +114,10 @@ public class SleepActivity extends AppCompatActivity {
                 Toast.makeText(SleepActivity.this, alarmAfter, Toast.LENGTH_LONG).show();
                 int myNum = 0;
                 final int finalMyNum = myNum;
-
                 int differenceMillis = timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000;
 
-                Log.d("yolo", "value: " + differenceMillis);
-
                 scheduleNotification(getNotification("Wake Up!"), differenceMillis);
-
-                //SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
-                //sleepThread.start();
-
+                createDatabase();
                 startThread(differenceMillis);
 
                 new CountDownTimer(timePicker.getCurrentHour()*60*60*1000 + timePicker.getCurrentMinute() * 60 * 1000, 1000 * 60 * 10) {
@@ -121,7 +133,6 @@ public class SleepActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void scheduleNotification(Notification notification, int delay) {
         //Channel Set-up
@@ -153,29 +164,60 @@ public class SleepActivity extends AppCompatActivity {
         return builder.build();
     }
 
+    public void createDatabase() {
+        Log.d("sleepActivity", "DifferenceMillis: " + differenceMillis);
+        Calendar cal = Calendar.getInstance();
+        startTimestamp = new Timestamp(cal.getTimeInMillis());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> sleep = new HashMap<>();
+        sleep.put("time", differenceMillis);
+        sleep.put("avgHR", 0);
+        sleep.put("timestamp", startTimestamp.getTime());
+        sleep.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        sleep.put("type", "sleep");
+        sleep.put("HRArray", Arrays.asList());
+
+        db.collection("activities")
+                .add(sleep)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        documentID = documentReference.getId();
+                        Log.d("sleepActivity", "DocumentSnapshot written with ID: " + documentID);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("sleepActivity", "Error adding document", e);
+                    }
+                });
+    }
 
     public void startThread(final int differenceMillis) {
-        /*
-        Log.d("yolo", "thread started: " + differenceMillis);
-        SleepThread sleepThread = new SleepThread(differenceMillis / 1000);
-        sleepThread.start();
-        */
-        //final int seconds = differenceMillis * 1000;
 
         new Thread( new Runnable() {
+
             @Override
             public void run() {
-            // Run whatever background code you want here.
-            //Thread.sleep(1000);
+
                 try {
                     for(int i = 0; i < differenceMillis / 1000; i++) {
                         Thread.sleep(1000);
-                        Log.d("yolo", "swägä " + i);
-                        //update database
+                        Log.d("sleepActivity", "differenceMillis: "+ differenceMillis);
+                        Log.d("sleepActivity", "counter: " + i);
+                        Log.d("sleepActivity", "Sleep ID: " + documentID);
+                        if(i % 10 == 5)
+                        {
+                            DocumentReference sleepRef = db.collection("activities").document(documentID);
+                            sleepRef.update("HRArray", FieldValue.arrayUnion(heartRate));
+                            sleepRef.update("time", differenceMillis/1000/60);
+                            //calculate new avgHR
+                            Log.d("sleepActivity", "10 sec");
 
+                        }
                     }
-                    Log.d("yolo", "REDI");
-                    //Thread.interrupted();
+                    Log.d("sleepActivity", "READY");
                 } catch (InterruptedException e) {}
         }}).start();
     }
@@ -210,5 +252,9 @@ public class SleepActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
     }
-}
 
+    @Override
+    public void hrUpdateData(int hr) {
+        heartRate = hr;
+    }
+}

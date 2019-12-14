@@ -458,9 +458,11 @@ public class AnalyticsActivity extends AppCompatActivity {
             } else if (highlight.getDataSetIndex() == 1) {
                 activityData = new ActivityData(userSleepCurrentWeekActivitiesList.get((int) e.getX()));
                 tvTime.setText("Time: " + activityData.getTime() + " min");
-                tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
-                tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
-                tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
+                //no data at least yet
+
+                //tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
+                //tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
+                //tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
             }
             super.refreshContent(e, highlight);
         }

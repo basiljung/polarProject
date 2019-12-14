@@ -192,10 +192,10 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                                 activityData.setTime(time);
                                 activityData.setAvgHR(avgHR);
                                 if (type.equals("sleep")) {
-                                    int deepSleepTime = Integer.parseInt(document.get(ACTIVITY_DEEP_SLEEP_TIME).toString());
-                                    int nightMoves = Integer.parseInt(document.get(ACTIVITY_NIGHT_MOVES).toString());
-                                    activityData.setDeepSleepTime(deepSleepTime);
-                                    activityData.setNightMoves(nightMoves);
+                                    //int deepSleepTime = Integer.parseInt(document.get(ACTIVITY_DEEP_SLEEP_TIME).toString());
+                                    //int nightMoves = Integer.parseInt(document.get(ACTIVITY_NIGHT_MOVES).toString());
+                                    //activityData.setDeepSleepTime(deepSleepTime);
+                                    //activityData.setNightMoves(nightMoves);
                                     sleepActivityDataArrayList.add(activityData);
                                 } else {
                                     int distance = Integer.parseInt(document.get(ACTIVITY_DISTANCE).toString());
