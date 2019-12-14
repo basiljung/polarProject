@@ -1,21 +1,31 @@
 package com.example.polarapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
-
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
-import com.example.polarapp.preferencesmanager.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.polarapp.preferencesmanager.IntroPreferencesManager;
+import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class IntroActivity extends AppCompatActivity {
 

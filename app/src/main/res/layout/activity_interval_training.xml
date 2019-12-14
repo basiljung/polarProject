@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_run_activity"
@@ -29,7 +28,7 @@
                 android:layout_gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/backgroundColor"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -59,7 +58,7 @@
                 android:gravity="center"
                 android:text="Avg Speed"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -69,7 +68,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
 
         </LinearLayout>
@@ -90,7 +89,7 @@
                 android:gravity="center"
                 android:text="Heart Rate"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -100,7 +99,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -120,7 +119,7 @@
                 android:gravity="center"
                 android:text="Distance"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -130,7 +129,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/runActivityTextColor"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -147,7 +146,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="start" />
+            android:text="Start" />
 
         <TextView
             android:layout_margin="5dp"
@@ -174,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="reset"
+                android:text="Reset"
                 android:visibility="invisible"/>
 
             <Button
@@ -202,8 +201,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:text="save training"
-            android:textSize="10dp"
+            android:text="Save Training"
+            android:textSize="10sp"
             android:visibility="invisible"/>
 
 
@@ -228,8 +227,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:text="reset laps"
-            android:textSize="10dp"
+            android:text="Reset Laps"
+            android:textSize="10sp"
             android:visibility="invisible"/>
 
     </LinearLayout>

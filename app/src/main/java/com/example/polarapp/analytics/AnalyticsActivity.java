@@ -1,37 +1,66 @@
 package com.example.polarapp.analytics;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.polarapp.R;
 import com.example.polarapp.activity.ActivityData;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.*;
-import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.IMarker;
+import com.github.mikephil.charting.components.MarkerView;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.*;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Timestamp;
-import java.text.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class AnalyticsActivity extends AppCompatActivity {
@@ -48,9 +77,10 @@ public class AnalyticsActivity extends AppCompatActivity {
             totalRunTimeDifferenceMonthText, totalSleepTimeDifferenceMonthText, avgHRDifferenceMonthText;
     private DecimalFormat df = new DecimalFormat();
 
+    private ArrayList<Integer> hrArray;
+
     private TabLayout tabLayout;
     private LinearLayout linearLayoutThisWeek, linearLayoutLastWeek, linearLayoutMonth;
-
 
     private SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd/MM/yyyy", Locale.ENGLISH);
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -75,14 +105,16 @@ public class AnalyticsActivity extends AppCompatActivity {
     // HR Zones calculus values
     private static final String PROFILE_USER_BIRTH = "profile_user_birth";
     private final int maxHeartRateBeats = 220;
-    //private final String[] hrLevelNames = {"Zone 1", "Zone 2", "Zone 3", "Zone 4", "Zone 5"};
     private int[] hrLevelMinValues = {0, 0, 0, 0, 0, 0};
     private int actualHRLevel = -1;
     private Dialog hrInfoDialog;
     private ImageButton infoImageButton;
-    private LinearLayout level0InfoLayout, level1InfoLayout, level2InfoLayout, level3InfoLayout, level4InfoLayout, level5InfoLayout, level6InfoLayout;
-    private TextView level0InfoText, level1InfoText, level2InfoText, level3InfoText, level4InfoText, level5InfoText, level6InfoText;
-    private ImageButton level0ImageButton, level1ImageButton, level2ImageButton, level3ImageButton, level4ImageButton, level5ImageButton, level6ImageButton;
+    private LinearLayout level0InfoLayout, level1InfoLayout, level2InfoLayout,
+            level3InfoLayout, level4InfoLayout, level5InfoLayout, level6InfoLayout;
+    private TextView level0InfoText, level1InfoText, level2InfoText,
+            level3InfoText, level4InfoText, level5InfoText, level6InfoText;
+    private ImageButton level0ImageButton, level1ImageButton, level2ImageButton,
+            level3ImageButton, level4ImageButton, level5ImageButton, level6ImageButton;
 
     // Names in Database
     private static final String ACTIVITY_UUID = "UUID";
@@ -93,6 +125,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
     private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
     private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_HR_ARRAY = "HRArray";
     private static final String ACTIVITY_INTERVAL = "interval";
     private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
     private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
@@ -460,9 +493,9 @@ public class AnalyticsActivity extends AppCompatActivity {
                 tvTime.setText("Time: " + activityData.getTime() + " min");
                 //no data at least yet
 
-                //tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
-                //tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
-                //tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
+                tvDistDeepSleep.setText("Deep sleep time: " + activityData.getDeepSleepTime() + " min");
+                tvSpeedNightMoves.setText("Night moves: " + activityData.getNightMoves() + " moves");
+                tvAvgHR.setText("Avg Heart Rate: " + df.format(activityData.getAvgHR()) + " bpm");
             }
             super.refreshContent(e, highlight);
         }
@@ -989,6 +1022,12 @@ public class AnalyticsActivity extends AppCompatActivity {
                                     activityData.setTime(time);
                                     activityData.setAvgHR(avgHR);
                                     if (type.equals("sleep")) {
+                                        try {
+                                            hrArray = new ArrayList<>((ArrayList<Integer>) document.get(ACTIVITY_HR_ARRAY));
+                                        } catch (NullPointerException e) {
+                                            Log.d("MyApp", "Error with array of HR");
+                                            hrArray = null;
+                                        }
                                         int deepSleepTime = Integer.parseInt(document.get(ACTIVITY_DEEP_SLEEP_TIME).toString());
                                         int nightMoves = Integer.parseInt(document.get(ACTIVITY_NIGHT_MOVES).toString());
                                         activityData.setDeepSleepTime(deepSleepTime);
@@ -1000,6 +1039,7 @@ public class AnalyticsActivity extends AppCompatActivity {
                                         List<LatLng> locationPoints;
                                         try {
                                             locationPoints = new ArrayList<>((Collection<? extends LatLng>) document.get(ACTIVITY_LOCATION_POINTS)); // Try if works
+                                            activityData.setLocationPoints(locationPoints);
                                         } catch (NullPointerException e) {
                                             locationPoints = null;
                                         }

@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:showIn="@layout/activity_intro">
 
@@ -32,7 +32,7 @@
                     android:layout_gravity="center"
                     android:text="Insert Your Data"
                     android:textColor="@android:color/white"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -51,7 +51,7 @@
                 android:id="@+id/userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Sex: "
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -136,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
                         android:text="Male"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <RadioButton
                         android:id="@+id/userSexOption2"
@@ -144,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
                         android:text="Female"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
                 </RadioGroup>
             </LinearLayout>
         </LinearLayout>
@@ -165,7 +165,7 @@
                 android:inputType="date"
                 android:focusable="false"
                 android:clickable="true"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Country: "
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.hbb20.CountryCodePicker
@@ -212,7 +212,7 @@
                     android:id="@+id/userCity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -226,7 +226,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_weight=".50"
                 android:orientation="vertical">
 
@@ -236,7 +236,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Select your height"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <NumberPicker
@@ -251,7 +251,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_weight=".50"
                 android:orientation="vertical">
 
@@ -261,7 +261,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Select your weight"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <NumberPicker

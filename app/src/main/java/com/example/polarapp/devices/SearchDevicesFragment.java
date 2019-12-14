@@ -1,12 +1,17 @@
 package com.example.polarapp.devices;
 
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
-import android.view.*;
-import android.widget.*;
 
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
@@ -124,7 +129,19 @@ public class SearchDevicesFragment extends Fragment implements PolarSDK.Callback
                 devicePreferencesManager.setDeviceID("");
             } else {
                 Log.d("MyApp", "You can only connect 1 device at the same time");
-                //Make a toast here
+                Thread toastMessage = new Thread() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(),
+                                        "You can only connect 1 device at the same time", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                };
+                toastMessage.start();
                 action = false;
             }
             return null;

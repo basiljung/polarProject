@@ -9,7 +9,6 @@ import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import java.util.*;
 import java.util.concurrent.*;
 
-import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.*;
@@ -22,12 +21,10 @@ public class PolarSDK extends Application {
     private String TAG = "PolarSDK_API";
     private PolarBleApi api;
     private String DEVICE_ID;
-    private Disposable scanDisposable, accDisposable;
+    private Disposable scanDisposable;
     private boolean isConnecting = false;
     private CountDownLatch latch;
     private DevicePreferencesManager devicePreferencesManager;
-
-    // Base for other Interfaces like the RunTypeSelectorActivity or the Sleep one.
 
     private CallbackInterfaceDevices callbackInterfaceDevices = null;
 

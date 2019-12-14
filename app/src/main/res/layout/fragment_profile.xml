@@ -28,7 +28,7 @@
                         android:layout_height="150dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="45dp"
-                        android:src="@mipmap/ic_launcher_round" />
+                        android:src="@mipmap/ic_polaris_logo_round" />
 
                     <TextView
                         android:id="@+id/profileName"
@@ -206,7 +206,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="25dp">
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp">
 
                 <ImageView
                     android:layout_width="36dp"
@@ -219,6 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -228,7 +230,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:orientation="horizontal"
-                android:paddingLeft="25dp">
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp">
 
                 <ImageView
                     android:layout_width="36dp"
@@ -240,7 +243,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -249,9 +253,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
                 android:orientation="horizontal"
-                android:paddingLeft="25dp"
-                android:layout_marginBottom="25dp">
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp">
 
                 <ImageView
                     android:layout_width="36dp"
@@ -263,7 +268,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

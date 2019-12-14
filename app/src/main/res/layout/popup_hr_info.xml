@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Zone 0. Below 50% of Max Heart Rate"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/popUpTextColor"/>
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,21 +35,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NOT ENOUGH"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="NOT ENOUGH"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level0ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -57,11 +57,11 @@
             android:id="@+id/level0InfoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:text="Training in this zone won't help you to improve!
             \n\nYou should increase your training level, at least, to zone 1 or 2, in where you'll be able to improve your overall health and general endurance."
-            android:textSize="13dp"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -80,9 +80,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Zone 1. 50-60% of Max Heart Rate"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/popUpTextColor"/>
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -92,21 +92,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VERY LIGHT"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="VERY LIGHT"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level1ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -114,11 +114,11 @@
             android:id="@+id/level1InfoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:text="Training in zone 1 improves your overall health and helps you recover from more demanding training.
             \n\nIt feels very easy. You could go on for hours."
-            android:textSize="13dp"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -136,9 +136,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/popUpTextColor"
             android:text="Zone 2. 60-70% of Max Heart Rate"
-            android:textSize="15dp"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -149,33 +149,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LIGHT"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="LIGHT"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level2ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/level2InfoText"
             android:layout_width="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:layout_height="wrap_content"
             android:text="Training in zone 2 develops your general endurance: it improves your body’s ability to utilize fat as an energy source, or in other words to burn fat.
             \n\nIt still feels comfortable and easy. You could go on for hours."
-            android:textSize="13dp"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -193,9 +193,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/popUpTextColor"
             android:text="Zone 3. 70-80% of Max Heart Rate"
-            android:textSize="15dp"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -206,33 +206,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MODERATE"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="MODERATE"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level3ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/level3InfoText"
             android:layout_width="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:layout_height="wrap_content"
             android:text="Training on zone 3 improves your aerobic fitness. On zone 3 lactate starts to build up in your bloodstream, but your body can reuse it as energy, and it won’t yet affect your performance.
             \n\nYou’ll start breathing deeper and feel a moderate effort."
-            android:textSize="13dp"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -250,9 +250,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/popUpTextColor"
             android:text="Zone 4. 80-90% of Max Heart Rate"
-            android:textSize="15dp"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -263,33 +263,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HARD"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="HARD"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level4ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/level4InfoText"
             android:layout_width="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:layout_height="wrap_content"
             android:text="Training on zone 4 improves your speed endurance, and your body gets better at using carbohydrates for energy. It also improves your body’s ability to withstand higher levels of lactate in your blood.
             \n\nYou’ll feel fatigue in your muscles and breathe heavily."
-            android:textSize="13dp"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -305,11 +305,11 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Zone 5. 90-100% of Max Heart Rate"
-            android:textSize="15dp"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -320,21 +320,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MAXIMUM"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="MAXIMUM"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level5ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -342,12 +342,12 @@
             android:id="@+id/level5InfoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/popUpTextColor"
+            android:elegantTextHeight="true"
             android:text="Training on zone 5 improves your maximum performance. A lot of lactate is building up and you won't be able to continue for long. Only recommended for professional athletes.
             \n\nIt’ll feel exhausting for breathing and muscles."
-            android:textSize="13dp"
-            android:elegantTextHeight="true"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -363,11 +363,11 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:textColor="@color/popUpTextColor"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Zone 6. Over 100% of Max Heart Rate"
-            android:textSize="15dp"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -378,21 +378,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DANGER!"
                 android:layout_centerInParent="true"
-                android:textStyle="bold|italic"
+                android:text="DANGER!"
                 android:textColor="@color/popUpTextColor"
-                android:textSize="15dp" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
             <ImageButton
                 android:id="@+id/level6ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_check_hr_level"
-                android:background="@drawable/shape_circle"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"/>
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_check_hr_level"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -400,12 +400,12 @@
             android:id="@+id/level6InfoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/popUpTextColor"
+            android:elegantTextHeight="true"
             android:text="Be careful if you are in this zone! If you don't have coronary artery disease or risk factors for a heart attack, it is possible to go over your estimated maximum heart rate without injury.
             \n\nHowever, it's still not a good idea because you are more likely to suffer sore joints and muscles if you do so and it raises your risk for a musculo-skeletal injury."
-            android:textSize="13dp"
-            android:elegantTextHeight="true"
             android:textAlignment="textStart"
+            android:textColor="@color/popUpTextColor"
+            android:textSize="13sp"
             android:visibility="gone" />
 
     </LinearLayout>

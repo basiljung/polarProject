@@ -1,14 +1,20 @@
 package com.example.polarapp.devices;
 
 import android.content.Context;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import polar.com.sdk.api.model.PolarDeviceInfo;
 
@@ -32,8 +38,8 @@ public class DevicesArrayAdapter extends ArrayAdapter<PolarDeviceInfo> {
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View listItem = convertView;
-        if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list, parent,false);
+        if (listItem == null)
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.devices_list, parent, false);
 
         final PolarDeviceInfo currentInfo = polarDeviceInfoList.get(position);
 

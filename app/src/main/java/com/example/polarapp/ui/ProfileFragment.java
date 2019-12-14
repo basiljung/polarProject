@@ -2,8 +2,12 @@ package com.example.polarapp.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,8 +16,11 @@ import com.example.polarapp.R;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.profile.EditDialog;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 public class ProfileFragment extends Fragment implements EditDialog.EditListener {

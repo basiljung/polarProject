@@ -9,9 +9,9 @@ import java.util.List;
 public class ActivityData implements Serializable, Comparable<ActivityData> {
     private String type = "";
     private Timestamp timestamp = null;
-    private int time = 0; // in  seconds
+    private int time = 0;
     private double avgHR = 0;
-    private int distance = 0; // in meters
+    private int distance = 0;
     private double avgSpeed = 0;
     private int interval = 0;
     private List<LatLng> locationPoints = null;

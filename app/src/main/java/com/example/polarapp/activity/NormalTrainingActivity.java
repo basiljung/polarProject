@@ -1,21 +1,26 @@
 package com.example.polarapp.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -28,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.example.polarapp.BuildConfig;
+import com.example.polarapp.MainActivity;
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
@@ -135,7 +141,7 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                 }
                 long tT = SystemClock.elapsedRealtime() - chronometer.getBase();
                 totalTimeInHour = (tT / 1000.0) / 60.0 / 60.0;
-                averageSpeed = (totalDistance/1000.0) / totalTimeInHour;
+                averageSpeed = (totalDistance / 1000.0) / totalTimeInHour;
                 txtDistance.setText((int) totalDistance + " m");
                 txtAverageSpeed.setText(df.format(averageSpeed) + " km/h");
             }
@@ -241,10 +247,38 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                 }).check();
     }
 
+    private void saveTraining() {
+        Integer sum = 0;
+        for (int i = 0; i < hrList.size(); i++) {
+            sum += hrList.get(i);
+        }
+        if (hrList.size() > 0) {
+            heartRateAverage = sum / hrList.size();
+        }
+
+        double totalDistanceInKm = totalDistance / 1000.0;
+        averageSpeed = totalDistanceInKm / totalTimeInHour;
+        Log.i("MyApp", "average speed: " + averageSpeed);
+        Log.i("MyApp", "average hr " + heartRateAverage);
+        Log.i("MyApp", "total time in min " + totalTimeInMin);
+        Log.i("MyApp", "total time in sec " + totalTimeInSec);
+        Log.i("MyApp", "total distance in m " + totalDistance);
+        Log.i("MyApp", "location points... in progress ");
+        if (!isOnline()) {
+            showDialog();
+        } else {
+            saveInDB();
+        }
+    }
+
+    private void backToMainActivity() {
+        Intent intent = new Intent(NormalTrainingActivity.this, MainActivity.class);
+        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    }
+
     public void saveInDB() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
-
         Log.d("MyApp", "Time: " + startTimestamp.getTime());
 
         activity1.put("UUID", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
@@ -263,6 +297,7 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("MyApp", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        backToMainActivity();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -271,6 +306,37 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                         Log.w("MyApp", "Error adding document", e);
                     }
                 });
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Internet connection needed to save the training!")
+                .setCancelable(false)
+                .setPositiveButton("Connect to Internet", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        if (isOnline()) {
+                            saveInDB();
+                        }
+                    }
+                })
+                .setNegativeButton("Quit without saving", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        backToMainActivity();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void startChronometer() {
@@ -317,28 +383,7 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
         gpsTrack.setPoints(points);
         txtAverageSpeed.setText("0 km/h");
         totalDistance = 0;
-        txtDistance.setText((int)totalDistance + " m");
-    }
-
-    private void saveTraining() {
-        Integer sum = 0;
-        for (int i = 0; i < hrList.size(); i++) {
-            sum += hrList.get(i);
-        }
-        if (hrList.size() > 0) {
-            heartRateAverage = sum / hrList.size();
-        }
-
-        double totalDistanceInKm = totalDistance / 1000.0;
-        averageSpeed = totalDistanceInKm / totalTimeInHour;
-        Log.i("MyApp", "average speed: " + averageSpeed);
-        Log.i("MyApp", "average hr " + heartRateAverage);
-        Log.i("MyApp", "total time in min " + totalTimeInMin);
-        Log.i("MyApp", "total time in sec " + totalTimeInSec);
-        Log.i("MyApp", "total distance in m " + totalDistance);
-        Log.i("MyApp", "location points... in progress ");
-        saveInDB();
-        finish();
+        txtDistance.setText((int) totalDistance + " m");
     }
 
     @Override

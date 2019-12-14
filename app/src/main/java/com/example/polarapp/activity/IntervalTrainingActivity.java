@@ -1,15 +1,19 @@
 package com.example.polarapp.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,6 +31,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.example.polarapp.BuildConfig;
+import com.example.polarapp.MainActivity;
 import com.example.polarapp.R;
 import com.example.polarapp.polar.PolarSDK;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
@@ -148,7 +153,7 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
                 }
                 double tT = (timeSetInSec * 1000) - TimeLeftInMillis;
                 double auxTime = (tT / 1000.0) / 60.0 / 60.0;
-                averageSpeed = (lapDistance/1000.0) / auxTime;
+                averageSpeed = (lapDistance / 1000.0) / auxTime;
                 txtDistance.setText((int) lapDistance + " m");
                 txtAverageSpeed.setText(df.format(averageSpeed) + " km/h");
             }
@@ -385,8 +390,17 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
         Log.i("MyApp", "total distance in m " + totalDistance);
         Log.i("MyApp", "laps " + lapCount);
         Log.i("MyApp", "location totalPoints... in progress ");
-        saveInDB();
-        finish();
+
+        if (!isOnline()) {
+            showDialog();
+        } else {
+            saveInDB();
+        }
+    }
+
+    private void backToMainActivity() {
+        Intent intent = new Intent(IntervalTrainingActivity.this, MainActivity.class);
+        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     public void saveInDB() {
@@ -409,6 +423,7 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("MyApp", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        backToMainActivity();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -419,13 +434,44 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
                 });
     }
 
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Internet connection needed to save the training!")
+                .setCancelable(false)
+                .setPositiveButton("Connect to Internet", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        if (isOnline()) {
+                            saveInDB();
+                        }
+                    }
+                })
+                .setNegativeButton("Quit without saving", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        backToMainActivity();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void saveLapData() {
         Log.d("MyAppSavePre", "Distance: " + totalDistance + ", size totalPoints: " + totalPoints.size() + ", lap distance: " + lapDistance);
         totalDistance = totalDistance + lapDistance;
-        for (int i = 0; i< lapHRList.size(); i++) {
+        for (int i = 0; i < lapHRList.size(); i++) {
             totalHRList.add(lapHRList.get(i));
         }
-        for (int i=0;i<lapPoints.size(); i++) {
+        for (int i = 0; i < lapPoints.size(); i++) {
             totalPoints.add(lapPoints.get(i));
         }
         Log.d("MyAppSavePost", "Distance: " + totalDistance + ", size totalPoints: " + totalPoints.size());

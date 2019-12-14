@@ -1,10 +1,12 @@
 package com.example.polarapp.preferencesmanager;
 
-import android.content.*;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfilePreferencesManager {
 

@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:text="Activity Type: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -30,9 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -49,7 +48,7 @@
             android:layout_gravity="center"
             android:text="Date: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -57,9 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -76,7 +74,7 @@
             android:layout_gravity="center"
             android:text="Total Time: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
 
@@ -85,9 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -104,7 +101,7 @@
             android:layout_gravity="center"
             android:text="Intervals: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -112,9 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -131,7 +127,7 @@
             android:layout_gravity="center"
             android:text="Distance: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -139,9 +135,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -158,7 +153,7 @@
             android:layout_gravity="center"
             android:text="Average Speed: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -166,9 +161,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -185,7 +179,7 @@
             android:layout_gravity="center"
             android:text="Average Heart Rate: "
             android:textColor="@color/popUpTextColor"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
@@ -193,9 +187,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2"
             android:textColor="@color/popUpTextColor"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

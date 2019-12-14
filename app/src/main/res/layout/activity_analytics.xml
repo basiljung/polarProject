@@ -26,7 +26,7 @@
                 android:layout_gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/backgroundColor"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -80,7 +80,7 @@
                 android:layout_margin="8dp"
                 android:gravity="center"
                 android:text="Data Analysis"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.tabs.TabLayout
@@ -121,14 +121,14 @@
 
                     <TextView
                         android:text="Average running time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgRunThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -143,13 +143,13 @@
                     <TextView
                         android:text="Total running time: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalRunThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -164,13 +164,13 @@
                     <TextView
                         android:text="Running time record: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/maxRunThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -185,13 +185,13 @@
                     <TextView
                         android:text="Average sleeping time: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgSleepThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -206,13 +206,13 @@
                     <TextView
                         android:text="Total sleeping time: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalSleepThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -227,13 +227,13 @@
                     <TextView
                         android:text="Sleeping time record: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/maxSleepThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -248,13 +248,13 @@
                     <TextView
                         android:text="Average Heart Rate: "
                         android:textStyle="bold"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgHRThisWeekText"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -285,14 +285,14 @@
 
                     <TextView
                         android:text="Average running time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgRunTimeDifferenceLastWeekText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -306,14 +306,14 @@
 
                     <TextView
                         android:text="Total running time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalRunTimeDifferenceLastWeekText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -327,14 +327,14 @@
 
                     <TextView
                         android:text="Average sleeping time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgSleepTimeDifferenceLastWeekText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -348,14 +348,14 @@
 
                     <TextView
                         android:text="Total sleeping time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalSleepTimeDifferenceLastWeekText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -369,14 +369,14 @@
 
                     <TextView
                         android:text="Average Heart Rate: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgHRDifferenceLastWeekText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -400,14 +400,14 @@
 
                     <TextView
                         android:text="Average running time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgRunTimeDifferenceMonthText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -421,14 +421,14 @@
 
                     <TextView
                         android:text="Total running time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalRunTimeDifferenceMonthText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -442,14 +442,14 @@
 
                     <TextView
                         android:text="Average sleeping time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgSleepTimeDifferenceMonthText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -463,14 +463,14 @@
 
                     <TextView
                         android:text="Total sleeping time: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/totalSleepTimeDifferenceMonthText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -484,14 +484,14 @@
 
                     <TextView
                         android:text="Average Heart Rate: "
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/avgHRDifferenceMonthText"
-                        android:text="14dp"
+                        android:text="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

@@ -34,6 +34,8 @@
 
     <color name="runActivityLayoutBackground">#80000000</color>
     <color name="runActivityTextColor">#FFFFFF</color>
+    <color name="sleepActivityLayoutBackground">#80FFFFFF</color>
+    <color name="sleepActivityTextColor">#000000</color>
 
     <color name="markerBackground">#80D10027</color>
 </resources>
