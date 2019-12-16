@@ -39,6 +39,7 @@ public class BackgroundLocationService extends Service implements GoogleApiClien
 
     private final long LOCATION_INTERVAL = 5000;
     private final long LOCATION_INTERVAL_FASTEST = 3000;
+    private final long LOCATION_MIN_DESPLACEMENT_METERS = 10;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -101,7 +102,9 @@ public class BackgroundLocationService extends Service implements GoogleApiClien
         locationRequest = new LocationRequest();
         locationRequest.setInterval(LOCATION_INTERVAL);
         locationRequest.setFastestInterval(LOCATION_INTERVAL_FASTEST);
+        locationRequest.setSmallestDisplacement(LOCATION_MIN_DESPLACEMENT_METERS);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 

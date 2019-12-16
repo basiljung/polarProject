@@ -70,13 +70,17 @@ public class HomeFragment extends Fragment {
             Intent myIntent = new Intent(HomeFragment.this.getActivity(), RunTypeSelectorActivity.class);
             startActivity(myIntent);
         } else {
-            Toast.makeText(getContext(), "Please, connect one Polar device first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please, connect one Polar device first", Toast.LENGTH_LONG).show();
         }
     }
 
     public void openSleepActivity() {
-        Intent myIntent = new Intent(HomeFragment.this.getActivity(), SleepActivity.class);
-        startActivity(myIntent);
+        if (devicePreferencesManager.getConnectedDevices() == 1) {
+            Intent myIntent = new Intent(HomeFragment.this.getActivity(), SleepActivity.class);
+            startActivity(myIntent);
+        } else {
+            Toast.makeText(getContext(), "Please, connect one Polar device first", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void openAnalyticsActivity() {

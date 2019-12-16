@@ -24,6 +24,8 @@ import com.example.polarapp.ui.DevicesFragment;
 import com.example.polarapp.ui.HomeFragment;
 import com.example.polarapp.ui.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,6 +45,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView textViewName, textViewEmail;
     private ProfilePreferencesManager profilePreferencesManager;
     private PolarSDK polarSDK;
+    private static final String ACTIVITY_UUID = "UUID";
+    private static final String ACTIVITY_TYPE = "type";
+    private static final String ACTIVITY_TIMESTAMP = "timestamp";
+    private static final String ACTIVITY_TIME = "time";
+    private static final String ACTIVITY_DISTANCE = "distance";
+    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
+    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
+    private static final String ACTIVITY_AVG_HR = "avgHR";
+    private static final String ACTIVITY_HR_ARRAY = "HRArray";
+    private static final String ACTIVITY_INTERVAL = "interval";
+    private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
+    private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
+    private static final String PROFILE_USER_ID = "profile_user_id";
 
     // Shared preferences file name
     private static final String PROFILE_USER_NAME = "profile_user_name";
@@ -58,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // createActivities();
+        //createActivities();
         polarSDK = (PolarSDK) getApplicationContext();
 
         drawer = findViewById(R.id.drawer_layout);
@@ -104,29 +119,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> activity1 = new HashMap<>();
 
-        DocumentReference docRef = db.collection("activities").document("UWJ6p8BenZwXsGQAptjm");
-
-// Remove the 'capital' field from the document
-        Map<String, Object> updates = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
-        updates.put("interval", 3);
-
-        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d("MyApp", "File updated");
-            }
-        });
-
-        /*activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
+        activity1.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity1.put(ACTIVITY_TYPE, "run");
-        activity1.put(ACTIVITY_TIMESTAMP, (long) 1575712800 * 1000);
-        activity1.put(ACTIVITY_TIME, 290);
-        activity1.put(ACTIVITY_DISTANCE, 22000);
-        activity1.put(ACTIVITY_AVG_SPEED, 12.34);
+        activity1.put(ACTIVITY_TIMESTAMP, (long) 1576423067 * 1000);
+        activity1.put(ACTIVITY_TIME, 135);
+        activity1.put(ACTIVITY_DISTANCE, 16470);
+        activity1.put(ACTIVITY_AVG_SPEED, 7.32);
         activity1.put(ACTIVITY_LOCATION_POINTS, null);
-        activity1.put(ACTIVITY_AVG_HR, 149.50);
+        activity1.put(ACTIVITY_AVG_HR, 125.97);
         activity1.put(ACTIVITY_INTERVAL, 1);
 
         db.collection("activities")
@@ -148,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         activity2.put(ACTIVITY_UUID, profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
         activity2.put(ACTIVITY_TYPE, "sleep");
-        activity2.put(ACTIVITY_TIMESTAMP, (long) 1575712800 * 1000);
-        activity2.put(ACTIVITY_TIME, 1500);
-        activity2.put(ACTIVITY_DEEP_SLEEP_TIME, 320);
-        activity2.put(ACTIVITY_NIGHT_MOVES, 56);
-        activity2.put(ACTIVITY_AVG_HR, 58.50);
+        activity2.put(ACTIVITY_TIMESTAMP, (long) 1576436400 * 1000);
+        activity2.put(ACTIVITY_TIME, 649);
+        activity2.put(ACTIVITY_DEEP_SLEEP_TIME, 0);
+        activity2.put(ACTIVITY_NIGHT_MOVES, 0);
+        activity2.put(ACTIVITY_AVG_HR, 53.05);
 
         db.collection("activities")
                 .add(activity2)
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onFailure(@NonNull Exception e) {
                         Log.w("MyApp", "Error adding document", e);
                     }
-                });*/
+                });
     }
 
     @Override

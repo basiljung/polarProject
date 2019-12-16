@@ -31,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -260,6 +261,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                 locationPoints.add(latLng);
             }
         } else {
+            locationPoints.clear();
             try {
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener() {
@@ -271,6 +273,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                                     new LatLng(initialLocation.getLatitude(),
                                             initialLocation.getLongitude()), 15));
                             Toast.makeText(getApplicationContext(), "No GPS data to show", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
@@ -285,6 +288,7 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                 map = googleMap;
 
                 PolylineOptions polylineOptions = new PolylineOptions();
+                Log.d("MyAppPoli", "Size: " + locationPoints.size());
                 for (int i = 0; i < locationPoints.size(); i++) {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(locationPoints.get(0).latitude,
@@ -293,6 +297,9 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
                 }
                 polylineOptions.color(Color.RED).width(4);
                 map.addPolyline(polylineOptions);
+                if (locationPoints.size() == 0) {
+                    map.clear();
+                }
             }
         });
 
