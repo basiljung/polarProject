@@ -18,9 +18,10 @@ public class ActivityData implements Serializable, Comparable<ActivityData> {
     private int deepSleepTime = 0;
     private int nightMoves = 0;
 
-    public ActivityData() {}
+    public ActivityData() {
+    }
 
-    public ActivityData (ActivityData activityData) {
+    public ActivityData(ActivityData activityData) {
         this.type = activityData.getType();
         this.timestamp = activityData.getTimestamp();
         this.time = activityData.getTime();

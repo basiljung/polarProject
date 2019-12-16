@@ -31,7 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,7 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class HistoryActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HistoryActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private Toolbar toolbar;
     private ProfilePreferencesManager profilePreferencesManager;
@@ -305,7 +305,6 @@ public class HistoryActivity extends AppCompatActivity implements GoogleApiClien
         distanceText.setText(activity.getDistance() + " m");
         avgSpeedText.setText(activity.getAvgSpeed() + " km/h");
         avgHRText.setText(activity.getAvgHR() + " bpm");
-
 
         runDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         runDialog.show();

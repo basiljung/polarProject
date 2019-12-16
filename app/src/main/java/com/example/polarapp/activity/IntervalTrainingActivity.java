@@ -135,7 +135,6 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
     };
 
     public class LocationUpdateData extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
@@ -148,7 +147,6 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
                 if (lapPoints.size() >= 2) {
                     double distance = SphericalUtil.computeDistanceBetween(lapPoints.get(lapPoints.size() - 2), lapPoints.get(lapPoints.size() - 1));
                     lapDistance = lapDistance + distance;
-                    Toast.makeText(getApplicationContext(), "Total distance: " + lapDistance, Toast.LENGTH_SHORT).show();
                     Log.d("BackgroundLocationService", "Total distance: " + lapDistance);
                 }
                 double tT = (timeSetInSec * 1000) - TimeLeftInMillis;
@@ -466,7 +464,6 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
     }
 
     private void saveLapData() {
-        Log.d("MyAppSavePre", "Distance: " + totalDistance + ", size totalPoints: " + totalPoints.size() + ", lap distance: " + lapDistance);
         totalDistance = totalDistance + lapDistance;
         for (int i = 0; i < lapHRList.size(); i++) {
             totalHRList.add(lapHRList.get(i));
@@ -474,7 +471,6 @@ public class IntervalTrainingActivity extends AppCompatActivity implements Polar
         for (int i = 0; i < lapPoints.size(); i++) {
             totalPoints.add(lapPoints.get(i));
         }
-        Log.d("MyAppSavePost", "Distance: " + totalDistance + ", size totalPoints: " + totalPoints.size());
     }
 
     private void checkPermissions() {

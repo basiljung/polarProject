@@ -3,12 +3,6 @@ package com.example.polarapp.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.Nullable;
 
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem;
@@ -19,8 +13,6 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
 import com.example.polarapp.R;
 
 public class AboutFragment extends MaterialAboutFragment {
-
-    private View root;
 
     @Override
     protected MaterialAboutList getMaterialAboutList(final Context activityContext) {
@@ -102,5 +94,4 @@ public class AboutFragment extends MaterialAboutFragment {
     protected int getTheme() {
         return R.style.AppTheme_MaterialAboutActivity_Fragment;
     }
-
 }

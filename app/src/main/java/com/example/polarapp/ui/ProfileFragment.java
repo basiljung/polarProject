@@ -34,7 +34,6 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
     private ProfilePreferencesManager profilePreferencesManager;
 
     private static final String PROFILE_USER_ID = "profile_user_id";
-    private static final String USER_ID = "id";
     private static final String PROFILE_USER_NAME = "profile_user_name";
     private static final String PROFILE_USER_EMAIL = "profile_user_email";
     private static final String PROFILE_USER_PHONE = "profile_user_phone";
@@ -167,8 +166,6 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
         weightText.setText(profilePreferencesManager.getIntProfileValue(PROFILE_USER_WEIGHT) + "kg");
         String[] date = profilePreferencesManager.getStringProfileValue(PROFILE_USER_BIRTH).split("/");
         ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
-
-        Log.d("1234", profilePreferencesManager.getStringProfileValue(PROFILE_USER_ID));
     }
 
     private int getAge(int year, int monthOfYear, int dayOfMonth) {
@@ -193,51 +190,6 @@ public class ProfileFragment extends Fragment implements EditDialog.EditListener
             return (c.get(Calendar.YEAR) - 1970);
         }
     }
-
-    /*private void loadProfileData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String id = sp.getString(USER_ID, "Error");
-        Log.d("MyApp", id);
-        docRef = db.collection("profile").document(id);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("MyApp", "DocumentSnapshot " + document.getId() + " data: " + document.getData());
-                        userData = document.getData();
-                        //printUserData(userData);
-                    } else {
-                        Log.d("MyApp", "No such document");
-                    }
-                } else {
-                    Log.d("MyApp", "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
-
-    /*private void printUserData(Map<String, Object> userData) {
-        Object userName = userData.get("Name");
-        Object userEmail = userData.get("Email");
-        Object userPhone = userData.get("Phone");
-        Object userCity = userData.get("City");
-        Object userCountry = userData.get("Country");
-        Object userBirthDate = userData.get("BirthDate");
-        Object userSex = userData.get("Sex");
-        Object userWeight = userData.get("Weight");
-        Object userHeight = userData.get("Height");
-        nameText.setText(String.valueOf(userName));
-        emailText.setText(String.valueOf(userEmail));
-        phoneText.setText(String.valueOf(userPhone));
-        locationText.setText(userCity + "/" + userCountry);
-        sexText.setText(String.valueOf(userSex));
-        weightText.setText(userWeight + "kg");
-        heightText.setText(userHeight + "cm");
-        String[] date = String.valueOf(userBirthDate).split("/");
-        ageText.setText(String.valueOf(getAge(Integer.parseInt(date[2]),Integer.parseInt(date[1]),Integer.parseInt(date[0]))));
-    }*/
 
     @Override
     public void applySexChanges(int sex) {

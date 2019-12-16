@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -225,12 +224,10 @@ public class EditDialog extends DialogFragment {
                     public void onClick(View v) {
                         layoutEmail.setError(null);
                         if (isValidEmail(email.getText().toString())) {
-                            Toast.makeText(getContext(), "Valid email", Toast.LENGTH_SHORT).show();
                             editListener.applyEmailChanges(email.getText().toString());
                             dialog.dismiss();
                         } else {
                             layoutEmail.setError("Invalid email");
-                            Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

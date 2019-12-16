@@ -20,7 +20,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -121,7 +120,6 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
     };
 
     public class LocationUpdateData extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
@@ -136,7 +134,6 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                     double distance = SphericalUtil.computeDistanceBetween(points.get(points.size() - 2), points.get(points.size() - 1));
                     totalDistance = totalDistance + distance;
                     actualSpeed = totalDistance / totalTimeInHour;
-                    Toast.makeText(getApplicationContext(), "Total distance: " + totalDistance, Toast.LENGTH_SHORT).show();
                     Log.d("BroadcastReceiver", "Total distance: " + totalDistance);
                 }
                 long tT = SystemClock.elapsedRealtime() - chronometer.getBase();
@@ -190,18 +187,21 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
                 checkPermissions();
             }
         });
+
         stopChronometer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
                 stopChronometer();
             }
         });
+
         resetChronometer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
                 resetChronometer();
             }
         });
+
         saveTrainingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
@@ -256,8 +256,7 @@ public class NormalTrainingActivity extends AppCompatActivity implements PolarSD
             heartRateAverage = sum / hrList.size();
         }
 
-        double totalDistanceInKm = totalDistance / 1000.0;
-        averageSpeed = totalDistanceInKm / totalTimeInHour;
+        averageSpeed = (totalDistance / 1000.0) / totalTimeInHour;
         Log.i("MyApp", "average speed: " + averageSpeed);
         Log.i("MyApp", "average hr " + heartRateAverage);
         Log.i("MyApp", "total time in min " + totalTimeInMin);

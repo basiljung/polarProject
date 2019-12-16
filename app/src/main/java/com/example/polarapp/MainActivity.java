@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,16 +18,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.polarapp.polar.PolarSDK;
-import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.example.polarapp.ui.AboutFragment;
 import com.example.polarapp.ui.DevicesFragment;
 import com.example.polarapp.ui.HomeFragment;
 import com.example.polarapp.ui.ProfileFragment;
-import com.example.polarapp.ui.SettingsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,26 +42,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     private TextView textViewName, textViewEmail;
     private ProfilePreferencesManager profilePreferencesManager;
-    private DevicePreferencesManager devicePreferencesManager;
     private PolarSDK polarSDK;
-    private static final String PROFILE_USER_ID = "profile_user_id";
 
     // Shared preferences file name
     private static final String PROFILE_USER_NAME = "profile_user_name";
     private static final String PROFILE_USER_EMAIL = "profile_user_email";
-
-    // Names in Database
-    private static final String ACTIVITY_UUID = "UUID";
-    private static final String ACTIVITY_TYPE = "type";
-    private static final String ACTIVITY_TIMESTAMP = "timestamp";
-    private static final String ACTIVITY_TIME = "time";
-    private static final String ACTIVITY_DISTANCE = "distance";
-    private static final String ACTIVITY_AVG_SPEED = "avgSpeed";
-    private static final String ACTIVITY_LOCATION_POINTS = "locationPoints";
-    private static final String ACTIVITY_AVG_HR = "avgHR";
-    private static final String ACTIVITY_INTERVAL = "interval";
-    private static final String ACTIVITY_DEEP_SLEEP_TIME = "deepSleepTime";
-    private static final String ACTIVITY_NIGHT_MOVES = "nightMoves";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +54,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
-        devicePreferencesManager = new DevicePreferencesManager(getBaseContext());
-
-        // createActivities();
-
-        polarSDK = (PolarSDK) getApplicationContext();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // createActivities();
+        polarSDK = (PolarSDK) getApplicationContext();
+
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        View hView = navigationView.getHeaderView(0);
+        View headerView = navigationView.getHeaderView(0);
 
-        textViewName = hView.findViewById(R.id.textViewNameHeader);
-        textViewEmail = hView.findViewById(R.id.textViewEmailHeader);
+        textViewName = headerView.findViewById(R.id.textViewNameHeader);
+        textViewEmail = headerView.findViewById(R.id.textViewEmailHeader);
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -109,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Open Home fragment by default
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
@@ -129,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DocumentReference docRef = db.collection("activities").document("UWJ6p8BenZwXsGQAptjm");
 
 // Remove the 'capital' field from the document
-        Map<String,Object> updates = new HashMap<>();
+        Map<String, Object> updates = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
         updates.put("interval", 3);
@@ -205,27 +183,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_home);
                 break;
-            case R.id.nav_device_list:
-                Toast.makeText(this, "Device List", Toast.LENGTH_SHORT).show();
+            case R.id.nav_devices:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DevicesFragment()).commit();
-                navigationView.setCheckedItem(R.id.nav_device_list);
+                navigationView.setCheckedItem(R.id.nav_devices);
                 break;
             case R.id.nav_profile:
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_profile);
                 break;
-            case R.id.nav_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-                navigationView.setCheckedItem(R.id.nav_settings);
-                break;
             case R.id.nav_about:
-                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_about);
                 break;
@@ -241,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivityForResult(enableBtIntent, 2);
         }
 
-        //requestPermissions() method needs to be called when the build SDK version is 23 or above
         if (Build.VERSION.SDK_INT >= 23) {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }

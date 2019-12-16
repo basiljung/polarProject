@@ -298,6 +298,21 @@ public class AnalyticsActivity extends AppCompatActivity {
         level5ImageButton.setVisibility(View.GONE);
         level6ImageButton.setVisibility(View.GONE);
 
+        TextView hrLevel0ValuesText = hrInfoDialog.findViewById(R.id.hrLevel0ValuesText);
+        hrLevel0ValuesText.append(" ( < " + hrLevelMinValues[0] + " )");
+        TextView hrLevel1ValuesText = hrInfoDialog.findViewById(R.id.hrLevel1ValuesText);
+        hrLevel1ValuesText.append(" ( " + hrLevelMinValues[0] + " - " + hrLevelMinValues[1] + " )");
+        TextView hrLevel2ValuesText = hrInfoDialog.findViewById(R.id.hrLevel2ValuesText);
+        hrLevel2ValuesText.append(" ( " + hrLevelMinValues[1] + " - " + hrLevelMinValues[2] + " )");
+        TextView hrLevel3ValuesText = hrInfoDialog.findViewById(R.id.hrLevel3ValuesText);
+        hrLevel3ValuesText.append(" ( " + hrLevelMinValues[2] + " - " + hrLevelMinValues[3] + " )");
+        TextView hrLevel4ValuesText = hrInfoDialog.findViewById(R.id.hrLevel4ValuesText);
+        hrLevel4ValuesText.append(" ( " + hrLevelMinValues[3] + " - " + hrLevelMinValues[4] + " )");
+        TextView hrLevel5ValuesText = hrInfoDialog.findViewById(R.id.hrLevel5ValuesText);
+        hrLevel5ValuesText.append(" ( " + hrLevelMinValues[4] + " - " + hrLevelMinValues[5] + " )");
+        TextView hrLevel6ValuesText = hrInfoDialog.findViewById(R.id.hrLevel6ValuesText);
+        hrLevel6ValuesText.append(" ( > " + hrLevelMinValues[5] + " )");
+
         if (actualHRLevel == 1) {
             level1ImageButton.setVisibility(View.VISIBLE);
         } else if (actualHRLevel == 2) {

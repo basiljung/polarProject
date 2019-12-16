@@ -1,19 +1,8 @@
 package com.example.polarapp.sleep;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -35,19 +24,16 @@ import com.example.polarapp.preferencesmanager.ProfilePreferencesManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SleepActivity extends AppCompatActivity implements PolarSDK.CallbackInterfaceActivity {
-
     private static final String PROFILE_USER_ID = "profile_user_id";
     public int differenceMillis;
     public String documentID;
@@ -60,6 +46,9 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
     private ProfilePreferencesManager profilePreferencesManager;
     private PolarSDK polarSDK;
     private ArrayList<Integer> hrArrayList = new ArrayList<>();
+    private TextView timer;
+    private TimePicker timePicker;
+    private Button button1, button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +61,10 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        final TextView timer = findViewById(R.id.timer);
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
-        final TimePicker timePicker = findViewById(R.id.timePicker);
+        timer = findViewById(R.id.timer);
+        button1 = findViewById(R.id.button1);
+        button2 = findViewById(R.id.button2);
+        timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
         profilePreferencesManager = new ProfilePreferencesManager(getBaseContext());
@@ -86,7 +75,20 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String time = ("Alarm Set for " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
+                button1.setEnabled(false);
+                button2.setEnabled(false);
+                int hour = timePicker.getCurrentHour();
+                int minute = timePicker.getCurrentMinute();
+                String hourRefactor = String.valueOf(hour);
+                String minuteRefactor = String.valueOf(minute);
+                if (hour >= 0 && hour < 10) {
+                    hourRefactor = "0" + hour;
+                }
+                if (minute >= 0 && minute < 10) {
+                    minuteRefactor = "0" + minute;
+                }
+
+                String time = ("Alarm Set for " + hourRefactor + ":" + minuteRefactor);
                 timer.setText(time);
                 Toast.makeText(SleepActivity.this, time, Toast.LENGTH_LONG).show();
                 Date currentTime = Calendar.getInstance().getTime();
@@ -111,7 +113,7 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
 
                 int differenceMillis = differenceHours * 60 * 60 * 1000 + differenceMinutes * 60 * 1000;
 
-                scheduleNotification(getNotification("Wake Up!"), differenceMillis);
+                startNotification(differenceMillis);
                 createDatabase();
                 startThread(differenceMillis);
             }
@@ -120,62 +122,54 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String alarmAfter = ("Alarm after " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
+                button1.setEnabled(false);
+                button2.setEnabled(false);
+                int hour = timePicker.getCurrentHour();
+                int minute = timePicker.getCurrentMinute();
+                String hourRefactor = String.valueOf(hour);
+                String minuteRefactor = String.valueOf(minute);
+                if (hour >= 0 && hour < 10) {
+                    hourRefactor = "0" + hour;
+                }
+                if (minute >= 0 && minute < 10) {
+                    minuteRefactor = "0" + minute;
+                }
+
+                String alarmAfter = ("Alarm after " + hourRefactor + ":" + minuteRefactor);
                 timer.setText(alarmAfter);
                 Toast.makeText(SleepActivity.this, alarmAfter, Toast.LENGTH_LONG).show();
                 int myNum = 0;
                 final int finalMyNum = myNum;
                 int differenceMillis = timePicker.getCurrentHour() * 60 * 60 * 1000 + timePicker.getCurrentMinute() * 60 * 1000;
 
-                scheduleNotification(getNotification("Wake Up!"), differenceMillis);
+                startNotification(differenceMillis);
                 createDatabase();
                 startThread(differenceMillis);
 
                 new CountDownTimer(timePicker.getCurrentHour() * 60 * 60 * 1000 + timePicker.getCurrentMinute() * 60 * 1000, 1000 * 60 * 10) {
                     public void onTick(long millisUntilFinished) {
-                        //for every 10 minutes
                         Log.d("numero", String.valueOf(finalMyNum));
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(calendar.getTimeInMillis() + millisUntilFinished);
-
                     }
 
                     public void onFinish() {
-                        Toast.makeText(SleepActivity.this, "DONE!", Toast.LENGTH_LONG).show();
+                        timer.setText("");
                     }
                 }.start();
             }
         });
     }
 
-    private void scheduleNotification(Notification notification, int delay) {
-        //Channel Set-up
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("1001", "alarm", NotificationManager.IMPORTANCE_HIGH);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        Intent notificationIntent = new Intent(this, MyReceiver.class);
-        notificationIntent.putExtra(MyReceiver.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(MyReceiver.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private void startNotification(int delay) {
+        Intent notifyIntent = new Intent(getApplicationContext(), MyReceiver.class);
+        notifyIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-    }
 
-    //Notification Builder
-    private Notification getNotification(String content) {
-        Notification.Builder builder = new Notification.Builder(this)
-                .setChannelId("1001")
-                .setContentTitle("Polaris")
-                .setContentText(content)
-                .setSmallIcon(R.mipmap.ic_polaris_logo);
-        return builder.build();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     public void createDatabase() {
@@ -217,6 +211,8 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
             public void run() {
                 try {
                     for (int i = 0; i < differenceMillis / 1000; i++) {
+                        button1.setEnabled(false);
+                        button2.setEnabled(false);
                         Thread.sleep(1000);
                         Log.d("sleepActivity", "differenceMillis: " + differenceMillis);
                         Log.d("sleepActivity", "counter: " + i);
@@ -236,30 +232,14 @@ public class SleepActivity extends AppCompatActivity implements PolarSDK.Callbac
                             }
                             sleepRef.update("HRArray", hrArrayList);
                             sleepRef.update("time", differenceMillis / 1000 / 60);
-                            //calculate new avgHR
                             Log.d("sleepActivity", "10 sec");
                         }
                     }
                     Log.d("sleepActivity", "READY");
-                    //playAlarm();
                 } catch (InterruptedException e) {
                 }
             }
         }).start();
-    }
-
-    public void playAlarm() {
-        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if(alert == null){
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            if(alert == null) {
-                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            }
-        }
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), alert);
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC,am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
-        mp.start();
     }
 
     @Override

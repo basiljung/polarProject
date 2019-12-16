@@ -33,6 +33,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel0ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -90,6 +91,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel1ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -147,6 +149,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel2ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -204,6 +207,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel3ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -261,6 +265,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel4ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -318,6 +323,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel5ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -376,6 +382,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/hrLevel6ValuesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

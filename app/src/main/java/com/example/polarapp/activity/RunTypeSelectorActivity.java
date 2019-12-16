@@ -3,7 +3,8 @@ package com.example.polarapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class RunTypeSelectorActivity extends AppCompatActivity implements TimePi
         startNormal = findViewById(R.id.startNormal);
         startInterval = findViewById(R.id.startInterval);
         pickerInterval = findViewById(R.id.pickerInterval);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -41,12 +43,14 @@ public class RunTypeSelectorActivity extends AppCompatActivity implements TimePi
                 openNormalTrainingActivity();
             }
         });
+
         startInterval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
                 openIntervalTrainingActivity();
             }
         });
+
         pickerInterval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
@@ -73,7 +77,6 @@ public class RunTypeSelectorActivity extends AppCompatActivity implements TimePi
         DialogFragment timePicker = new TimePickerFragment(RunTypeSelectorActivity.this);
         timePicker.show(getSupportFragmentManager(), "time picker");
         startInterval.setEnabled(true);
-
     }
 
     @Override

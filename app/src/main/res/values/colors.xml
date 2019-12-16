@@ -7,16 +7,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorOrange">#FFA500</color>
 
-
-    <!--<color name="primaryLightColor">#FF5C47</color>
-    <color name="primaryDarkColor">#8F0000</color>
-
-    <color name="secondaryLightColor">#69F6FB</color>
-    <color name="secondaryDarkColor">#009297</color>
-
-    <color name="primaryTextColor">#FFFFFF</color>
-    <color name="secondaryTextColor">#000000</color>-->
-
     <color name="backgroundColor">#DAE8F0</color>
     <color name="backgroundColorDark">#B9C7CE</color>
     <color name="backgroundColorLight">#E8F5FD</color>

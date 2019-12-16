@@ -6,15 +6,21 @@ import android.util.Log;
 
 import com.example.polarapp.preferencesmanager.DevicePreferencesManager;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.*;
-import polar.com.sdk.api.*;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import polar.com.sdk.api.PolarBleApi;
+import polar.com.sdk.api.PolarBleApiCallback;
+import polar.com.sdk.api.PolarBleApiDefaultImpl;
 import polar.com.sdk.api.errors.PolarInvalidArgument;
-import polar.com.sdk.api.model.*;
+import polar.com.sdk.api.model.PolarDeviceInfo;
+import polar.com.sdk.api.model.PolarHrData;
 
 public class PolarSDK extends Application {
 

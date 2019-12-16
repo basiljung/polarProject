@@ -19,7 +19,7 @@ public class DevicesFragment extends Fragment {
     private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_device, container, false);
+        root = inflater.inflate(R.layout.fragment_devices, container, false);
 
         bottomNavigationView = root.findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

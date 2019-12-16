@@ -155,50 +155,46 @@ public class IntroActivity extends AppCompatActivity {
 
     private void doChecks() {
         if (isValidName() && isValidEmail() && isValidCity() && isValidPhone() && isValidSex() && isValidBirthDate()) {
-            Toast.makeText(getApplicationContext(), "Good data", Toast.LENGTH_SHORT).show();
             saveUserData();
             launchHomeScreen();
         } else {
-            Toast.makeText(getApplicationContext(), "Error with data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error with the provided information", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void saveUserData() {
-        Map<String, Object> userData = new HashMap<>();
-
         String uniqueID = UUID.randomUUID().toString();
-        userData.put("UserID", uniqueID);
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_ID, uniqueID);
-        //sharedPreferences.edit().putString("UUID", uniqueID).apply();
-        userData.put("Name", userName.getText().toString().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_NAME, userName.getText().toString().trim());
-        userData.put("Email", userEmail.getText().toString().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_EMAIL, userEmail.getText().toString().trim());
-        userData.put("Country", ccpCountry.getSelectedCountryName().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_COUNTRY, ccpCountry.getSelectedCountryName().trim());
-        userData.put("City", userCity.getText().toString().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_CITY, userCity.getText().toString().trim());
-        userData.put("Phone", ccpPhone.getFormattedFullNumber().trim());
         profilePreferencesManager.setStringProfileValue(PROFILE_USER_PHONE, ccpPhone.getFormattedFullNumber().trim());
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_HEIGHT, pickerHeight.getValue());
+        profilePreferencesManager.setIntProfileValue(PROFILE_USER_WEIGHT, pickerWeight.getValue());
+        profilePreferencesManager.setStringProfileValue(PROFILE_USER_BIRTH, userBirthDate.getText().toString().trim());
+
+        //Map<String, Object> userData = new HashMap<>();
+        //userData.put("UserID", uniqueID);
+        //userData.put("Name", userName.getText().toString().trim());
+        //userData.put("Email", userEmail.getText().toString().trim());
+        //userData.put("Country", ccpCountry.getSelectedCountryName().trim());
+        //userData.put("City", userCity.getText().toString().trim());
+        //userData.put("Phone", ccpPhone.getFormattedFullNumber().trim());
+        //userData.put("Height", pickerHeight.getValue());
+        //userData.put("Weight", pickerWeight.getValue());
+        //userData.put("BirthDate", userBirthDate.getText().toString().trim());
 
         switch (sexGroup.getCheckedRadioButtonId()) {
             case R.id.userSexOption1:
-                userData.put("Sex", "Male");
+                //userData.put("Sex", "Male");
                 profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Male");
                 break;
             case R.id.userSexOption2:
-                userData.put("Sex", "Female");
+                //userData.put("Sex", "Female");
                 profilePreferencesManager.setStringProfileValue(PROFILE_USER_SEX, "Female");
                 break;
         }
-
-        userData.put("Height", pickerHeight.getValue());
-        profilePreferencesManager.setIntProfileValue(PROFILE_USER_HEIGHT, pickerHeight.getValue());
-        userData.put("Weight", pickerWeight.getValue());
-        profilePreferencesManager.setIntProfileValue(PROFILE_USER_WEIGHT, pickerWeight.getValue());
-        userData.put("BirthDate", userBirthDate.getText().toString().trim());
-        profilePreferencesManager.setStringProfileValue(PROFILE_USER_BIRTH, userBirthDate.getText().toString().trim());
-
     }
 
     private boolean isValidEmailPattern(CharSequence target) {
@@ -261,7 +257,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private boolean isValidCity() {
         if (userCity.getText().toString().isEmpty()) {
-            cityLayout.setError("Empty city");
+            cityLayout.setError("Insert your city");
             return false;
         } else {
             cityLayout.setError(null);

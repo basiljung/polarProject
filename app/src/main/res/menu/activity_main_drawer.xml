@@ -9,17 +9,13 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_device_list"
+            android:id="@+id/nav_devices"
             android:icon="@drawable/ic_menu_device_list"
             android:title="@string/menu_device_list" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_profile"
             android:title="@string/menu_profile" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/menu_settings" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_about"
